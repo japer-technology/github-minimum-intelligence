@@ -66,7 +66,7 @@ console.log("🔧 Installing gitclaw into this repository...\n");
 console.log("Workflows:");
 ensureDir(resolve(repoRoot, ".github", "workflows"));
 copyIfMissing(
-  resolve(bootstrapDir, ".GITCLAW-AGENT.yml"),
+  resolve(bootstrapDir, ".GITCLAW-WORKFLOW-AGENT.yml"),
   resolve(repoRoot, ".github", "workflows", "agent.yml"),
   ".github/workflows/agent.yml"
 );
@@ -75,7 +75,7 @@ copyIfMissing(
 console.log("\nIssue templates:");
 ensureDir(resolve(repoRoot, ".github", "ISSUE_TEMPLATE"));
 copyIfMissing(
-  resolve(bootstrapDir, "hatch.md"),
+  resolve(bootstrapDir, ".GITCLAW-TEMPLATE-HATCH.md"),
   resolve(repoRoot, ".github", "ISSUE_TEMPLATE", "hatch.md"),
   ".github/ISSUE_TEMPLATE/hatch.md"
 );
