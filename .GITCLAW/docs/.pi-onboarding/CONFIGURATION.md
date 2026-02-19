@@ -1,4 +1,10 @@
-# .pi Configuration
+# 🦞 GITCLAW .pi Configuration
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+  </picture>
+</p>
 
 How to tune the agent's behavior — from model selection to tool access.
 
