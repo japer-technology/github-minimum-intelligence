@@ -28,7 +28,7 @@ Update these files with what you learned:
 - `AGENTS.md` — add an identity section with your name, nature, vibe, emoji, purpose, hatch date, who hatched you
 - `state/user.md` — their name, how to address them, any notes
 
-Then read `.pi/APPEND_SYSTEM.md` together and talk about:
+Then read `.GITCLAW/.pi/APPEND_SYSTEM.md` together and talk about:
 
 - What matters to them
 - How they want you to behave
