@@ -2,7 +2,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/logo.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
   </picture>
 </p>
 
@@ -50,11 +50,11 @@ gitclaw lives entirely inside a `.GITCLAW` folder that you drop into your reposi
 1. **Copy the `.GITCLAW` folder** into your repo's root.
 2. **Run the install script** to set up workflows and templates:
    ```bash
-   bun .GITCLAW/bootstrap/bootstrap.ts
+   bun .GITCLAW/install/bootstrap.ts
    ```
 3. **Install dependencies:**
    ```bash
-   cd .GITCLAW/bootstrap && bun install
+   cd .GITCLAW/install && bun install
    ```
 4. **Add your Anthropic API key** — go to **Settings → Secrets and variables → Actions** and create a secret named `ANTHROPIC_API_KEY`.
 5. **Commit and push** the changes.
@@ -66,7 +66,7 @@ The install script copies the workflow and issue template into the right places.
 
 ```
 .GITCLAW/
-  bootstrap/
+  install/
     bootstrap.ts          # Setup script — installs workflows & templates
     .GITCLAW-AGENT.yml    # GitHub Actions workflow template
     hatch.md              # Issue template for bootstrapping agent identity
@@ -76,8 +76,8 @@ The install script copies the workflow and issue template into the right places.
     preinstall.ts          # Adds 👀 reaction on issue activity
   .pi/                    # Agent personality & skills config
   AGENTS.md               # Agent identity file
-  bootstrap/package.json  # Dependencies
-  bootstrap/package-lock.json # NPM lockfile
+  install/package.json  # Dependencies
+  install/package-lock.json # NPM lockfile
   bun.lock                # Bun lockfile
 ```
 
