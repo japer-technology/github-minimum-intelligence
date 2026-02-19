@@ -50,7 +50,7 @@ gitclaw lives entirely inside a `.GITCLAW` folder that you drop into your reposi
 1. **Copy the `.GITCLAW` folder** into your repo's root.
 2. **Run the install script** to set up workflows and templates:
    ```bash
-   bun .GITCLAW/install/bootstrap.ts
+   bun .GITCLAW/install/.GITCLAW-INSTALLER.ts
    ```
 3. **Install dependencies:**
    ```bash
@@ -67,10 +67,10 @@ The install script copies the workflow and issue template into the right places.
 ```
 .GITCLAW/
   install/
-    bootstrap.ts          # Setup script — installs workflows & templates
+    .GITCLAW-INSTALLER.ts    # Setup script — installs workflows & templates
     .GITCLAW-AGENT.yml    # GitHub Actions workflow template
     hatch.md              # Issue template for bootstrapping agent identity
-    AGENT                 # Default agent identity file installed as AGENTS.md
+    .GITCLAW-AGENTS.md       # Default agent identity file installed as AGENTS.md
   lifecycle/
     main.ts               # Core agent orchestrator
     preinstall.ts          # Adds 👀 reaction on issue activity
