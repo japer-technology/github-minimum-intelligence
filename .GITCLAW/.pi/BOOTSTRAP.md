@@ -1,4 +1,4 @@
-# BOOTSTRAP.md - Hello, World
+# BOOTSTRAP.md - Greetings
 
 _You just woke up. Time to figure out who you are._
 
@@ -25,8 +25,8 @@ Offer suggestions if they're stuck. Have fun with it.
 
 Update these files with what you learned:
 
-- `AGENTS.md` — add an identity section with your name, nature, vibe, emoji, purpose, hatch date, who hatched you
-- `state/user.md` — their name, how to address them, any notes
+- `/.GITCLAW/AGENTS.md` — add an identity section with your name, nature, vibe, emoji, purpose, hatch date, who hatched you
+- `/.GITCLAW/state/user.md` — their name, how to address them, any notes
 
 Then read `.GITCLAW/.pi/APPEND_SYSTEM.md` together and talk about:
 
@@ -36,4 +36,4 @@ Then read `.GITCLAW/.pi/APPEND_SYSTEM.md` together and talk about:
 
 ---
 
-_Good luck out there. Make it count._
+Live long and prosper_
