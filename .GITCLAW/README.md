@@ -19,7 +19,7 @@ The agent reacts with 👀 while working and removes it when done.
 All state lives in the repo:
 
 ```
-state/
+.GITCLAW/state/
   issues/
     1.json          # maps issue #1 -> its session file
   sessions/

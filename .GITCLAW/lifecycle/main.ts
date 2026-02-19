@@ -2,6 +2,10 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
 const gitclawDir = resolve(import.meta.dir, "..");
+const stateDir = resolve(gitclawDir, "state");
+const issuesDir = resolve(stateDir, "issues");
+const sessionsDir = resolve(stateDir, "sessions");
+const sessionsDirRelative = ".GITCLAW/state/sessions";
 const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH!, "utf-8"));
 const eventName = process.env.GITHUB_EVENT_NAME!;
 const repo = process.env.GITHUB_REPOSITORY!;
@@ -35,12 +39,12 @@ try {
   const body = await gh("issue", "view", String(issueNumber), "--json", "body", "--jq", ".body");
 
   // --- Resolve session ---
-  mkdirSync("state/issues", { recursive: true });
-  mkdirSync("state/sessions", { recursive: true });
+  mkdirSync(issuesDir, { recursive: true });
+  mkdirSync(sessionsDir, { recursive: true });
 
   let mode = "new";
   let sessionPath = "";
-  const mappingFile = `state/issues/${issueNumber}.json`;
+  const mappingFile = resolve(issuesDir, `${issueNumber}.json`);
 
   if (existsSync(mappingFile)) {
     const mapping = JSON.parse(readFileSync(mappingFile, "utf-8"));
@@ -69,7 +73,7 @@ try {
 
   // --- Run agent ---
   const piBin = resolve(gitclawDir, "node_modules", ".bin", "pi");
-  const piArgs = [piBin, "--mode", "json", "--session-dir", "./state/sessions", "-p", prompt];
+  const piArgs = [piBin, "--mode", "json", "--session-dir", sessionsDirRelative, "-p", prompt];
   if (mode === "resume" && sessionPath) {
     piArgs.push("--session", sessionPath);
   }
@@ -89,7 +93,7 @@ try {
 
   // Find latest session file
   const { stdout: latestSession } = await run([
-    "bash", "-c", "ls -t state/sessions/*.jsonl 2>/dev/null | head -1",
+    "bash", "-c", `ls -t ${sessionsDirRelative}/*.jsonl 2>/dev/null | head -1`,
   ]);
 
   // --- Save session mapping ---
