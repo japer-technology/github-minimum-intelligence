@@ -1,10 +1,17 @@
 ![gitclaw banner](banner.jpeg)
 
-A personal AI assistant that runs entirely through GitHub Issues and Actions. Like [OpenClaw](https://github.com/openclaw/openclaw), but no servers or extra infrastructure.
+A personal AI assistant that runs entirely through GitHub Issues and Actions. Drop a single `.GITCLAW` folder into any repo and you have a fully functional AI agent — no servers, no external services, no extra infrastructure.
 
 Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Every issue becomes a chat thread with an AI agent. Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
 Since the agent can read and write files, you can build an evolving software project that updates itself as you open issues. Try asking it to set up a GitHub Pages site, then iterate on it issue by issue.
+
+### Benefits
+
+- **Single folder, any repo** — copy `.GITCLAW/` in and run the install script. Nothing to host or maintain.
+- **Zero infrastructure** — runs on GitHub Actions with your repo as the only backend.
+- **Persistent memory** — conversations are committed to git, so the agent remembers everything across sessions.
+- **Full auditability** — every interaction is versioned; review or roll back any change the agent made.
 
 ## How it works
 
