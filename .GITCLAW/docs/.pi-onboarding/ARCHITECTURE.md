@@ -1,4 +1,10 @@
-# .pi Architecture
+# 🦞 GITCLAW .pi Architecture
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+  </picture>
+</p>
 
 How the pieces fit together — from files on disk to a running agent session.
 
