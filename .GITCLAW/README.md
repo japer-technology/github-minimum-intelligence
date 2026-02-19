@@ -48,11 +48,11 @@ gitclaw lives entirely inside a `.GITCLAW` folder that you drop into your reposi
 1. **Copy the `.GITCLAW` folder** into your repo's root.
 2. **Run the install script** to set up workflows and templates:
    ```bash
-   bun .GITCLAW/install.ts
+   bun .GITCLAW/bootstrap/bootstrap.ts
    ```
 3. **Install dependencies:**
    ```bash
-   cd .GITCLAW && bun install
+   cd .GITCLAW/bootstrap && bun install
    ```
 4. **Add your Anthropic API key** — go to **Settings → Secrets and variables → Actions** and create a secret named `ANTHROPIC_API_KEY`.
 5. **Commit and push** the changes.
@@ -64,18 +64,19 @@ The install script copies the workflow and issue template into the right places.
 
 ```
 .GITCLAW/
-  install.ts              # Setup script — installs workflows & templates
+  bootstrap/
+    bootstrap.ts          # Setup script — installs workflows & templates
+    .GITCLAW-AGENT.yml    # GitHub Actions workflow template
+    hatch.md              # Issue template for bootstrapping agent identity
+    AGENT                 # Default agent identity file installed as AGENTS.md
   lifecycle/
     main.ts               # Core agent orchestrator
     preinstall.ts          # Adds 👀 reaction on issue activity
-  workflows/
-    agent.yml             # GitHub Actions workflow template
-  issue-templates/
-    hatch.md              # Issue template for bootstrapping agent identity
   .pi/                    # Agent personality & skills config
   AGENTS.md               # Agent identity file
-  package.json            # Dependencies
-  bun.lock                # Lockfile
+  bootstrap/package.json  # Dependencies
+  bootstrap/package-lock.json # NPM lockfile
+  bun.lock                # Bun lockfile
 ```
 
 ## Security

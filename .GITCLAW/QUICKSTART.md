@@ -15,7 +15,7 @@ Get a personal AI agent running in any GitHub repo in under 5 minutes. No server
 Copy the `.GITCLAW` folder into your repository root, then run the install script:
 
 ```bash
-bun .GITCLAW/install.ts
+bun .GITCLAW/bootstrap/bootstrap.ts
 ```
 
 This sets up the GitHub Actions workflow and issue templates.
@@ -23,7 +23,7 @@ This sets up the GitHub Actions workflow and issue templates.
 **2. Install dependencies**
 
 ```bash
-cd .GITCLAW && bun install
+cd .GITCLAW/bootstrap && bun install
 ```
 
 **3. Add your API key**
