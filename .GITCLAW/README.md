@@ -1,4 +1,4 @@
-# 🦞 GITCLAW - An AI Agent As An Add-On
+# .GITCLAW 🦞 An AI Agent As An Add-On
 
 <p align="center">
   <picture>
