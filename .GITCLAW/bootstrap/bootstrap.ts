@@ -1,22 +1,22 @@
 /**
- * install.ts — One-time setup script for gitclaw.
+ * bootstrap.ts — One-time setup script for gitclaw.
  *
  * Copies the GitHub Actions workflow, issue templates, and git attributes
- * from `.GITCLAW/` into the standard locations the repo needs to function.
+ * from `.GITCLAW/bootstrap` into the standard locations the repo needs to function.
  * Existing files are never overwritten — only missing ones are installed.
  *
  * Usage:
- *   bun .GITCLAW/install.ts
+ *   bun .GITCLAW/bootstrap/bootstrap.ts
  */
 
 import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-/** Directory containing the `.GITCLAW` folder (i.e. this script's directory). */
-const gitclawDir = import.meta.dir;
+/** Directory containing the installable bootstrap resources. */
+const bootstrapDir = import.meta.dir;
 
-/** Repository root — one level above `.GITCLAW/`. */
-const repoRoot = resolve(gitclawDir, "..");
+/** Repository root — two levels above `.GITCLAW/bootstrap/`. */
+const repoRoot = resolve(bootstrapDir, "..", "..");
 
 /** Create a directory (and parents) if it does not already exist. */
 function ensureDir(dir: string) {
@@ -66,7 +66,7 @@ console.log("🔧 Installing gitclaw into this repository...\n");
 console.log("Workflows:");
 ensureDir(resolve(repoRoot, ".github", "workflows"));
 copyIfMissing(
-  resolve(gitclawDir, "workflows", "agent.yml"),
+  resolve(bootstrapDir, ".GITCLAW-AGENT.yml"),
   resolve(repoRoot, ".github", "workflows", "agent.yml"),
   ".github/workflows/agent.yml"
 );
@@ -75,10 +75,15 @@ copyIfMissing(
 console.log("\nIssue templates:");
 ensureDir(resolve(repoRoot, ".github", "ISSUE_TEMPLATE"));
 copyIfMissing(
-  resolve(gitclawDir, "issue-templates", "hatch.md"),
+  resolve(bootstrapDir, "hatch.md"),
   resolve(repoRoot, ".github", "ISSUE_TEMPLATE", "hatch.md"),
   ".github/ISSUE_TEMPLATE/hatch.md"
 );
+
+// --- Agent identity ---------------------------------------------------
+console.log("\nAgent identity:");
+ensureDir(resolve(repoRoot, ".GITCLAW"));
+copyIfMissing(resolve(bootstrapDir, "AGENT"), resolve(repoRoot, ".GITCLAW", "AGENTS.md"), ".GITCLAW/AGENTS.md");
 
 // --- Git attributes --------------------------------------------------
 // `memory.log merge=union` tells git to union-merge the append-only
@@ -89,6 +94,6 @@ ensureAttribute(resolve(repoRoot, ".gitattributes"), "memory.log merge=union");
 console.log("\n✨ gitclaw installed!\n");
 console.log("Next steps:");
 console.log("  1. Add ANTHROPIC_API_KEY to Settings → Secrets and variables → Actions");
-console.log("  2. Run: cd .GITCLAW && bun install");
+console.log("  2. Run: cd .GITCLAW/bootstrap && bun install");
 console.log("  3. Commit and push the changes");
 console.log("  4. Open an issue to start chatting with the agent\n");
