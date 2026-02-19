@@ -2,20 +2,20 @@
  * bootstrap.ts — One-time setup script for gitclaw.
  *
  * Copies the GitHub Actions workflow, issue templates, and git attributes
- * from `.GITCLAW/bootstrap` into the standard locations the repo needs to function.
+ * from `.GITCLAW/install` into the standard locations the repo needs to function.
  * Existing files are never overwritten — only missing ones are installed.
  *
  * Usage:
- *   bun .GITCLAW/bootstrap/bootstrap.ts
+ *   bun .GITCLAW/install/bootstrap.ts
  */
 
 import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-/** Directory containing the installable bootstrap resources. */
+/** Directory containing the installable resources. */
 const bootstrapDir = import.meta.dir;
 
-/** Repository root — two levels above `.GITCLAW/bootstrap/`. */
+/** Repository root — two levels above `.GITCLAW/install/`. */
 const repoRoot = resolve(bootstrapDir, "..", "..");
 
 /** Create a directory (and parents) if it does not already exist. */
@@ -94,6 +94,6 @@ ensureAttribute(resolve(repoRoot, ".gitattributes"), "memory.log merge=union");
 console.log("\n✨ gitclaw installed!\n");
 console.log("Next steps:");
 console.log("  1. Add ANTHROPIC_API_KEY to Settings → Secrets and variables → Actions");
-console.log("  2. Run: cd .GITCLAW/bootstrap && bun install");
+console.log("  2. Run: cd .GITCLAW/install && bun install");
 console.log("  3. Commit and push the changes");
 console.log("  4. Open an issue to start chatting with the agent\n");

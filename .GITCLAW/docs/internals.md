@@ -1,6 +1,6 @@
-# Deep Analysis: How `gitclaw` Works End-to-End
+# gitclaw Internals
 
-This document explains the full execution path of this repository’s issue-driven AI agent pipeline: what triggers it, how it manages conversation memory, how it posts replies, and how it persists state back to git.
+This document covers the internal mechanics of gitclaw — how the issue-driven AI agent pipeline is structured, what triggers it, how it manages conversation memory, how it posts replies, and how it persists state back to git.
 
 ---
 

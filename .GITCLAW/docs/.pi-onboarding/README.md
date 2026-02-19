@@ -1,6 +1,6 @@
-# .pi — Onboarding Guide
+# .pi Onboarding
 
-Welcome to `.pi`, the brain behind your gitclaw agent. This folder is where identity, memory, skills, and behavior configuration all live. Everything the agent needs to be *someone* — not just something — starts here.
+This folder documents the `.pi` agent configuration system that powers gitclaw. It covers identity, memory, skills, and behavior configuration — everything that shapes how the agent operates.
 
 ## What is .pi?
 

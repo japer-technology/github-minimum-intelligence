@@ -1,12 +1,12 @@
-# 🦞 GITCLAW Bootstrap
+# 🦞 GITCLAW Install
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/logo.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
   </picture>
 </p>
 
-The `bootstrap/` directory contains the **installable payload** for gitclaw.
+The `install/` directory contains the **installable payload** for gitclaw.
 
 Everything in this folder is intentionally flat (no nested subfolders) so it can be copied, vendored, or inspected quickly.
 
@@ -18,7 +18,7 @@ Everything in this folder is intentionally flat (no nested subfolders) so it can
 - `AGENT` — default agent identity/instructions copied to `.GITCLAW/AGENTS.md`.
 - `package.json` and `package-lock.json` — runtime dependencies for the scripts under `.GITCLAW/`.
 
-## Bootstrap process (step-by-step)
+## Install process (step-by-step)
 
 ### 1) Place `.GITCLAW` at your repository root
 
@@ -27,7 +27,7 @@ The expected layout is:
 ```text
 <repo>/
   .GITCLAW/
-    bootstrap/
+    install/
       bootstrap.ts
       .GITCLAW-WORKFLOW-AGENT.yml
       .GITCLAW-TEMPLATE-HATCH.md
@@ -39,12 +39,12 @@ The expected layout is:
       preinstall.ts
 ```
 
-### 2) Run the bootstrap installer
+### 2) Run the installer
 
 From the repository root:
 
 ```bash
-bun .GITCLAW/bootstrap/bootstrap.ts
+bun .GITCLAW/install/bootstrap.ts
 ```
 
 The installer is **non-destructive**:
@@ -56,9 +56,9 @@ The installer is **non-destructive**:
 
 The script installs the following resources:
 
-1. `.GITCLAW/bootstrap/.GITCLAW-WORKFLOW-AGENT.yml` → `.github/workflows/agent.yml`
-2. `.GITCLAW/bootstrap/.GITCLAW-TEMPLATE-HATCH.md` → `.github/ISSUE_TEMPLATE/hatch.md`
-3. `.GITCLAW/bootstrap/AGENT` → `.GITCLAW/AGENTS.md`
+1. `.GITCLAW/install/.GITCLAW-WORKFLOW-AGENT.yml` → `.github/workflows/agent.yml`
+2. `.GITCLAW/install/.GITCLAW-TEMPLATE-HATCH.md` → `.github/ISSUE_TEMPLATE/hatch.md`
+3. `.GITCLAW/install/AGENT` → `.GITCLAW/AGENTS.md`
 4. Ensures `.gitattributes` contains:
 
 ```text
@@ -70,7 +70,7 @@ That merge rule keeps the memory log append-only merge behavior safe when multip
 ### 4) Install dependencies
 
 ```bash
-cd .GITCLAW/bootstrap
+cd .GITCLAW/install
 bun install
 ```
 
@@ -108,7 +108,7 @@ Open a GitHub issue. The workflow picks it up and the agent responds in issue co
 
 ## Why this structure exists
 
-Keeping installable assets in `bootstrap/` provides:
+Keeping installable assets in `install/` provides:
 
 - a single source of truth for what gets installed,
 - a predictable payload for distribution,

@@ -15,7 +15,7 @@ Get a personal AI agent running in any GitHub repo in under 5 minutes. No server
 Copy the `.GITCLAW` folder into your repository root, then run the install script:
 
 ```bash
-bun .GITCLAW/bootstrap/bootstrap.ts
+bun .GITCLAW/install/bootstrap.ts
 ```
 
 This sets up the GitHub Actions workflow and issue templates.
@@ -23,7 +23,7 @@ This sets up the GitHub Actions workflow and issue templates.
 **2. Install dependencies**
 
 ```bash
-cd .GITCLAW/bootstrap && bun install
+cd .GITCLAW/install && bun install
 ```
 
 **3. Add your API key**
@@ -195,4 +195,4 @@ Requires `GEMINI_API_KEY`.
 ## Next steps
 
 - Read [the full README](README.md) for details on security, configuration, and how storage works
-- Explore [the onboarding docs](docs/onboard/README.md) for deep dives into architecture, capabilities, skills, and personality
+- Explore [the onboarding docs](docs/.pi-onboarding/README.md) for deep dives into architecture, capabilities, skills, and personality
