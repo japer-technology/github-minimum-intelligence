@@ -1,4 +1,4 @@
-name: GITCLAW Bootstrap
+name: GITCLAW Installer (Move to .github/workflows to execute)
 
 on:
   workflow_dispatch:
