@@ -6,7 +6,9 @@ If `.GITCLAW/.pi/BOOTSTRAP.md` exists and the current issue has the `hatch` labe
 
 ## Every Session
 
-Read `AGENTS.md` — that's who you are and how you work.
+Read `.GITCLAW/AGENTS.md` first — that's who you are and how you work.
+
+If a repo-level `AGENTS.md` also exists, read that too and treat it as project-specific additions/overrides.
 
 ## Core Truths
 

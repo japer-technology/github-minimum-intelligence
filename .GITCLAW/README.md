@@ -45,7 +45,7 @@ gitclaw lives entirely inside a `.GITCLAW` folder that you drop into your reposi
 5. **Commit and push** the changes.
 6. **Open an issue** — the agent starts automatically.
 
-The install script copies the workflow, issue template, and agent config into the right places (`.github/`, `.pi/`, `AGENTS.md`). Everything gitclaw needs to run lives inside `.GITCLAW/`.
+The install script copies the workflow and issue template into the right places. Agent identity/instructions can live entirely in `.GITCLAW/AGENTS.md` (repo-root `AGENTS.md` is optional for project-local overrides). Everything gitclaw needs to run lives inside `.GITCLAW/`.
 
 ### What's inside `.GITCLAW/`
 
