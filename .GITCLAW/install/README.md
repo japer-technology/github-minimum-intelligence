@@ -12,10 +12,10 @@ Everything in this folder is intentionally flat (no nested subfolders) so it can
 
 ## Files in this folder
 
-- `bootstrap.ts` — one-time installer script.
+- `.GITCLAW-INSTALLER.ts` — one-time installer script.
 - `.GITCLAW-WORKFLOW-AGENT.yml` — GitHub Actions workflow template copied to `.github/workflows/agent.yml`.
 - `.GITCLAW-TEMPLATE-HATCH.md` — issue template copied to `.github/ISSUE_TEMPLATE/hatch.md`.
-- `AGENT` — default agent identity/instructions copied to `.GITCLAW/AGENTS.md`.
+- `.GITCLAW-AGENTS.md` — default agent identity/instructions copied to `.GITCLAW/AGENTS.md`.
 - `package.json` and `package-lock.json` — runtime dependencies for the scripts under `.GITCLAW/`.
 
 ## Install process (step-by-step)
@@ -28,10 +28,10 @@ The expected layout is:
 <repo>/
   .GITCLAW/
     install/
-      bootstrap.ts
+      .GITCLAW-INSTALLER.ts
       .GITCLAW-WORKFLOW-AGENT.yml
       .GITCLAW-TEMPLATE-HATCH.md
-      AGENT
+      .GITCLAW-AGENTS.md
       package.json
       package-lock.json
     lifecycle/
@@ -44,7 +44,7 @@ The expected layout is:
 From the repository root:
 
 ```bash
-bun .GITCLAW/install/bootstrap.ts
+bun .GITCLAW/install/.GITCLAW-INSTALLER.ts
 ```
 
 The installer is **non-destructive**:
@@ -52,13 +52,13 @@ The installer is **non-destructive**:
 - If a destination file already exists, it skips it.
 - If a destination file is missing, it installs it.
 
-### 3) What `bootstrap.ts` installs
+### 3) What `.GITCLAW-INSTALLER.ts` installs
 
 The script installs the following resources:
 
 1. `.GITCLAW/install/.GITCLAW-WORKFLOW-AGENT.yml` → `.github/workflows/agent.yml`
 2. `.GITCLAW/install/.GITCLAW-TEMPLATE-HATCH.md` → `.github/ISSUE_TEMPLATE/hatch.md`
-3. `.GITCLAW/install/AGENT` → `.GITCLAW/AGENTS.md`
+3. `.GITCLAW/install/.GITCLAW-AGENTS.md` → `.GITCLAW/AGENTS.md`
 4. Ensures `.gitattributes` contains:
 
 ```text

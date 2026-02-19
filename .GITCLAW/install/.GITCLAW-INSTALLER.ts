@@ -1,12 +1,12 @@
 /**
- * bootstrap.ts — One-time setup script for gitclaw.
+ * .GITCLAW-INSTALLER.ts — One-time setup script for gitclaw.
  *
  * Copies the GitHub Actions workflow, issue templates, and git attributes
  * from `.GITCLAW/install` into the standard locations the repo needs to function.
  * Existing files are never overwritten — only missing ones are installed.
  *
  * Usage:
- *   bun .GITCLAW/install/bootstrap.ts
+ *   bun .GITCLAW/install/.GITCLAW-INSTALLER.ts
  */
 
 import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from "fs";
@@ -83,7 +83,7 @@ copyIfMissing(
 // --- Agent identity ---------------------------------------------------
 console.log("\nAgent identity:");
 ensureDir(resolve(repoRoot, ".GITCLAW"));
-copyIfMissing(resolve(bootstrapDir, "AGENT"), resolve(repoRoot, ".GITCLAW", "AGENTS.md"), ".GITCLAW/AGENTS.md");
+copyIfMissing(resolve(bootstrapDir, ".GITCLAW-AGENTS.md"), resolve(repoRoot, ".GITCLAW", "AGENTS.md"), ".GITCLAW/AGENTS.md");
 
 // --- Git attributes --------------------------------------------------
 // `memory.log merge=union` tells git to union-merge the append-only
