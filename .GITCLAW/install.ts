@@ -1,13 +1,29 @@
+/**
+ * install.ts — One-time setup script for gitclaw.
+ *
+ * Copies the GitHub Actions workflow, issue templates, and git attributes
+ * from `.GITCLAW/` into the standard locations the repo needs to function.
+ * Existing files are never overwritten — only missing ones are installed.
+ *
+ * Usage:
+ *   bun .GITCLAW/install.ts
+ */
+
 import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
+/** Directory containing the `.GITCLAW` folder (i.e. this script's directory). */
 const gitclawDir = import.meta.dir;
+
+/** Repository root — one level above `.GITCLAW/`. */
 const repoRoot = resolve(gitclawDir, "..");
 
+/** Create a directory (and parents) if it does not already exist. */
 function ensureDir(dir: string) {
   mkdirSync(dir, { recursive: true });
 }
 
+/** Copy `src` to `dest` only when `dest` is absent; logs the outcome. */
 function copyIfMissing(src: string, dest: string, label: string) {
   if (existsSync(dest)) {
     console.log(`  ⏭  ${label} already exists, skipping`);
@@ -17,6 +33,10 @@ function copyIfMissing(src: string, dest: string, label: string) {
   }
 }
 
+/**
+ * Ensure that `.gitattributes` contains `attributeRule`.
+ * Creates the file if absent; appends the rule if not already present.
+ */
 function ensureAttribute(filePath: string, attributeRule: string) {
   if (!existsSync(filePath)) {
     writeFileSync(filePath, `${attributeRule}\n`, "utf-8");
@@ -42,7 +62,7 @@ function ensureAttribute(filePath: string, attributeRule: string) {
 
 console.log("🔧 Installing gitclaw into this repository...\n");
 
-// Install workflow
+// --- Install workflow -------------------------------------------------
 console.log("Workflows:");
 ensureDir(resolve(repoRoot, ".github", "workflows"));
 copyIfMissing(
@@ -51,6 +71,7 @@ copyIfMissing(
   ".github/workflows/agent.yml"
 );
 
+// --- Issue templates --------------------------------------------------
 console.log("\nIssue templates:");
 ensureDir(resolve(repoRoot, ".github", "ISSUE_TEMPLATE"));
 copyIfMissing(
@@ -59,6 +80,9 @@ copyIfMissing(
   ".github/ISSUE_TEMPLATE/hatch.md"
 );
 
+// --- Git attributes --------------------------------------------------
+// `memory.log merge=union` tells git to union-merge the append-only
+// memory log so concurrent writes from different branches don't conflict.
 console.log("\nGit attributes:");
 ensureAttribute(resolve(repoRoot, ".gitattributes"), "memory.log merge=union");
 
