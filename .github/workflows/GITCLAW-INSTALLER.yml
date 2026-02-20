@@ -18,7 +18,7 @@ on:
         type: string
   push:
     paths:
-      - '.github/workflows/.GITCLAW-INSTALLER.yml'
+      - '.github/workflows/GITCLAW-INSTALLER.yml'
   workflow_run:
     workflows:
       - 'GITCLAW Agent'
