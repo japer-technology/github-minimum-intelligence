@@ -87,7 +87,7 @@ This makes the agent fully auditable. Everything it "remembers" is a file you ca
 
 ## Skill System
 
-Skills are modular packages that extend the agent's capabilities. See [SKILLS.md](SKILLS.md) for the full guide.
+Skills are modular packages that extend the agent's capabilities. See [GITCLAW-Pi-Skills.md](GITCLAW-Pi-Skills.md) for the full guide.
 
 ### Built-In Skills
 
@@ -154,7 +154,7 @@ Every interaction is versioned in git:
 
 ## Configuration-Driven Behavior
 
-The agent's behavior can be tuned through configuration (see [CONFIGURATION.md](CONFIGURATION.md)):
+The agent's behavior can be tuned through configuration (see [GITCLAW-Pi-Configuration.md](GITCLAW-Pi-Configuration.md)):
 
 - **Model selection**: Choose the LLM provider and model
 - **Thinking level**: Adjust reasoning depth (low, medium, high)

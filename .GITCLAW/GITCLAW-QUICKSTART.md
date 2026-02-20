@@ -287,4 +287,4 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 ## Next steps
 
 - Read [the full README](README.md) for details on security, configuration, and how storage works
-- Explore [the onboarding docs](docs/.pi-onboarding/README.md) for deep dives into architecture, capabilities, skills, and personality
+- Explore [the onboarding docs](docs/GITCLAW-Pi/GITCLAW-Pi-README.md) for deep dives into architecture, capabilities, skills, and personality
