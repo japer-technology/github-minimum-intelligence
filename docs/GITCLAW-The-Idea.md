@@ -1,10 +1,14 @@
-# THE IDEA 🦞
+# .GITCLAW 🦞 The Idea
 
-## .GITCLAW — An AI Agent That Lives in Your Repo
+### An AI Agent That Lives in Your Repo
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
+  </picture>
+</p>
 
 What if your repository wasn't just a place where code sleeps between deploys — but a living, breathing collaborator that *thinks*?
-
-That's `.GITCLAW`.
 
 ---
 
