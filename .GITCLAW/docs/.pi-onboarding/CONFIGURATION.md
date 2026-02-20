@@ -2,7 +2,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
   </picture>
 </p>
 
@@ -40,12 +40,12 @@ The workflow file is the primary place to customize runtime behavior. Edit the `
 
 ```yaml
 - name: Run
-  run: bun .GITCLAW/lifecycle/.GITCLAW-AGENT.ts
+  run: bun .GITCLAW/lifecycle/GITCLAW-AGENT.ts
   # The pi agent reads settings.json by default.
-  # Override with --provider and --model flags in lifecycle/.GITCLAW-AGENT.ts
+  # Override with --provider and --model flags in lifecycle/GITCLAW-AGENT.ts
 ```
 
-To change the model, edit the `piArgs` array in `lifecycle/.GITCLAW-AGENT.ts` or update `settings.json`.
+To change the model, edit the `piArgs` array in `lifecycle/GITCLAW-AGENT.ts` or update `settings.json`.
 
 ### Thinking Level
 
@@ -150,7 +150,7 @@ The agent reads `.GITCLAW/AGENTS.md` first, then checks for a root-level `AGENTS
 }
 ```
 
-The `pi` coding agent is the core runtime. It's installed via `bun install` and provides the `pi` binary that `lifecycle/.GITCLAW-AGENT.ts` invokes.
+The `pi` coding agent is the core runtime. It's installed via `bun install` and provides the `pi` binary that `lifecycle/GITCLAW-AGENT.ts` invokes.
 
 ## Common Customization Recipes
 

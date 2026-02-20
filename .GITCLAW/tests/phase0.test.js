@@ -32,7 +32,7 @@ describe("Workflow triggers", () => {
   });
 
   it("workflow template also has correct triggers", () => {
-    const template = readFile(".GITCLAW/install/.GITCLAW-WORKFLOW-AGENT.yml");
+    const template = readFile(".GITCLAW/install/GITCLAW-WORKFLOW-AGENT.yml");
     assert.match(template, /issues:\s*\n\s*types:\s*\[.*opened.*\]/);
     assert.match(template, /issue_comment:\s*\n\s*types:\s*\[.*created.*\]/);
   });
@@ -76,17 +76,17 @@ describe("Session persistence", () => {
   });
 
   it("agent script references sessions directory", () => {
-    const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+    const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
     assert.ok(agent.includes("state/sessions"));
   });
 
   it("agent script uses JSONL session format", () => {
-    const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+    const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
     assert.ok(agent.includes(".jsonl"));
   });
 
   it("agent script handles session resumption", () => {
-    const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+    const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
     assert.ok(agent.includes("--session"));
     assert.ok(agent.includes('mode = "resume"'));
   });
@@ -100,13 +100,13 @@ describe("Issue-session mapping", () => {
   });
 
   it("agent script writes mapping files", () => {
-    const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+    const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
     assert.ok(agent.includes("mappingFile"));
     assert.ok(agent.includes("writeFileSync"));
   });
 
   it("mapping includes issueNumber and sessionPath", () => {
-    const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+    const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
     assert.ok(agent.includes("issueNumber"));
     assert.ok(agent.includes("sessionPath"));
   });
@@ -117,22 +117,22 @@ describe("Issue-session mapping", () => {
 describe("Reaction indicator", () => {
   it("indicator script exists", () => {
     assert.ok(
-      fs.existsSync(path.join(GITCLAW, "lifecycle", ".GITCLAW-INDICATOR.ts"))
+      fs.existsSync(path.join(GITCLAW, "lifecycle", "GITCLAW-INDICATOR.ts"))
     );
   });
 
   it("indicator adds eyes reaction", () => {
-    const indicator = readFile(".GITCLAW/lifecycle/.GITCLAW-INDICATOR.ts");
+    const indicator = readFile(".GITCLAW/lifecycle/GITCLAW-INDICATOR.ts");
     assert.ok(indicator.includes("content=eyes"));
   });
 
   it("indicator persists reaction state to /tmp", () => {
-    const indicator = readFile(".GITCLAW/lifecycle/.GITCLAW-INDICATOR.ts");
+    const indicator = readFile(".GITCLAW/lifecycle/GITCLAW-INDICATOR.ts");
     assert.ok(indicator.includes("/tmp/reaction-state.json"));
   });
 
   it("agent script removes reaction in finally block", () => {
-    const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+    const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
     assert.ok(agent.includes("finally"));
     assert.ok(agent.includes("reactionId"));
     assert.ok(agent.includes("DELETE"));
@@ -153,7 +153,7 @@ describe("Reaction indicator", () => {
 // ── 6. Commit + push state to main with retry-on-conflict ──────────────────
 
 describe("Commit and push with retry", () => {
-  const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+  const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
 
   it("stages all changes with git add", () => {
     assert.ok(agent.includes('"git", "add"'));
@@ -240,24 +240,24 @@ describe("Configurable personality", () => {
 describe("Fail-closed guard", () => {
   it("sentinel file exists", () => {
     assert.ok(
-      fs.existsSync(path.join(GITCLAW, ".GITCLAW-ENABLED.md"))
+      fs.existsSync(path.join(GITCLAW, "GITCLAW-ENABLED.md"))
     );
   });
 
   it("guard script exists", () => {
     assert.ok(
-      fs.existsSync(path.join(GITCLAW, "lifecycle", ".GITCLAW-ENABLED.ts"))
+      fs.existsSync(path.join(GITCLAW, "lifecycle", "GITCLAW-ENABLED.ts"))
     );
   });
 
   it("guard checks for sentinel file", () => {
-    const guard = readFile(".GITCLAW/lifecycle/.GITCLAW-ENABLED.ts");
-    assert.ok(guard.includes(".GITCLAW-ENABLED.md"));
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-ENABLED.ts");
+    assert.ok(guard.includes("GITCLAW-ENABLED.md"));
     assert.ok(guard.includes("existsSync"));
   });
 
   it("guard exits non-zero when sentinel missing", () => {
-    const guard = readFile(".GITCLAW/lifecycle/.GITCLAW-ENABLED.ts");
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-ENABLED.ts");
     assert.ok(guard.includes("process.exit(1)"));
   });
 
@@ -277,7 +277,7 @@ describe("Fail-closed guard", () => {
 describe("Install templates", () => {
   it("hatch template has valid frontmatter", () => {
     const template = readFile(
-      ".GITCLAW/install/.GITCLAW-TEMPLATE-HATCH.md"
+      ".GITCLAW/install/GITCLAW-TEMPLATE-HATCH.md"
     );
     assert.ok(
       template.startsWith("---"),
@@ -289,7 +289,7 @@ describe("Install templates", () => {
 
   it("workflow template has checkout with ref and fetch-depth", () => {
     const template = readFile(
-      ".GITCLAW/install/.GITCLAW-WORKFLOW-AGENT.yml"
+      ".GITCLAW/install/GITCLAW-WORKFLOW-AGENT.yml"
     );
     assert.ok(
       template.includes("github.event.repository.default_branch"),
@@ -303,7 +303,7 @@ describe("Install templates", () => {
 
   it("workflow template matches live workflow triggers", () => {
     const template = readFile(
-      ".GITCLAW/install/.GITCLAW-WORKFLOW-AGENT.yml"
+      ".GITCLAW/install/GITCLAW-WORKFLOW-AGENT.yml"
     );
     const live = readFile(".github/workflows/agent.yml");
     // Both should have the same trigger structure
@@ -315,7 +315,7 @@ describe("Install templates", () => {
 
   it("workflow template name matches live workflow name", () => {
     const template = readFile(
-      ".GITCLAW/install/.GITCLAW-WORKFLOW-AGENT.yml"
+      ".GITCLAW/install/GITCLAW-WORKFLOW-AGENT.yml"
     );
     const live = readFile(".github/workflows/agent.yml");
     const templateName = template.match(/^name:\s*(.+)$/m)?.[1];
@@ -329,7 +329,7 @@ describe("Install templates", () => {
 // ── Error handling and observability ───────────────────────────────────────
 
 describe("Error handling", () => {
-  const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+  const agent = readFile(".GITCLAW/lifecycle/GITCLAW-AGENT.ts");
 
   it("gh() helper checks exit code", () => {
     assert.ok(agent.includes("exitCode !== 0"));

@@ -4,7 +4,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
   </picture>
 </p>
 
@@ -21,7 +21,7 @@
 Copy the `.GITCLAW` folder into your repository root, then run the install script:
 
 ```bash
-bun .GITCLAW/install/.GITCLAW-INSTALLER.ts
+bun .GITCLAW/install/GITCLAW-INSTALLER.ts
 ```
 
 This sets up the GitHub Actions workflow and issue templates.
@@ -85,7 +85,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
 | Path | Purpose |
 |------|---------|
 | `AGENTS.md` | Agent identity — name, personality, instructions |
-| `lifecycle/.GITCLAW-AGENT.ts` | Core orchestrator that runs on every issue |
+| `lifecycle/GITCLAW-AGENT.ts` | Core orchestrator that runs on every issue |
 | `.pi/settings.json` | LLM provider, model, and thinking level |
 | `.pi/APPEND_SYSTEM.md` | System prompt loaded every session |
 | `.pi/skills/` | Modular skill packages |
@@ -263,7 +263,7 @@ Requires `GROQ_API_KEY`.
 Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https://openrouter.ai/).
 </details>
 
-**Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/.GITCLAW-AGENT.ts`.
+**Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/GITCLAW-AGENT.ts`.
 
 **Filter by label** — edit `.github/workflows/agent.yml` to only trigger on issues with a specific label.
 

@@ -4,7 +4,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
   </picture>
 </p>
 
@@ -34,7 +34,7 @@ These aren't just features — they form a _platform_ that can grow in many dire
 Even without any changes, GitClaw can already serve a surprising number of workflows:
 
 ### 2.1 Code Review Companion
-Open an issue like _"Review the error handling in `lifecycle/.GITCLAW-AGENT.ts`"_ and the agent reads the file, analyzes it, and posts a thorough review. Because sessions persist, follow-up questions refine the review incrementally.
+Open an issue like _"Review the error handling in `lifecycle/GITCLAW-AGENT.ts`"_ and the agent reads the file, analyzes it, and posts a thorough review. Because sessions persist, follow-up questions refine the review incrementally.
 
 ### 2.2 Documentation Writer
 Ask the agent to document a module, generate a README, or explain architecture. It has full read access to every file in the repo.

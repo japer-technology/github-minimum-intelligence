@@ -1,12 +1,12 @@
 /**
- * .GITCLAW-INSTALLER.ts — One-time setup script for gitclaw.
+ * GITCLAW-INSTALLER.ts — One-time setup script for gitclaw.
  *
  * Copies the GitHub Actions workflow, issue templates, and git attributes
  * from `.GITCLAW/install` into the standard locations the repo needs to function.
  * Existing files are never overwritten — only missing ones are installed.
  *
  * Usage:
- *   bun .GITCLAW/install/.GITCLAW-INSTALLER.ts
+ *   bun .GITCLAW/install/GITCLAW-INSTALLER.ts
  */
 
 import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from "fs";
@@ -66,7 +66,7 @@ console.log("🔧 Installing gitclaw into this repository...\n");
 console.log("Workflows:");
 ensureDir(resolve(repoRoot, ".github", "workflows"));
 copyIfMissing(
-  resolve(bootstrapDir, ".GITCLAW-WORKFLOW-AGENT.yml"),
+  resolve(bootstrapDir, "GITCLAW-WORKFLOW-AGENT.yml"),
   resolve(repoRoot, ".github", "workflows", "agent.yml"),
   ".github/workflows/agent.yml"
 );
@@ -75,7 +75,7 @@ copyIfMissing(
 console.log("\nIssue templates:");
 ensureDir(resolve(repoRoot, ".github", "ISSUE_TEMPLATE"));
 copyIfMissing(
-  resolve(bootstrapDir, ".GITCLAW-TEMPLATE-HATCH.md"),
+  resolve(bootstrapDir, "GITCLAW-TEMPLATE-HATCH.md"),
   resolve(repoRoot, ".github", "ISSUE_TEMPLATE", "hatch.md"),
   ".github/ISSUE_TEMPLATE/hatch.md"
 );
@@ -83,7 +83,7 @@ copyIfMissing(
 // --- Agent identity ---------------------------------------------------
 console.log("\nAgent identity:");
 ensureDir(resolve(repoRoot, ".GITCLAW"));
-copyIfMissing(resolve(bootstrapDir, ".GITCLAW-AGENTS.md"), resolve(repoRoot, ".GITCLAW", "AGENTS.md"), ".GITCLAW/AGENTS.md");
+copyIfMissing(resolve(bootstrapDir, "GITCLAW-AGENTS.md"), resolve(repoRoot, ".GITCLAW", "AGENTS.md"), ".GITCLAW/AGENTS.md");
 
 // --- Git attributes --------------------------------------------------
 // `memory.log merge=union` tells git to union-merge the append-only

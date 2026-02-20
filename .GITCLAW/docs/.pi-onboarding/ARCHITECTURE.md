@@ -2,7 +2,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
   </picture>
 </p>
 
@@ -27,7 +27,7 @@ How the pieces fit together — from files on disk to a running agent session.
 ## How .pi Connects to gitclaw
 
 ```
-GitHub Issue → GitHub Actions → lifecycle/.GITCLAW-AGENT.ts → pi agent → .pi config
+GitHub Issue → GitHub Actions → lifecycle/GITCLAW-AGENT.ts → pi agent → .pi config
                                       │                          │
                                       │                          ├── reads settings.json
                                       │                          ├── reads APPEND_SYSTEM.md
@@ -39,10 +39,10 @@ GitHub Issue → GitHub Actions → lifecycle/.GITCLAW-AGENT.ts → pi agent →
 
 1. A user opens an issue or comments on one.
 2. GitHub Actions triggers the `agent.yml` workflow.
-3. `lifecycle/.GITCLAW-AGENT.ts` resolves the session (new or resumed), builds a prompt, and launches the `pi` agent binary.
+3. `lifecycle/GITCLAW-AGENT.ts` resolves the session (new or resumed), builds a prompt, and launches the `pi` agent binary.
 4. The `pi` agent reads `.pi/settings.json` for LLM config, loads `.pi/APPEND_SYSTEM.md` as the system prompt, and activates relevant skills.
 5. The agent reads `.GITCLAW/AGENTS.md` to learn who it is.
-6. After the agent responds, `.GITCLAW-AGENT.ts` commits the session log, pushes changes, and posts the reply as an issue comment.
+6. After the agent responds, `GITCLAW-AGENT.ts` commits the session log, pushes changes, and posts the reply as an issue comment.
 
 ## Session Lifecycle
 
@@ -50,7 +50,7 @@ GitHub Issue → GitHub Actions → lifecycle/.GITCLAW-AGENT.ts → pi agent →
 
 When no prior session exists for an issue:
 
-1. `.GITCLAW-AGENT.ts` checks `state/issues/{number}.json` — not found.
+1. `GITCLAW-AGENT.ts` checks `state/issues/{number}.json` — not found.
 2. A new session starts; the agent has no prior conversation context.
 3. After completion, the session file lands in `state/sessions/` and a mapping is written to `state/issues/{number}.json`.
 
@@ -58,7 +58,7 @@ When no prior session exists for an issue:
 
 When a session already exists:
 
-1. `.GITCLAW-AGENT.ts` finds the mapping in `state/issues/{number}.json`.
+1. `GITCLAW-AGENT.ts` finds the mapping in `state/issues/{number}.json`.
 2. The existing session file is passed via `--session` to the `pi` agent.
 3. The agent picks up the full prior conversation and continues.
 
@@ -107,13 +107,13 @@ User writes issue/comment
 GitHub Actions triggers workflow
         │
         ▼
-.GITCLAW-ENABLED.ts verifies opt-in sentinel (fail-closed guard)
+GITCLAW-ENABLED.ts verifies opt-in sentinel (fail-closed guard)
         │
         ▼
-.GITCLAW-INDICATOR.ts adds 👀 reaction
+GITCLAW-INDICATOR.ts adds 👀 reaction
         │
         ▼
-.GITCLAW-AGENT.ts resolves session
+GITCLAW-AGENT.ts resolves session
         │
         ▼
 pi agent starts ← settings.json (model config)
@@ -129,10 +129,10 @@ Agent reads files, runs tools, generates response
 Session appended to state/sessions/*.jsonl
         │
         ▼
-.GITCLAW-AGENT.ts commits all changes to git
+GITCLAW-AGENT.ts commits all changes to git
         │
         ▼
-.GITCLAW-AGENT.ts posts reply as issue comment
+GITCLAW-AGENT.ts posts reply as issue comment
         │
         ▼
 👀 reaction removed

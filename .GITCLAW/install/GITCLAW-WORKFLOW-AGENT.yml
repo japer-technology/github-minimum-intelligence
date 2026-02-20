@@ -37,12 +37,12 @@ jobs:
           bun-version: latest
 
       - name: Guard
-        run: bun .GITCLAW/lifecycle/.GITCLAW-ENABLED.ts
+        run: bun .GITCLAW/lifecycle/GITCLAW-ENABLED.ts
 
       - name: Preinstall
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun .GITCLAW/lifecycle/.GITCLAW-INDICATOR.ts
+        run: bun .GITCLAW/lifecycle/GITCLAW-INDICATOR.ts
 
       - name: Install dependencies
         run: cd .GITCLAW && bun install --frozen-lockfile
@@ -51,4 +51,4 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun .GITCLAW/lifecycle/.GITCLAW-AGENT.ts
+        run: bun .GITCLAW/lifecycle/GITCLAW-AGENT.ts

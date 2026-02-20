@@ -4,7 +4,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
   </picture>
 </p>
 
@@ -52,7 +52,7 @@ gitclaw lives entirely inside a `.GITCLAW` folder that you drop into your reposi
 1. **Copy the `.GITCLAW` folder** into your repo's root.
 2. **Run the install script** to set up workflows and templates:
    ```bash
-   bun .GITCLAW/install/.GITCLAW-INSTALLER.ts
+   bun .GITCLAW/install/GITCLAW-INSTALLER.ts
    ```
 3. **Install dependencies:**
    ```bash
@@ -69,14 +69,14 @@ The install script copies the workflow and issue template into the right places.
 ```
 .GITCLAW/
   install/
-    .GITCLAW-INSTALLER.ts    # Setup script — installs workflows & templates
-    .GITCLAW-WORKFLOW-AGENT.yml    # GitHub Actions workflow template
+    GITCLAW-INSTALLER.ts    # Setup script — installs workflows & templates
+    GITCLAW-WORKFLOW-AGENT.yml    # GitHub Actions workflow template
     hatch.md              # Issue template for bootstrapping agent identity
-    .GITCLAW-AGENTS.md       # Default agent identity file installed as AGENTS.md
+    GITCLAW-AGENTS.md       # Default agent identity file installed as AGENTS.md
   lifecycle/
-    .GITCLAW-AGENT.ts      # Core agent orchestrator
-    .GITCLAW-INDICATOR.ts  # Adds 👀 reaction on issue activity
-    .GITCLAW-ENABLED.ts    # Fail-closed guard — verifies opt-in sentinel exists
+    GITCLAW-AGENT.ts      # Core agent orchestrator
+    GITCLAW-INDICATOR.ts  # Adds 👀 reaction on issue activity
+    GITCLAW-ENABLED.ts    # Fail-closed guard — verifies opt-in sentinel exists
   .pi/                    # Agent personality & skills config
   AGENTS.md               # Agent identity file
   install/package.json  # Dependencies

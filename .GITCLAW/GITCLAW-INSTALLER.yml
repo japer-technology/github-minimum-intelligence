@@ -170,7 +170,7 @@ jobs:
 
           mkdir -p "$DEST_DIR"
 
-          for src in "$SRC_DIR"/.GITCLAW-TEMPLATE-*; do
+          for src in "$SRC_DIR"/GITCLAW-TEMPLATE-*; do
             [ -f "$src" ] || continue
             filename="$(basename "$src")"
             dest="$DEST_DIR/$filename"
@@ -223,13 +223,13 @@ jobs:
 
       - name: Mark installation complete
         run: |
-          if [ -f ".GITCLAW/.GITCLAW-NOT-INSTALLED.md" ]; then
-            mv ".GITCLAW/.GITCLAW-NOT-INSTALLED.md" ".GITCLAW/.GITCLAW-INSTALLED.md"
-            echo "::notice::Renamed .GITCLAW-NOT-INSTALLED.md → .GITCLAW-INSTALLED.md"
-          elif [ -f ".GITCLAW/.GITCLAW-INSTALLED.md" ]; then
-            echo "::notice::.GITCLAW-INSTALLED.md already exists — install verified"
+          if [ -f ".GITCLAW/GITCLAW-NOT-INSTALLED.md" ]; then
+            mv ".GITCLAW/GITCLAW-NOT-INSTALLED.md" ".GITCLAW/GITCLAW-INSTALLED.md"
+            echo "::notice::Renamed GITCLAW-NOT-INSTALLED.md → GITCLAW-INSTALLED.md"
+          elif [ -f ".GITCLAW/GITCLAW-INSTALLED.md" ]; then
+            echo "::notice::GITCLAW-INSTALLED.md already exists — install verified"
           else
-            echo "::warning::Neither .GITCLAW-NOT-INSTALLED.md nor .GITCLAW-INSTALLED.md found"
+            echo "::warning::Neither GITCLAW-NOT-INSTALLED.md nor GITCLAW-INSTALLED.md found"
           fi
 
       - name: Check for changes

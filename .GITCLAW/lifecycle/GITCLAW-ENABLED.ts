@@ -1,13 +1,13 @@
 /**
- * .GITCLAW-ENABLED.ts — Fail-closed guard for the .GITCLAW-ENABLED.md sentinel file.
+ * GITCLAW-ENABLED.ts — Fail-closed guard for the GITCLAW-ENABLED.md sentinel file.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * PURPOSE
  * ─────────────────────────────────────────────────────────────────────────────
- * This script is the very first step executed in every .GITCLAW-* workflow.
+ * This script is the very first step executed in every GITCLAW-* workflow.
  * Its sole job is to verify that the operator has deliberately opted-in to
  * GitClaw automation by checking for the presence of the sentinel file
- * `.GITCLAW/.GITCLAW-ENABLED.md`.
+ * `.GITCLAW/GITCLAW-ENABLED.md`.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * SECURITY MODEL — "FAIL-CLOSED"
@@ -29,10 +29,10 @@
  * The workflow invokes this file as the "Guard" step:
  *
  *   - name: Guard
- *     run: bun .GITCLAW/lifecycle/.GITCLAW-ENABLED.ts
+ *     run: bun .GITCLAW/lifecycle/GITCLAW-ENABLED.ts
  *
- * To ENABLE  GitClaw: ensure `.GITCLAW/.GITCLAW-ENABLED.md` exists in the repo.
- * To DISABLE GitClaw: delete `.GITCLAW/.GITCLAW-ENABLED.md` and commit the removal.
+ * To ENABLE  GitClaw: ensure `.GITCLAW/GITCLAW-ENABLED.md` exists in the repo.
+ * To DISABLE GitClaw: delete `.GITCLAW/GITCLAW-ENABLED.md` and commit the removal.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * DEPENDENCIES
@@ -52,18 +52,18 @@ import { resolve } from "path";
 // `import.meta.dir` resolves to the directory containing THIS script, i.e.
 // `.GITCLAW/lifecycle/`.  We step one level up (`..`) to reach `.GITCLAW/`,
 // then join with the sentinel filename.
-const enabledFile = resolve(import.meta.dir, "..", ".GITCLAW-ENABLED.md");
+const enabledFile = resolve(import.meta.dir, "..", "GITCLAW-ENABLED.md");
 
 // ─── Guard: fail-closed if the sentinel is missing ────────────────────────────
 // Print a clear, actionable error message before exiting so that operators
 // immediately understand why the workflow stopped and what to do about it.
 if (!existsSync(enabledFile)) {
   console.error(
-    "GitClaw disabled — sentinel file `.GITCLAW/.GITCLAW-ENABLED.md` is missing.\n" +
+    "GitClaw disabled — sentinel file `.GITCLAW/GITCLAW-ENABLED.md` is missing.\n" +
     "To enable GitClaw, restore that file and push it to the repository."
   );
   process.exit(1);
 }
 
 // ─── Sentinel found: log confirmation and let the workflow continue ───────────
-console.log("GitClaw enabled — .GITCLAW-ENABLED.md found.");
+console.log("GitClaw enabled — GITCLAW-ENABLED.md found.");
