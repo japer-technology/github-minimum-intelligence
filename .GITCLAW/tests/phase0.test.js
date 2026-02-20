@@ -312,4 +312,45 @@ describe("Install templates", () => {
     assert.ok(live.includes("issues:"));
     assert.ok(live.includes("issue_comment:"));
   });
+
+  it("workflow template name matches live workflow name", () => {
+    const template = readFile(
+      ".GITCLAW/install/.GITCLAW-WORKFLOW-AGENT.yml"
+    );
+    const live = readFile(".github/workflows/agent.yml");
+    const templateName = template.match(/^name:\s*(.+)$/m)?.[1];
+    const liveName = live.match(/^name:\s*(.+)$/m)?.[1];
+    assert.ok(templateName, "Template should have a name field");
+    assert.ok(liveName, "Live workflow should have a name field");
+    assert.strictEqual(liveName, templateName, "Live workflow name must match template");
+  });
+});
+
+// ── Error handling and observability ───────────────────────────────────────
+
+describe("Error handling", () => {
+  const agent = readFile(".GITCLAW/lifecycle/.GITCLAW-AGENT.ts");
+
+  it("gh() helper checks exit code", () => {
+    assert.ok(agent.includes("exitCode !== 0"));
+    assert.ok(agent.includes("throw new Error"));
+  });
+
+  it("pi agent stderr is not silenced", () => {
+    assert.ok(
+      !agent.includes('stderr: "ignore"'),
+      "pi agent stderr should not be silenced — use 'inherit' for observability"
+    );
+  });
+
+  it("checks pi agent exit code", () => {
+    assert.ok(agent.includes("piExitCode"));
+  });
+
+  it("handles empty agent response", () => {
+    assert.ok(
+      agent.includes("did not produce a response"),
+      "Agent should post an error message when response is empty"
+    );
+  });
 });
