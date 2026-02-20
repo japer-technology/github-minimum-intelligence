@@ -226,12 +226,24 @@ try {
     await gh(
       "issue", "comment", String(issueNumber),
       "--body",
-      `⚠️ The \`${requiredKeyName}\` secret is not set but the configured provider is \`"${configuredProvider}"\`. ` +
-      `Add it as a repository secret in **Settings → Secrets and variables → Actions**.`
+      `## ⚠️ Missing API Key: \`${requiredKeyName}\`\n\n` +
+      `The configured provider is \`${configuredProvider}\`, but the \`${requiredKeyName}\` secret is not available to this workflow run.\n\n` +
+      `### How to fix\n\n` +
+      `**Option A — Repository secret** _(simplest)_\n` +
+      `1. Go to **Settings → Secrets and variables → Actions → New repository secret**\n` +
+      `2. Name: \`${requiredKeyName}\`, Value: your API key\n\n` +
+      `**Option B — Organization secret** _(already have one?)_\n` +
+      `Organization secrets are only available to workflows if the secret has been explicitly granted to this repository:\n` +
+      `1. Go to your **Organization Settings → Secrets and variables → Actions**\n` +
+      `2. Click the \`${requiredKeyName}\` secret → **Repository access**\n` +
+      `3. Add **this repository** to the selected repositories list\n\n` +
+      `Once the secret is accessible, re-trigger this workflow by posting a new comment on this issue.`
     );
     throw new Error(
-      `${requiredKeyName} is not set but the configured provider is "${configuredProvider}". ` +
-      `Add it as a repository secret in Settings → Secrets and variables → Actions.`
+      `${requiredKeyName} is not available to this workflow run. ` +
+      `If you have set it as a repository secret, verify the secret name matches exactly. ` +
+      `If you have set it as an organization secret, ensure this repository has been granted access ` +
+      `(Organization Settings → Secrets and variables → Actions → ${requiredKeyName} → Repository access).`
     );
   }
 
