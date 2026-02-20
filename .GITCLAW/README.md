@@ -1,5 +1,7 @@
 # .GITCLAW 🦞 An AI Agent As An Add-On
 
+### Move one file to install
+
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
