@@ -2,7 +2,7 @@
 
 > How gitclaw reaches repositories — current approach, alternatives, and everything in between.
 
-GitClaw is a self-contained `.GITCLAW` folder that turns any GitHub repo into an AI-powered assistant. The delivery question is: **how does that folder get into a repo in the first place?**
+gitclaw is a self-contained `.GITCLAW` folder that turns any GitHub repo into an AI-powered assistant. The delivery question is: **how does that folder get into a repo in the first place?**
 
 This document maps out every viable channel — from what exists today to ideas that could reshape how gitclaw is distributed.
 
