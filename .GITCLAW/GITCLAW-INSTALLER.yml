@@ -1,4 +1,4 @@
-name: GITCLAW Installer (Move to .github/workflows to execute)
+name: GITCLAW Installer (Move to .github/workflows to execute, the master version lives .GITCLAW/GITCLAW-INSTALLER.yml)
 
 on:
   workflow_dispatch:
