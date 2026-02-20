@@ -1,6 +1,6 @@
 # .GITCLAW 🦞 Install
 
-### These files are installed by .GITHUB-INSTALLER.yml
+### These files are installed by GITCLAW-INSTALLER.yml
 
 <p align="center">
   <picture>
@@ -92,13 +92,13 @@ To activate it:
 1. Copy `.GITCLAW/GITCLAW-INSTALLER.yml` into your `.github/workflows/` folder:
 
    ```bash
-   cp .GITCLAW/GITCLAW-INSTALLER.yml .github/workflows/.GITCLAW-INSTALLER.yml
+   cp .GITCLAW/GITCLAW-INSTALLER.yml .github/workflows/GITCLAW-INSTALLER.yml
    ```
 
 2. Commit and push:
 
    ```bash
-   git add .github/workflows/.GITCLAW-INSTALLER.yml
+   git add .github/workflows/GITCLAW-INSTALLER.yml
    git commit -m "chore: add GITCLAW installer workflow"
    git push
    ```

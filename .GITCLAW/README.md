@@ -70,7 +70,7 @@ The install script copies the workflow and issue template into the right places.
 .GITCLAW/
   install/
     .GITCLAW-INSTALLER.ts    # Setup script — installs workflows & templates
-    .GITCLAW-AGENT.yml    # GitHub Actions workflow template
+    .GITCLAW-WORKFLOW-AGENT.yml    # GitHub Actions workflow template
     hatch.md              # Issue template for bootstrapping agent identity
     .GITCLAW-AGENTS.md       # Default agent identity file installed as AGENTS.md
   lifecycle/
