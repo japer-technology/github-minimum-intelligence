@@ -1,4 +1,4 @@
-# 🦞 GITCLAW Life Cycle
+# .GITCLAW 🦞 Life Cycle
 
 <p align="center">
   <picture>
