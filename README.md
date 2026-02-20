@@ -1,4 +1,4 @@
-# japer-technology/gitclaw
+# japer-technology/gitclaw 🦞A Drop-In AI Agent
 
 <p align="center">
   <picture>
