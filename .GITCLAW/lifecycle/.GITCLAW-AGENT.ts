@@ -89,6 +89,10 @@ const sessionsDir = resolve(stateDir, "sessions");
 // absolute one, so we keep this as a relative string constant.
 const sessionsDirRelative = ".GITCLAW/state/sessions";
 
+// GitHub enforces a ~65 535 character limit on issue comments; cap at 60 000
+// characters to leave a comfortable safety margin and avoid API rejections.
+const MAX_COMMENT_LENGTH = 60000;
+
 // Parse the full GitHub Actions event payload (contains issue/comment details).
 const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH!, "utf-8"));
 
@@ -272,13 +276,11 @@ try {
   }
 
   // ── Post reply as issue comment ──────────────────────────────────────────────
-  // GitHub enforces a ~65 535 character limit on issue comments; cap at 60 000
-  // characters to leave a comfortable safety margin and avoid API rejections.
   // Guard against empty/null responses — post an error message instead of silence.
   const trimmedText = agentText.trim();
   const commentBody = trimmedText.length > 0
-    ? trimmedText.slice(0, 60000)
-    : "⚠️ The agent did not produce a response. Check the [workflow run logs](https://github.com/" + repo + "/actions) for details.";
+    ? trimmedText.slice(0, MAX_COMMENT_LENGTH)
+    : `⚠️ The agent did not produce a response. Check the [workflow run logs](https://github.com/${repo}/actions) for details.`;
   await gh("issue", "comment", String(issueNumber), "--body", commentBody);
 
 } finally {
