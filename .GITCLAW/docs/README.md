@@ -18,4 +18,5 @@
 | [GITCLAW-Since-Forking.md](GITCLAW-Since-Forking.md) | How japer-technology/gitclaw diverged from SawyerHood/gitclaw |
 | [GITCLAW-Delivery-Methods.md](GITCLAW-Delivery-Methods.md) | Overview and comparison matrix of all delivery methods |
 | [delivery-method/](delivery-method/README.md) | Deep-dive documentation for each individual delivery method |
+| [GITCLAW-Cloud-vs-Local.md](GITCLAW-Cloud-vs-Local.md) | Cloud (GitHub Actions) vs Local (pi CLI) — UX, UI, and capability differences |
 | [GITCLAW-Pi/](GITCLAW-Pi/GITCLAW-Pi-README.md) | Dedicated documentation for the .pi agent configuration system |

@@ -158,6 +158,7 @@ If you plan to use gitclaw for anything private, **make the repo private**. Publ
 | [Possibilities](docs/GITCLAW-Possibilities.md) | Current and future use cases, skill ideas, and design space |
 | [GitHub Possibilities](docs/GITCLAW-The-GitHub-Possibilities.md) | Analysis of every GitHub platform feature and what it means for GitClaw |
 | [Roadmap](docs/GITCLAW-Roadmap.md) | Phased plan from issue bot to full-platform agent |
+| [Cloud vs Local](docs/GITCLAW-Cloud-vs-Local.md) | Cloud (GitHub Actions) vs Local (pi CLI) — UX, capabilities, and trade-offs |
 | [Pi Agent Docs](docs/GITCLAW-Pi/GITCLAW-Pi-README.md) | Deep dive into the `.pi` agent configuration system |
 | [Install Guide](install/README.md) | Detailed install process and installer workflow reference |
 
