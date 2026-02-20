@@ -61,7 +61,7 @@ jobs:
           OVERWRITE: ${{ steps.inputs.outputs.overwrite }}
           NODE_VERSION: ${{ steps.inputs.outputs.node_version }}
         run: |
-          SRC_DIR=".GITCLAW/workflows"
+          SRC_DIR=".GITCLAW/install"
           DEST_DIR=".github/workflows"
 
           if [ ! -d "$SRC_DIR" ]; then
@@ -71,6 +71,7 @@ jobs:
 
           mkdir -p "$DEST_DIR"
 
+          shopt -s dotglob
           for src in "$SRC_DIR"/*.yml "$SRC_DIR"/*.yaml; do
             [ -f "$src" ] || continue
             filename="$(basename "$src")"
@@ -159,7 +160,7 @@ jobs:
         env:
           OVERWRITE: ${{ steps.inputs.outputs.overwrite }}
         run: |
-          SRC_DIR=".GITCLAW/issue-templates"
+          SRC_DIR=".GITCLAW/install"
           DEST_DIR=".github/ISSUE_TEMPLATE"
 
           if [ ! -d "$SRC_DIR" ]; then
@@ -169,7 +170,7 @@ jobs:
 
           mkdir -p "$DEST_DIR"
 
-          for src in "$SRC_DIR"/*; do
+          for src in "$SRC_DIR"/.GITCLAW-TEMPLATE-*; do
             [ -f "$src" ] || continue
             filename="$(basename "$src")"
             dest="$DEST_DIR/$filename"
