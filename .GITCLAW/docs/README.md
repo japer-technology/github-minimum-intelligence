@@ -1,4 +1,4 @@
-# 🦞 GITCLAW Documentation
+# .GITCLAW 🦞 Documentation
 
 <p align="center">
   <picture>
