@@ -68,11 +68,12 @@ Job steps are intentionally ordered:
 
 1. **Checkout** (`actions/checkout@v4`)
 2. **Setup Bun** (`oven-sh/setup-bun@v2`)
-3. **Preinstall** (`bun lifecycle/.GITCLAW-INDICATOR.ts`)
-4. **Install dependencies** (`bun install --frozen-lockfile`)
-5. **Run main logic** (`bun lifecycle/.GITCLAW-AGENT.ts`)
+3. **Guard** (`bun lifecycle/.GITCLAW-ENABLED.ts`) — fail-closed check for `.GITCLAW-ENABLED.md` sentinel
+4. **Preinstall** (`bun lifecycle/.GITCLAW-INDICATOR.ts`)
+5. **Install dependencies** (`bun install --frozen-lockfile`)
+6. **Run main logic** (`bun lifecycle/.GITCLAW-AGENT.ts`)
 
-Notably, preinstall runs before dependency installation to immediately signal activity via reaction.
+Notably, the guard runs before anything else to enforce the fail-closed opt-in, and preinstall runs before dependency installation to immediately signal activity via reaction.
 
 ---
 
@@ -284,15 +285,16 @@ Potential hard failures would come from:
 
 1. User opens issue/comment.
 2. Workflow starts (if actor authorized).
-3. `.GITCLAW-INDICATOR.ts` adds 👀 reaction.
-4. `.GITCLAW-AGENT.ts` fetches issue context.
-5. `.GITCLAW-AGENT.ts` resolves/creates session mapping.
-6. `.GITCLAW-AGENT.ts` runs `pi` with prompt (+ prior session if resume).
-7. `.GITCLAW-AGENT.ts` extracts final assistant text.
-8. `.GITCLAW-AGENT.ts` commits session/mapping/other repo changes.
-9. `.GITCLAW-AGENT.ts` pushes to `main` with retry-on-conflict.
-10. `.GITCLAW-AGENT.ts` comments response to issue.
-11. `.GITCLAW-AGENT.ts` removes 👀 reaction in `finally`.
+3. `.GITCLAW-ENABLED.ts` verifies opt-in sentinel exists (fail-closed guard).
+4. `.GITCLAW-INDICATOR.ts` adds 👀 reaction.
+5. `.GITCLAW-AGENT.ts` fetches issue context.
+6. `.GITCLAW-AGENT.ts` resolves/creates session mapping.
+7. `.GITCLAW-AGENT.ts` runs `pi` with prompt (+ prior session if resume).
+8. `.GITCLAW-AGENT.ts` extracts final assistant text.
+9. `.GITCLAW-AGENT.ts` commits session/mapping/other repo changes.
+10. `.GITCLAW-AGENT.ts` pushes to `main` with retry-on-conflict.
+11. `.GITCLAW-AGENT.ts` comments response to issue.
+12. `.GITCLAW-AGENT.ts` removes 👀 reaction in `finally`.
 
 ---
 
