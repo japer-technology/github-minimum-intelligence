@@ -21,7 +21,7 @@ on:
       - '.github/workflows/GITCLAW-INSTALLER.yml'
   workflow_run:
     workflows:
-      - 'GITCLAW Agent'
+      - 'GITCLAW-WORKFLOW-AGENT'
     types:
       - completed
 

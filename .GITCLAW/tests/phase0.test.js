@@ -21,7 +21,7 @@ function readFile(relPath) {
 // ── 1. Trigger on issues.opened and issue_comment.created ──────────────────
 
 describe("Workflow triggers", () => {
-  const workflow = readFile(".github/workflows/agent.yml");
+  const workflow = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
 
   it("triggers on issues.opened", () => {
     assert.match(workflow, /issues:\s*\n\s*types:\s*\[.*opened.*\]/);
@@ -41,7 +41,7 @@ describe("Workflow triggers", () => {
 // ── 2. Authorization gating ────────────────────────────────────────────────
 
 describe("Authorization gating", () => {
-  const workflow = readFile(".github/workflows/agent.yml");
+  const workflow = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
 
   it("gates on OWNER association", () => {
     assert.ok(workflow.includes("OWNER"));
@@ -139,7 +139,7 @@ describe("Reaction indicator", () => {
   });
 
   it("workflow runs indicator before install", () => {
-    const workflow = readFile(".github/workflows/agent.yml");
+    const workflow = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
     const indicatorIdx = workflow.indexOf("GITCLAW-INDICATOR");
     const installIdx = workflow.indexOf("bun install");
     assert.ok(indicatorIdx > 0 && installIdx > 0);
@@ -262,7 +262,7 @@ describe("Fail-closed guard", () => {
   });
 
   it("workflow runs guard before indicator and agent", () => {
-    const workflow = readFile(".github/workflows/agent.yml");
+    const workflow = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
     const guardIdx = workflow.indexOf("GITCLAW-ENABLED");
     const indicatorIdx = workflow.indexOf("GITCLAW-INDICATOR");
     const agentIdx = workflow.indexOf("GITCLAW-AGENT");
@@ -305,7 +305,7 @@ describe("Install templates", () => {
     const template = readFile(
       ".GITCLAW/install/GITCLAW-WORKFLOW-AGENT.yml"
     );
-    const live = readFile(".github/workflows/agent.yml");
+    const live = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
     // Both should have the same trigger structure
     assert.ok(template.includes("issues:"));
     assert.ok(template.includes("issue_comment:"));
@@ -317,7 +317,7 @@ describe("Install templates", () => {
     const template = readFile(
       ".GITCLAW/install/GITCLAW-WORKFLOW-AGENT.yml"
     );
-    const live = readFile(".github/workflows/agent.yml");
+    const live = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
     const templateName = template.match(/^name:\s*(.+)$/m)?.[1];
     const liveName = live.match(/^name:\s*(.+)$/m)?.[1];
     assert.ok(templateName, "Template should have a name field");
