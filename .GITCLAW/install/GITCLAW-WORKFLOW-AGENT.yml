@@ -15,9 +15,20 @@ jobs:
   run-agent:
     runs-on: ubuntu-latest
     if: >-
-      (github.event_name == 'issues' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
-      || (github.event_name == 'issue_comment' && github.event.comment.user.login != 'github-actions[bot]' && contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))
+      (github.event_name == 'issues')
+      || (github.event_name == 'issue_comment' && github.event.comment.user.login != 'github-actions[bot]')
     steps:
+      - name: Authorize
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PERM=$(gh api "repos/${{ github.repository }}/collaborators/${{ github.actor }}/permission" --jq '.permission' 2>/dev/null || echo "none")
+          echo "Actor: ${{ github.actor }}, Permission: $PERM"
+          if [[ "$PERM" != "admin" && "$PERM" != "maintain" && "$PERM" != "write" ]]; then
+            echo "::error::Unauthorized: ${{ github.actor }} has '$PERM' permission"
+            exit 1
+          fi
+
       - name: Checkout
         uses: actions/checkout@v4
         with:

@@ -43,28 +43,32 @@ describe("Workflow triggers", () => {
 describe("Authorization gating", () => {
   const workflow = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
 
-  it("gates on OWNER association", () => {
-    assert.ok(workflow.includes("OWNER"));
+  it("has an Authorize step that checks collaborator permission", () => {
+    assert.ok(workflow.includes("name: Authorize"));
+    assert.ok(workflow.includes("collaborators"));
+    assert.ok(workflow.includes("permission"));
   });
 
-  it("gates on MEMBER association", () => {
-    assert.ok(workflow.includes("MEMBER"));
+  it("gates on admin permission", () => {
+    assert.ok(workflow.includes("admin"));
   });
 
-  it("gates on COLLABORATOR association", () => {
-    assert.ok(workflow.includes("COLLABORATOR"));
+  it("gates on write permission", () => {
+    assert.ok(workflow.includes("write"));
   });
 
   it("excludes github-actions[bot] from comment triggers", () => {
     assert.ok(workflow.includes("github-actions[bot]"));
   });
 
-  it("checks author_association for issues", () => {
-    assert.ok(workflow.includes("github.event.issue.author_association"));
-  });
-
-  it("checks author_association for comments", () => {
-    assert.ok(workflow.includes("github.event.comment.author_association"));
+  it("Authorize step runs before Checkout", () => {
+    const authorizeIdx = workflow.indexOf("name: Authorize");
+    const checkoutIdx = workflow.indexOf("name: Checkout");
+    assert.ok(authorizeIdx > 0 && checkoutIdx > 0);
+    assert.ok(
+      authorizeIdx < checkoutIdx,
+      "Authorize must run before Checkout"
+    );
   });
 });
 
@@ -343,8 +347,17 @@ describe("Error handling", () => {
     );
   });
 
-  it("checks pi agent exit code", () => {
+  it("validates provider API key is set", () => {
+    assert.ok(
+      agent.includes("providerKeyMap"),
+      "Agent should validate that the required API key for the configured provider is present"
+    );
+    assert.ok(agent.includes("ANTHROPIC_API_KEY"));
+  });
+
+  it("checks pi agent exit code and throws on failure", () => {
     assert.ok(agent.includes("piExitCode"));
+    assert.ok(agent.includes("throw new Error") && agent.includes("piExitCode"));
   });
 
   it("handles empty agent response", () => {

@@ -122,6 +122,21 @@ if (!configuredProvider || !configuredModel) {
   );
 }
 
+// Validate that the required API key for the configured provider is present.
+// For example, if the default provider is "anthropic", ANTHROPIC_API_KEY must be set.
+// Without this check, the pi binary may silently fall back to an unsupported provider.
+const providerKeyMap: Record<string, string> = {
+  anthropic: "ANTHROPIC_API_KEY",
+  openai: "OPENAI_API_KEY",
+};
+const requiredKeyName = providerKeyMap[configuredProvider];
+if (requiredKeyName && !process.env[requiredKeyName]) {
+  throw new Error(
+    `${requiredKeyName} is not set but the configured provider is "${configuredProvider}". ` +
+    `Add it as a repository secret in Settings → Secrets and variables → Actions.`
+  );
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /**
@@ -244,7 +259,7 @@ try {
   // Check if the pi agent exited successfully.
   const piExitCode = await pi.exited;
   if (piExitCode !== 0) {
-    console.error(`pi agent exited with code ${piExitCode}`);
+    throw new Error(`pi agent exited with code ${piExitCode}. Check the workflow logs above for details.`);
   }
 
   // ── Extract final assistant text ─────────────────────────────────────────────
