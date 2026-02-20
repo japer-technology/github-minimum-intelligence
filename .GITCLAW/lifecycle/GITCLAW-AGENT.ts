@@ -84,6 +84,7 @@ const gitclawDir = resolve(import.meta.dir, "..");
 const stateDir = resolve(gitclawDir, "state");
 const issuesDir = resolve(stateDir, "issues");
 const sessionsDir = resolve(stateDir, "sessions");
+const piSettingsPath = resolve(gitclawDir, ".pi", "settings.json");
 
 // The `pi` CLI requires a repo-root-relative path for `--session-dir`, not an
 // absolute one, so we keep this as a relative string constant.
@@ -107,6 +108,19 @@ const defaultBranch = event.repository?.default_branch ?? "main";
 
 // The issue number is present on both the `issues` and `issue_comment` payloads.
 const issueNumber: number = event.issue.number;
+
+// Read the committed `.pi` defaults and pass them explicitly to the runtime.
+// This prevents provider/model drift from host-level config (for example a
+// runner image with a global `~/.pi/settings.json` set to github-copilot).
+const piSettings = JSON.parse(readFileSync(piSettingsPath, "utf-8"));
+const configuredProvider: string = piSettings.defaultProvider;
+const configuredModel: string = piSettings.defaultModel;
+
+if (!configuredProvider || !configuredModel) {
+  throw new Error(
+    `Invalid .pi settings at ${piSettingsPath}: expected defaultProvider and defaultModel`
+  );
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -205,7 +219,19 @@ try {
   //   • a live stream to stdout (visible in the Actions log in real time), and
   //   • a persisted copy at `/tmp/agent-raw.jsonl` for post-processing below.
   const piBin = resolve(gitclawDir, "node_modules", ".bin", "pi");
-  const piArgs = [piBin, "--mode", "json", "--session-dir", sessionsDirRelative, "-p", prompt];
+  const piArgs = [
+    piBin,
+    "--mode",
+    "json",
+    "--provider",
+    configuredProvider,
+    "--model",
+    configuredModel,
+    "--session-dir",
+    sessionsDirRelative,
+    "-p",
+    prompt,
+  ];
   if (mode === "resume" && sessionPath) {
     // Pass the prior session transcript so the agent can recall earlier context.
     piArgs.push("--session", sessionPath);
