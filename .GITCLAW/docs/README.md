@@ -16,4 +16,6 @@
 | [GITCLAW-Internal-Mechanics.md](GITCLAW-Internal-Mechanics.md) | Architecture, workflow steps, session management, and data model |
 | [GITCLAW-Loves-Pi.md](GITCLAW-Loves-Pi.md) | How the Pi coding agent powers GitClaw |
 | [GITCLAW-Since-Forking.md](GITCLAW-Since-Forking.md) | How japer-technology/gitclaw diverged from SawyerHood/gitclaw |
+| [GITCLAW-Delivery-Methods.md](GITCLAW-Delivery-Methods.md) | Overview and comparison matrix of all delivery methods |
+| [delivery-method/](delivery-method/README.md) | Deep-dive documentation for each individual delivery method |
 | [GITCLAW-Pi/](GITCLAW-Pi/GITCLAW-Pi-README.md) | Dedicated documentation for the .pi agent configuration system |
