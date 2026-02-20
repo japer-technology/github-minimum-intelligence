@@ -1,6 +1,6 @@
 # .GITCLAW 🦞 Install
 
-### Just copy .GITHUB-INSTALLER.yml to workflows
+### These files are installed by .GITHUB-INSTALLER.yml
 
 <p align="center">
   <picture>
