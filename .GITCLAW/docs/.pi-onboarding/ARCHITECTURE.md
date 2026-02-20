@@ -107,6 +107,9 @@ User writes issue/comment
 GitHub Actions triggers workflow
         │
         ▼
+.GITCLAW-ENABLED.ts verifies opt-in sentinel (fail-closed guard)
+        │
+        ▼
 .GITCLAW-INDICATOR.ts adds 👀 reaction
         │
         ▼
