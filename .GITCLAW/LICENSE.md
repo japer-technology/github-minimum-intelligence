@@ -1,6 +1,6 @@
 # .GITCLAW 🦞 MIT License
 
-### Copyright © 2026 Sawyer Hood & Eric Mourant
+### Copyright © 2026 Eric Mourant and Sawyer Hood
 
 <p align="center">
   <picture>
