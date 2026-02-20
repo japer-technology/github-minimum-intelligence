@@ -1,4 +1,4 @@
-# gitclaw
+# japer-technology/gitclaw
 
 <p align="center">
   <picture>
