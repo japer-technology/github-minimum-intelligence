@@ -43,7 +43,7 @@ Only 3 commits: "Initial commit", "Update acknowledgments", "Tighten up README".
 
 ## 🚀 Fork Changes (japer-technology/gitclaw)
 
-### 1. Complete Restructure into `.GITCLAW/` Addon Folder
+### 1. Complete Restructure into `.GITCLAW/` Drop In Folder
 
 The original `lifecycle/`, `.pi/`, `AGENTS.md`, `LICENSE`, and `banner.jpeg` were moved and reorganized into a self-contained `.GITCLAW/` directory:
 
@@ -90,13 +90,13 @@ The original `lifecycle/`, `.pi/`, `AGENTS.md`, `LICENSE`, and `banner.jpeg` wer
 
 ### 7. README.md
 
-Significantly rewritten with new branding, emoji, and documentation of the `.GITCLAW` addon approach.
+Significantly rewritten with new branding, emoji, and documentation of the `.GITCLAW` drop in approach.
 
 ---
 
 ## 🔑 Key Takeaway
 
-The fork transformed the original minimal 3-commit Pi agent scaffold into a **full-featured, self-contained `.GITCLAW/` addon system** with its own installer workflow, extensive documentation, lifecycle management, state tracking, issue automation, and tests — all while keeping 0 commits behind upstream.
+The fork transformed the original minimal 3-commit Pi agent scaffold into a **full-featured, self-contained `.GITCLAW/` drop in system** with its own installer workflow, extensive documentation, lifecycle management, state tracking, issue automation, and tests — all while keeping 0 commits behind upstream.
 
 ---
 
