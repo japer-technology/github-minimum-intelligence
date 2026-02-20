@@ -8,7 +8,7 @@
   </picture>
 </p>
 
-> This roadmap builds on [possibilities.md](possibilities.md) and lays out concrete
+> This roadmap builds on [GITCLAW-Possibilities.md](GITCLAW-Possibilities.md) and lays out concrete
 > phases for turning GitClaw from an issue-comment assistant into an agent that
 > participates in every layer of the GitHub platform — pull requests, reviews,
 > checks, projects, releases, security scanning, and more.

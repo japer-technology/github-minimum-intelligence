@@ -1,6 +1,6 @@
 /**
  * Phase 0 validation tests — verify that all Foundation-layer features
- * described in .GITCLAW/docs/roadmap.md are structurally present.
+ * described in .GITCLAW/docs/GITCLAW-Roadmap.md are structurally present.
  *
  * Run with: node --test .GITCLAW/tests/phase0.test.js
  *        or: bun test .GITCLAW/tests/phase0.test.js
