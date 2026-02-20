@@ -124,8 +124,4 @@ When you fork the repo, you fork the agent's mind. When you branch, you branch i
 
 `.GITCLAW` is the idea that a single folder, dropped into any GitHub repository, can turn issues into conversations with an AI agent that remembers everything, touches any file, and needs nothing but git and a willingness to try.
 
-🦞
-
----
-
-*The claw is the repo. The repo is the claw.*
+🦞 *The claw is the repo. The repo is the claw.*
