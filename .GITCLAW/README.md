@@ -1,6 +1,6 @@
 # .GITCLAW 🦞 An AI Agent As An Add-On
 
-### Move GITHUB-INSTALLER.yml to workflows to install
+### Move or copy GITHUB-INSTALLER.yml to workflows to install
 
 <p align="center">
   <picture>
