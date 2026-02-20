@@ -1,4 +1,4 @@
-name: GITCLAW Agent
+name: GITCLAW-WORKFLOW-AGENT
 
 on:
   issues:
