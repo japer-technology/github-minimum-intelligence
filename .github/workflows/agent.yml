@@ -1,4 +1,4 @@
-name: Gitclaw Agent
+name: GITCLAW Agent
 
 on:
   issues:

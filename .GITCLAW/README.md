@@ -56,7 +56,7 @@ gitclaw lives entirely inside a `.GITCLAW` folder that you drop into your reposi
    ```
 3. **Install dependencies:**
    ```bash
-   cd .GITCLAW/install && bun install
+   cd .GITCLAW && bun install
    ```
 4. **Add your Anthropic API key** — go to **Settings → Secrets and variables → Actions** and create a secret named `ANTHROPIC_API_KEY`.
 5. **Commit and push** the changes.

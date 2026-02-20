@@ -73,7 +73,7 @@ That merge rule keeps the memory log append-only merge behavior safe when multip
 ### 4) Install dependencies
 
 ```bash
-cd .GITCLAW/install
+cd .GITCLAW
 bun install
 ```
 

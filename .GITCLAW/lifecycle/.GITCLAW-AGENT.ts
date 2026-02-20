@@ -89,6 +89,10 @@ const sessionsDir = resolve(stateDir, "sessions");
 // absolute one, so we keep this as a relative string constant.
 const sessionsDirRelative = ".GITCLAW/state/sessions";
 
+// GitHub enforces a ~65 535 character limit on issue comments; cap at 60 000
+// characters to leave a comfortable safety margin and avoid API rejections.
+const MAX_COMMENT_LENGTH = 60000;
+
 // Parse the full GitHub Actions event payload (contains issue/comment details).
 const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH!, "utf-8"));
 
@@ -128,9 +132,13 @@ async function run(cmd: string[], opts?: { stdin?: any }): Promise<{ exitCode: n
 /**
  * Convenience wrapper: run `gh <args>` and return trimmed stdout.
  * Uses the `run` helper above so that `gh` errors appear in the Actions log.
+ * Throws on non-zero exit codes to fail fast on API errors.
  */
 async function gh(...args: string[]): Promise<string> {
-  const { stdout } = await run(["gh", ...args]);
+  const { exitCode, stdout } = await run(["gh", ...args]);
+  if (exitCode !== 0) {
+    throw new Error(`gh ${args[0]} failed with exit code ${exitCode}`);
+  }
   return stdout;
 }
 
@@ -203,9 +211,15 @@ try {
     piArgs.push("--session", sessionPath);
   }
 
-  const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "ignore" });
+  const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "inherit" });
   const tee = Bun.spawn(["tee", "/tmp/agent-raw.jsonl"], { stdin: pi.stdout, stdout: "inherit" });
   await tee.exited;
+
+  // Check if the pi agent exited successfully.
+  const piExitCode = await pi.exited;
+  if (piExitCode !== 0) {
+    console.error(`pi agent exited with code ${piExitCode}`);
+  }
 
   // ── Extract final assistant text ─────────────────────────────────────────────
   // The `pi` agent writes newline-delimited JSON events.  We reverse the file
@@ -262,9 +276,11 @@ try {
   }
 
   // ── Post reply as issue comment ──────────────────────────────────────────────
-  // GitHub enforces a ~65 535 character limit on issue comments; cap at 60 000
-  // characters to leave a comfortable safety margin and avoid API rejections.
-  const commentBody = agentText.slice(0, 60000);
+  // Guard against empty/null responses — post an error message instead of silence.
+  const trimmedText = agentText.trim();
+  const commentBody = trimmedText.length > 0
+    ? trimmedText.slice(0, MAX_COMMENT_LENGTH)
+    : `⚠️ The agent did not produce a response. Check the [workflow run logs](https://github.com/${repo}/actions) for details.`;
   await gh("issue", "comment", String(issueNumber), "--body", commentBody);
 
 } finally {
