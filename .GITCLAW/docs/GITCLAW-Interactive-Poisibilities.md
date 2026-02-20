@@ -86,7 +86,7 @@ This creates a fundamentally different interaction model from stateless chatbots
 | Memory across messages | None | Full conversation history via JSONL sessions |
 | Memory across days/weeks | None | Sessions persisted as git commits |
 | Memory of file changes | None | Agent can see its own prior edits in the repo |
-| Conversation forks | Not possible | Implicit via pi's session tree structure |
+| Conversation forks | Not possible | Implicit via Pi's session tree structure |
 | Auditability | Ephemeral logs | Every exchange is a diffable git commit |
 
 ### 1.6 Prompt Construction — Translating Interaction to Agent Input
