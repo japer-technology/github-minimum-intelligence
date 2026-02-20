@@ -1,4 +1,4 @@
-name: GITCLAW Installer (Move to .github/workflows to execute)
+name: GITCLAW Installer (Move to .github/workflows to execute, but this is the master version)
 
 on:
   workflow_dispatch:
