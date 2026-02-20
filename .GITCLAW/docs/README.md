@@ -15,4 +15,5 @@
 | [GITCLAW-Roadmap.md](GITCLAW-Roadmap.md) | Phased implementation plan from issues to full-platform agent |
 | [GITCLAW-Internal-Mechanics.md](GITCLAW-Internal-Mechanics.md) | Architecture, workflow steps, session management, and data model |
 | [GITCLAW-Loves-Pi.md](GITCLAW-Loves-Pi.md) | How the Pi coding agent powers GitClaw |
+| [GITCLAW-Since-Forking.md](GITCLAW-Since-Forking.md) | How japer-technology/gitclaw diverged from SawyerHood/gitclaw |
 | [GITCLAW-Pi/](GITCLAW-Pi/GITCLAW-Pi-README.md) | Dedicated documentation for the .pi agent configuration system |
