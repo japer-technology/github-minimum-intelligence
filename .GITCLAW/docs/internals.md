@@ -1,8 +1,12 @@
-# gitclaw Internals
+# .GITCLAW 🦞 Internals
 
-This document covers the internal mechanics of gitclaw — how the issue-driven AI agent pipeline is structured, what triggers it, how it manages conversation memory, how it posts replies, and how it persists state back to git.
+### The internal mechanics of .GITCLAW
 
----
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/.GITCLAW-LOGO.png" alt="GitClaw" width="500">
+  </picture>
+</p>
 
 ## 1) High-level architecture
 
