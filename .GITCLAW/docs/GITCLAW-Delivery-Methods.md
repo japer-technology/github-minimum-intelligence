@@ -1,4 +1,4 @@
-# GITCLAW Delivery Methods 🦞
+# .GITCLAW 🦞 Delivery Methods
 
 > How gitclaw reaches repositories — current approach, alternatives, and everything in between.
 
