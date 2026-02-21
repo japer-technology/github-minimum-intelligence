@@ -1,8 +1,12 @@
-# GitHub as Infrastructure: From Test Case to Agentic Platform
+# .GITCLAW 🦞 GitHub as Infrastructure
 
 ### How .GITCLAW proves the model and .GITOPENCLAW realizes it
 
----
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
+  </picture>
+</p>
 
 ## Abstract
 
