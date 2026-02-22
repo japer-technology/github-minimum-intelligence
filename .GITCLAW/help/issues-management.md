@@ -155,6 +155,12 @@ Only users with **admin**, **maintain**, or **write** permission on the reposito
 
 Random users on public repositories cannot trigger the agent by opening issues or posting comments.
 
+## Heart Emoji Requirement
+
+GitClaw supports an optional heart emoji gate for new issues. When enabled (by renaming `.GITCLAW/GITCLAW-HEART-NOT-REQUIRED.md` to `.GITCLAW/GITCLAW-HEART-REQUIRED.md`), the agent only processes new issues that contain a ❤️ heart emoji in the issue body. Comments on existing issues are always processed.
+
+See [❤️ Heart Requirement](heart-requirement.md) for full details.
+
 ## Comment Size Limits
 
 GitHub enforces a ~65,535 character limit on issue comments. The agent caps its replies at 60,000 characters to stay within this limit. If a response is truncated, check the workflow logs for the full output.
