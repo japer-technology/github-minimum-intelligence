@@ -330,6 +330,88 @@ describe("Install templates", () => {
   });
 });
 
+// ── Heart emoji guard ──────────────────────────────────────────────────────
+
+describe("Heart emoji guard", () => {
+  it("heart guard script exists", () => {
+    assert.ok(
+      fs.existsSync(path.join(GITCLAW, "lifecycle", "GITCLAW-HEART-GUARD.ts"))
+    );
+  });
+
+  it("default sentinel file is GITCLAW-HEART-NOT-REQUIRED.md", () => {
+    assert.ok(
+      fs.existsSync(path.join(GITCLAW, "GITCLAW-HEART-NOT-REQUIRED.md"))
+    );
+  });
+
+  it("guard checks for GITCLAW-HEART-REQUIRED file pattern", () => {
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-HEART-GUARD.ts");
+    assert.ok(guard.includes("GITCLAW-HEART-REQUIRED"));
+  });
+
+  it("guard reads issue body from event payload", () => {
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-HEART-GUARD.ts");
+    assert.ok(guard.includes("GITHUB_EVENT_PATH"));
+    assert.ok(guard.includes("issue"));
+    assert.ok(guard.includes("body"));
+  });
+
+  it("guard checks for heart emoji pattern", () => {
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-HEART-GUARD.ts");
+    assert.ok(guard.includes("heartPattern"));
+  });
+
+  it("guard only enforces on issues.opened events", () => {
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-HEART-GUARD.ts");
+    assert.ok(guard.includes("GITHUB_EVENT_NAME"));
+    assert.ok(guard.includes('"issues"'));
+  });
+
+  it("guard exits non-zero when heart emoji is missing", () => {
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-HEART-GUARD.ts");
+    assert.ok(guard.includes("process.exit(1)"));
+  });
+
+  it("guard passes when heart requirement is not active", () => {
+    const guard = readFile(".GITCLAW/lifecycle/GITCLAW-HEART-GUARD.ts");
+    assert.ok(guard.includes("process.exit(0)"));
+  });
+
+  it("workflow runs heart guard after main guard and before indicator", () => {
+    const workflow = readFile(".github/workflows/GITCLAW-WORKFLOW-AGENT.yml");
+    const guardIdx = workflow.indexOf("GITCLAW-ENABLED");
+    const heartGuardIdx = workflow.indexOf("GITCLAW-HEART-GUARD");
+    const indicatorIdx = workflow.indexOf("GITCLAW-INDICATOR");
+    assert.ok(guardIdx > 0, "Main guard must be present");
+    assert.ok(heartGuardIdx > 0, "Heart guard must be present");
+    assert.ok(indicatorIdx > 0, "Indicator must be present");
+    assert.ok(guardIdx < heartGuardIdx, "Main guard must run before heart guard");
+    assert.ok(heartGuardIdx < indicatorIdx, "Heart guard must run before indicator");
+  });
+
+  it("workflow template also has heart guard step", () => {
+    const template = readFile(".GITCLAW/install/GITCLAW-WORKFLOW-AGENT.yml");
+    assert.ok(template.includes("GITCLAW-HEART-GUARD"));
+    const guardIdx = template.indexOf("GITCLAW-ENABLED");
+    const heartGuardIdx = template.indexOf("GITCLAW-HEART-GUARD");
+    const indicatorIdx = template.indexOf("GITCLAW-INDICATOR");
+    assert.ok(guardIdx < heartGuardIdx, "Template: main guard before heart guard");
+    assert.ok(heartGuardIdx < indicatorIdx, "Template: heart guard before indicator");
+  });
+
+  it("help documentation for heart requirement exists", () => {
+    assert.ok(
+      fs.existsSync(path.join(GITCLAW, "help", "heart-requirement.md"))
+    );
+  });
+
+  it("help index links to heart requirement page", () => {
+    const helpIndex = readFile(".GITCLAW/help/README.md");
+    assert.ok(helpIndex.includes("heart-requirement.md"));
+  });
+});
+
 // ── Error handling and observability ───────────────────────────────────────
 
 describe("Error handling", () => {
