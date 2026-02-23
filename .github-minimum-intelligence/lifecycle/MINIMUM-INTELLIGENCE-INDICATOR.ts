@@ -1,5 +1,5 @@
 /**
- * MINIMUM-INTELLIGENCE-INDICATOR.ts — Adds a 👀 reaction to signal that the agent is working.
+ * MINIMUM-INTELLIGENCE-INDICATOR.ts — Adds a 🚀 reaction to signal that the agent is working.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * PURPOSE
@@ -7,7 +7,7 @@
  * This script serves as the "activity indicator" for Minimum Intelligence.  It runs
  * *before* dependency installation (hence "pre-install") so that users
  * receive immediate visual feedback on the triggering issue or comment —
- * in the form of a 👀 (eyes) emoji reaction — the moment the workflow starts.
+ * in the form of a 🚀 (rocket) emoji reaction — the moment the workflow starts.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * LIFECYCLE POSITION
@@ -25,9 +25,9 @@
  * file at `/tmp/reaction-state.json`.
  *
  * `MINIMUM-INTELLIGENCE-AGENT.ts` reads that file in its `finally` block and uses the
- * stored IDs to DELETE the 👀 reaction once the agent finishes — regardless
- * of whether the run succeeded or failed.  This guarantees the indicator is
- * always cleaned up.
+ * stored IDs to add an outcome reaction (👍 on success, 👎 on error) while
+ * leaving the 🚀 rocket in place.  On authorization rejection, the rocket
+ * is never added and only a 👎 is posted by the workflow.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * EVENT HANDLING
@@ -84,10 +84,11 @@ async function gh(...args: string[]): Promise<string> {
   return stdout.trim();
 }
 
-// ─── Add 👀 reaction ──────────────────────────────────────────────────────────
-// Track three pieces of information that `MINIMUM-INTELLIGENCE-AGENT.ts` needs for cleanup:
+// ─── Add 🚀 reaction ──────────────────────────────────────────────────────────
+// Track three pieces of information that `MINIMUM-INTELLIGENCE-AGENT.ts` needs for
+// adding the outcome reaction:
 //   reactionId     — the numeric GitHub reaction ID returned by the API
-//   reactionTarget — "comment" or "issue" (determines which API endpoint to DELETE)
+//   reactionTarget — "comment" or "issue" (determines which API endpoint to use)
 //   commentId      — the comment's ID, only set when reactionTarget === "comment"
 let reactionId: string | null = null;
 let reactionTarget: "comment" | "issue" = "issue";
@@ -100,7 +101,7 @@ try {
     commentId = event.comment.id;
     reactionId = await gh(
       "api", `repos/${repo}/issues/comments/${commentId}/reactions`,
-      "-f", "content=eyes", "--jq", ".id"
+      "-f", "content=rocket", "--jq", ".id"
     );
     reactionTarget = "comment";
   } else {
@@ -108,20 +109,19 @@ try {
     // POST /repos/{owner}/{repo}/issues/{issue_number}/reactions
     reactionId = await gh(
       "api", `repos/${repo}/issues/${issueNumber}/reactions`,
-      "-f", "content=eyes", "--jq", ".id"
+      "-f", "content=rocket", "--jq", ".id"
     );
   }
 } catch (e) {
   // A failed reaction is non-fatal — log it but do not abort the workflow.
-  // The agent will still run; the user just won't see the 👀 indicator.
+  // The agent will still run; the user just won't see the 🚀 indicator.
   console.error("Failed to add reaction:", e);
 }
 
-// ─── Persist reaction state for MINIMUM-INTELLIGENCE-AGENT.ts cleanup ────────────────────
+// ─── Persist reaction state for MINIMUM-INTELLIGENCE-AGENT.ts outcome ────────────────────
 // Write all fields to a well-known temp path.  `MINIMUM-INTELLIGENCE-AGENT.ts` reads this
-// file inside its `finally` block and uses the IDs to DELETE the reaction
-// once the agent finishes — ensuring the indicator is always cleaned up,
-// even if the agent itself throws an error.
+// file inside its `finally` block and uses the IDs to add an outcome reaction
+// (👍 or 👎) once the agent finishes.
 writeFileSync("/tmp/reaction-state.json", JSON.stringify({
   reactionId,
   reactionTarget,

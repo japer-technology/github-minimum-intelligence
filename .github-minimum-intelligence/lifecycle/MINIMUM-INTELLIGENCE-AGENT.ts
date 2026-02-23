@@ -14,7 +14,7 @@
  * LIFECYCLE POSITION
  * ─────────────────────────────────────────────────────────────────────────────
  * Workflow step order:
- *   1. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) — add 👀 reaction indicator
+ *   1. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) — add 🚀 reaction indicator
  *   2. Install     (bun install)            — install npm/bun dependencies
  *   3. Run         (MINIMUM-INTELLIGENCE-AGENT.ts)     ← YOU ARE HERE
  *
@@ -35,8 +35,9 @@
  *   7. Stage, commit, and push all changes (session log, mapping, repo edits)
  *      back to the default branch with an automatic retry-on-conflict loop.
  *   8. Post the extracted reply as a new comment on the originating issue.
- *   9. [finally] Remove the 👀 reaction that `MINIMUM-INTELLIGENCE-INDICATOR.ts` added,
- *      guaranteeing cleanup even if the agent threw an unhandled error.
+ *   9. [finally] Add an outcome reaction: 👍 (thumbs up) on success or
+ *      👎 (thumbs down) on error.  The 🚀 rocket from `MINIMUM-INTELLIGENCE-INDICATOR.ts`
+ *      is left in place for both success and error cases.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * SESSION CONTINUITY
@@ -156,13 +157,17 @@ async function gh(...args: string[]): Promise<string> {
 }
 
 // ─── Restore reaction state from MINIMUM-INTELLIGENCE-INDICATOR.ts ────────────────────────
-// `MINIMUM-INTELLIGENCE-INDICATOR.ts` runs before dependency installation and writes the 👀
+// `MINIMUM-INTELLIGENCE-INDICATOR.ts` runs before dependency installation and writes the 🚀
 // reaction metadata to `/tmp/reaction-state.json`.  We read it here so the
-// `finally` block can delete the reaction when the agent finishes (or errors).
+// `finally` block can add the outcome reaction (👍 or 👎) when the agent finishes.
 // If the file is absent (e.g., indicator step was skipped), we default to null.
 const reactionState = existsSync("/tmp/reaction-state.json")
   ? JSON.parse(readFileSync("/tmp/reaction-state.json", "utf-8"))
   : null;
+
+// Track whether the agent completed successfully so the `finally` block can
+// add the correct outcome reaction (👍 on success, 👎 on error).
+let succeeded = false;
 
 try {
   // ── Fetch issue title and body ───────────────────────────────────────────────
@@ -215,7 +220,7 @@ try {
 
   // ── Validate provider API key ────────────────────────────────────────────────
   // This check is inside the try block so that the finally clause always runs
-  // (removing the 👀 reaction) and a helpful comment can be posted to the issue.
+  // (adding the outcome reaction) and a helpful comment can be posted to the issue.
   const providerKeyMap: Record<string, string> = {
     anthropic: "ANTHROPIC_API_KEY",
     openai: "OPENAI_API_KEY",
@@ -344,23 +349,28 @@ try {
     : `✅ The agent ran successfully but did not produce a text response. Check the repository for any file changes that were made.\n\nFor full details, see the [workflow run logs](https://github.com/${repo}/actions).`;
   await gh("issue", "comment", String(issueNumber), "--body", commentBody);
 
+  // Mark the run as successful so the `finally` block adds 👍 instead of 👎.
+  succeeded = true;
+
 } finally {
-  // ── Guaranteed cleanup: remove 👀 reaction ───────────────────────────────────
-  // This block always executes — even when the try block throws — ensuring the
-  // 👀 activity indicator is always removed so users know the agent has stopped.
-  if (reactionState?.reactionId) {
+  // ── Guaranteed outcome reaction: 👍 on success, 👎 on error ─────────────────
+  // This block always executes — even when the try block throws.  The 🚀 rocket
+  // from `MINIMUM-INTELLIGENCE-INDICATOR.ts` is intentionally left in place; we only
+  // ADD the outcome reaction here.
+  if (reactionState) {
     try {
-      const { reactionId, reactionTarget, commentId } = reactionState;
-      if (reactionTarget === "comment" && commentId) {
-        // Delete the reaction from the triggering comment.
-        await gh("api", `repos/${repo}/issues/comments/${commentId}/reactions/${reactionId}`, "-X", "DELETE");
+      const { reactionTarget, commentId: stateCommentId } = reactionState;
+      const outcomeContent = succeeded ? "+1" : "-1";
+      if (reactionTarget === "comment" && stateCommentId) {
+        // Add outcome reaction to the triggering comment.
+        await gh("api", `repos/${repo}/issues/comments/${stateCommentId}/reactions`, "-f", `content=${outcomeContent}`);
       } else {
-        // Delete the reaction from the issue itself.
-        await gh("api", `repos/${repo}/issues/${issueNumber}/reactions/${reactionId}`, "-X", "DELETE");
+        // Add outcome reaction to the issue itself.
+        await gh("api", `repos/${repo}/issues/${issueNumber}/reactions`, "-f", `content=${outcomeContent}`);
       }
     } catch (e) {
-      // Log but do not re-throw — a failed cleanup should not mask the original error.
-      console.error("Failed to remove reaction:", e);
+      // Log but do not re-throw — a failed reaction should not mask the original error.
+      console.error("Failed to add outcome reaction:", e);
     }
   }
 }
