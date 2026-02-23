@@ -36,20 +36,20 @@ The entire system runs as a closed loop inside your GitHub repository. When you 
 
 ```mermaid
 flowchart TD
-    A["👤 User opens or comments\non a GitHub Issue"] --> B["⚡ GitHub Actions\ntriggers workflow"]
-    B --> C{"🔐 Authorize\ncollaborator?"}
+    A["👤 User opens or comments<br/>on a GitHub Issue"] --> B["⚡ GitHub Actions<br/>triggers workflow"]
+    B --> C{"🔐 Authorize<br/>collaborator?"}
     C -- No --> D["🚫 Rejected"]
-    C -- Yes --> E["👀 Add reaction\nindicator"]
-    E --> F["📦 Install\ndependencies"]
-    F --> G{"🔄 Existing session\nfor this issue?"}
-    G -- Yes --> H["📂 Load prior\nsession context"]
-    G -- No --> I["🆕 Create fresh\nsession"]
-    H --> J["🤖 Run pi AI agent\nwith prompt + context"]
+    C -- Yes --> E["👀 Add reaction<br/>indicator"]
+    E --> F["📦 Install<br/>dependencies"]
+    F --> G{"🔄 Existing session<br/>for this issue?"}
+    G -- Yes --> H["📂 Load prior<br/>session context"]
+    G -- No --> I["🆕 Create fresh<br/>session"]
+    H --> J["🤖 Run pi AI agent<br/>with prompt + context"]
     I --> J
-    J --> K["💾 Persist session\n& issue mapping"]
-    K --> L["📤 Commit & push\nstate to repo"]
-    L --> M["💬 Post reply as\nissue comment"]
-    M --> N["✅ Remove 👀\nreaction"]
+    J --> K["💾 Persist session<br/>& issue mapping"]
+    K --> L["📤 Commit & push<br/>state to repo"]
+    L --> M["💬 Post reply as<br/>issue comment"]
+    M --> N["✅ Remove 👀<br/>reaction"]
 
     style A fill:#4CAF50,color:#fff
     style J fill:#2196F3,color:#fff
