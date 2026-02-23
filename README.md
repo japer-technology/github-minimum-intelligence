@@ -10,6 +10,8 @@
   </picture>
 </p>
 
+### [🦞 Quick Start](.minimum-intelligence/MINIMUM-INTELLIGENCE-QUICKSTART.md)
+
 ### Get an AI agent running in any GitHub repo in under 5 minutes.
 
 A personal AI assistant that runs entirely through GitHub Issues and Actions. Drop a single `.minimum-intelligence` folder into any repo and you have a fully functional AI agent — no servers, no external services, no extra infrastructure.
@@ -17,6 +19,18 @@ A personal AI assistant that runs entirely through GitHub Issues and Actions. Dr
 Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Every issue becomes a chat thread with an AI agent. Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
 Since the agent can read and write files, you can build an evolving software project that updates itself as you open issues. Try asking it to set up a GitHub Pages site, then iterate on it issue by issue.
+
+### Why Minimum Intelligence
+
+| Capability | Why it matters |
+|---|---|
+| **Single folder, any repo** | Copy `.minimum-intelligence/` in and run the install script. Nothing to host or maintain. |
+| **Zero infrastructure** | Runs on GitHub Actions with your repo as the only backend. |
+| **Persistent memory** | Conversations are committed to git — the agent remembers everything across sessions. |
+| **Full auditability** | Every interaction is versioned; review or roll back any change the agent made. |
+| **Multi-provider LLM support** | Works with Anthropic, OpenAI, Google Gemini, xAI, DeepSeek, Mistral, Groq, and any OpenRouter model. |
+| **Modular skill system** | Agent capabilities are self-contained Markdown files — user-extensible and composable. |
+| **Personality hatching** | Give the agent a name, personality, and vibe through a guided conversation. |
 
 ---
 
@@ -145,18 +159,32 @@ Use the **🥚 Hatch** issue template (or create an issue with the `hatch` label
 
 This is optional. The agent works without hatching, but it's more fun with a personality.
 
-## What's in the `.minimum-intelligence` folder
+## What's Inside `.minimum-intelligence/`
 
-| Path | Purpose |
-|------|---------|
-| `AGENTS.md` | Agent identity — name, personality, instructions |
-| `lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts` | Core orchestrator that runs on every issue |
-| `.pi/settings.json` | LLM provider, model, and thinking level |
-| `.pi/APPEND_SYSTEM.md` | System prompt loaded every session |
-| `.pi/skills/` | Modular skill packages |
-| `state/` | Session history and issue mappings |
+```
+.minimum-intelligence/
+  .pi/                              # Agent personality & skills config
+    settings.json                   # LLM provider, model, and thinking level
+    APPEND_SYSTEM.md                # System prompt loaded every session
+    BOOTSTRAP.md                    # First-run identity prompt
+    skills/                         # Modular skill packages
+  install/
+    MINIMUM-INTELLIGENCE-INSTALLER.ts            # Setup script — installs workflows & templates
+    MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml      # GitHub Actions workflow template
+    MINIMUM-INTELLIGENCE-TEMPLATE-HATCH.md       # Issue template for personality hatching
+    MINIMUM-INTELLIGENCE-AGENTS.md               # Default agent identity file
+    package.json                    # Installer dependencies
+  lifecycle/
+    MINIMUM-INTELLIGENCE-AGENT.ts                # Core agent orchestrator
+    MINIMUM-INTELLIGENCE-INDICATOR.ts            # Adds/removes 👀 reaction on issue activity
+  state/                            # Session history and issue mappings (git-tracked)
+  AGENTS.md                         # Agent identity file
+  MINIMUM-INTELLIGENCE-QUICKSTART.md             # Quick start guide
+  LICENSE.md                        # MIT license
+  package.json                      # Runtime dependencies
+```
 
-## Common tweaks
+## Configuration
 
 **Change the model** — edit `.minimum-intelligence/.pi/settings.json`:
 
@@ -332,6 +360,8 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 **Filter by label** — edit `.github/workflows/MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml` to only trigger on issues with a specific label.
 
+**Adjust thinking level** — set `defaultThinkingLevel` to `"low"`, `"medium"`, or `"high"` in `settings.json` for different task complexities.
+
 ## Supported providers
 
 `.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.minimum-intelligence/.pi/settings.json` and add the matching API key to your workflow:
@@ -355,10 +385,14 @@ The workflow only responds to repository **owners, members, and collaborators**.
 
 If you plan to use minimum-intelligence for anything private, **make the repo private**. Public repos mean your conversation history is visible to everyone, but get generous GitHub Actions usage.
 
-## Next steps
+## Documentation
 
-- Explore the [onboarding docs](.minimum-intelligence/README.md) for deep dives into architecture, capabilities, skills, and personality
+| Document | Description |
+|---|---|
+| [Quick Start](.minimum-intelligence/MINIMUM-INTELLIGENCE-QUICKSTART.md) | Get running in under 5 minutes — setup, providers, and common tweaks |
 
 ## Acknowledgments
 
 Built on top of [pi-mono](https://github.com/badlogic/pi-mono) by [Mario Zechner](https://github.com/badlogic).
+
+Thanks to [ymichael](https://github.com/ymichael) for nerdsniping me with the idea of an agent that runs in GitHub Actions.
