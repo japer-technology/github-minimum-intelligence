@@ -6,7 +6,7 @@
   </picture>
 </p>
 
-### Any LLM but an ANTHROPIC_API_KEY secret to quick-start
+### Any LLM but an ANTHROPIC_API_KEY secret will quick-start
 
 A personal AI assistant that runs entirely through GitHub Issues and Actions. Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent — no servers, no external services, no extra infrastructure.
 
