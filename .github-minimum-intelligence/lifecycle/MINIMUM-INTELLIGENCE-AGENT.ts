@@ -199,8 +199,8 @@ try {
 
   // ── Configure git identity ───────────────────────────────────────────────────
   // Set the bot identity for all git commits made during this run.
-  await run(["git", "config", "user.name", "minimum-intelligence[bot]"]);
-  await run(["git", "config", "user.email", "minimum-intelligence[bot]@users.noreply.github.com"]);
+  await run(["git", "config", "user.name", "github-minimum-intelligence[bot]"]);
+  await run(["git", "config", "user.email", "github-minimum-intelligence[bot]@users.noreply.github.com"]);
 
   // ── Build prompt from event context ─────────────────────────────────────────
   // For `issue_comment` events, use the new comment body as the full prompt so
