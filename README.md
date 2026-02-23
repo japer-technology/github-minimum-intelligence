@@ -422,6 +422,10 @@ The workflow only responds to repository **owners, members, and collaborators**.
 
 If you plan to use minimum-intelligence for anything private, **make the repo private**. Public repos mean your conversation history is visible to everyone, but get generous GitHub Actions usage.
 
+## Repo Size
+
+The repo is overwhelmingly dominated by node_modules ~99%). The actual project files (README, LICENSE, config, GitHub workflows, GMI state/lifecycle) are only about ~1 MB
+
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
