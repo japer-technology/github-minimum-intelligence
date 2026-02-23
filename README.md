@@ -91,7 +91,46 @@ Each issue number is a stable conversation key — `issue #N` → `state/issues/
 - [Bun](https://bun.sh) installed locally
 - An API key from your chosen LLM provider (see [Supported providers](#supported-providers) below)
 
-## Setup
+## GitHub App Setup
+
+Running minimum-intelligence as a **GitHub App** gives it its own bot identity, consistent permissions across repositories, and a path toward multi-repo installation without copy-pasting files.
+
+### 1. Register the GitHub App
+
+Use the included [`app-manifest.json`](./app-manifest.json) to register the app automatically via GitHub's manifest flow:
+
+1. Go to **GitHub → Settings → Developer settings → GitHub Apps → New GitHub App**.
+2. Scroll to the bottom and click **"Register a GitHub App from a manifest"**.
+3. Paste the contents of `app-manifest.json` and submit.
+
+Or use the [GitHub Apps API](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app-from-a-manifest) to register programmatically.
+
+After registration you will receive:
+- An **App ID** (numeric)
+- A **private key** (`.pem` file to download)
+
+### 2. Store the App credentials as secrets
+
+In the repository where the agent workflow lives, go to **Settings → Secrets and variables → Actions** and add:
+
+| Secret name | Value |
+|-------------|-------|
+| `APP_ID` | The numeric App ID shown on the app's settings page |
+| `APP_PRIVATE_KEY` | The full contents of the downloaded `.pem` private key file |
+
+### 3. Install the App on target repositories
+
+Go to the app's **Install** page (linked from its settings) and install it on the repositories where you want the agent to respond to issues. The app needs **read/write** access to **Issues**, **Contents**, and **Actions**.
+
+### 4. Add your LLM API key
+
+In each target repo, go to **Settings → Secrets and variables → Actions** and add the key for your chosen LLM provider (see the table in the [manual setup section](#manual-setup) below).
+
+---
+
+## Manual Setup
+
+You can also run minimum-intelligence without registering a GitHub App by using the repository's built-in `GITHUB_TOKEN`.  In that case skip the App setup above and follow these steps instead.
 
 **1. Add minimum-intelligence to your repo**
 
