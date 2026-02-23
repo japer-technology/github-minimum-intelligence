@@ -1,4 +1,6 @@
-# .minimum-intelligence
+# .github-minimum-intelligence
+
+### Any LLM but an ANTHROPIC_API_KEY secret to quick-start
 
 ### An AI Agent As A Drop-In
 
