@@ -43,13 +43,13 @@ jobs:
       - name: Preinstall
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun .minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-INDICATOR.ts
+        run: bun .github-minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-INDICATOR.ts
 
       - name: Install dependencies
-        run: cd .minimum-intelligence && bun install --frozen-lockfile
+        run: cd .github-minimum-intelligence && bun install --frozen-lockfile
 
       - name: Run
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun .minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts
+        run: bun .github-minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts

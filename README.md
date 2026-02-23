@@ -2,13 +2,13 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
 ### Any LLM but an ANTHROPIC_API_KEY secret to quick-start
 
-A personal AI assistant that runs entirely through GitHub Issues and Actions. Drop a single `.minimum-intelligence` folder into any repo and you have a fully functional AI agent — no servers, no external services, no extra infrastructure.
+A personal AI assistant that runs entirely through GitHub Issues and Actions. Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent — no servers, no external services, no extra infrastructure.
 
 Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Every issue becomes a chat thread with an AI agent. Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
@@ -20,7 +20,7 @@ Since the agent can read and write files, you can build an evolving software pro
 
 | Capability | Why it matters |
 |---|---|
-| **Single folder, any repo** | Copy `.minimum-intelligence/` in and run the install script. Nothing to host or maintain. |
+| **Single folder, any repo** | Copy `.github-minimum-intelligence/` in and run the install script. Nothing to host or maintain. |
 | **Zero infrastructure** | Runs on GitHub Actions with your repo as the only backend. |
 | **Persistent memory** | Conversations are committed to git — the agent remembers everything across sessions. |
 | **Full auditability** | Every interaction is versioned; review or roll back any change the agent made. |
@@ -72,7 +72,7 @@ flowchart TD
 All state lives in the repo:
 
 ```
-.minimum-intelligence/state/
+.github-minimum-intelligence/state/
   issues/
     1.json          # maps issue #1 → its session file
   sessions/
@@ -93,10 +93,10 @@ Each issue number is a stable conversation key — `issue #N` → `state/issues/
 
 **1. Add minimum-intelligence to your repo**
 
-Copy the `.minimum-intelligence` folder into your repository root, then run the install script:
+Copy the `.github-minimum-intelligence` folder into your repository root, then run the install script:
 
 ```bash
-bun .minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
+bun .github-minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
 ```
 
 This sets up the GitHub Actions workflow and issue templates.
@@ -104,7 +104,7 @@ This sets up the GitHub Actions workflow and issue templates.
 **2. Install dependencies**
 
 ```bash
-cd .minimum-intelligence && bun install
+cd .github-minimum-intelligence && bun install
 ```
 
 **3. Add your API key**
@@ -155,10 +155,10 @@ Use the **🥚 Hatch** issue template (or create an issue with the `hatch` label
 
 This is optional. The agent works without hatching, but it's more fun with a personality.
 
-## What's Inside `.minimum-intelligence/`
+## What's Inside `.github-minimum-intelligence/`
 
 ```
-.minimum-intelligence/
+.github-minimum-intelligence/
   .pi/                              # Agent personality & skills config
     settings.json                   # LLM provider, model, and thinking level
     APPEND_SYSTEM.md                # System prompt loaded every session
@@ -182,7 +182,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
 
 ## Configuration
 
-**Change the model** — edit `.minimum-intelligence/.pi/settings.json`:
+**Change the model** — edit `.github-minimum-intelligence/.pi/settings.json`:
 
 <details>
 <summary><strong>Anthropic (default)</strong></summary>
@@ -360,7 +360,7 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 ## Supported providers
 
-`.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.minimum-intelligence/.pi/settings.json` and add the matching API key to your workflow:
+`.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.github-minimum-intelligence/.pi/settings.json` and add the matching API key to your workflow:
 
 | Provider | `defaultProvider` | Example model | API key env var |
 |----------|-------------------|---------------|-----------------|
@@ -385,7 +385,7 @@ If you plan to use minimum-intelligence for anything private, **make the repo pr
 
 | Document | Description |
 |---|---|
-| [Quick Start](.minimum-intelligence/MINIMUM-INTELLIGENCE-QUICKSTART.md) | Get running in under 5 minutes — setup, providers, and common tweaks |
+| [Quick Start](.github-minimum-intelligence/MINIMUM-INTELLIGENCE-QUICKSTART.md) | Get running in under 5 minutes — setup, providers, and common tweaks |
 
 ## Acknowledgments
 

@@ -1,10 +1,10 @@
-# .minimum-intelligence 🦞 Quick Start
+# .github-minimum-intelligence 🦞 Quick Start
 
 ### Get an AI agent running in any GitHub repo in under 5 minutes.
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/minimum-intelligence/main/.minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
@@ -18,10 +18,10 @@
 
 **1. Add minimum-intelligence to your repo**
 
-Copy the `.minimum-intelligence` folder into your repository root, then run the install script:
+Copy the `.github-minimum-intelligence` folder into your repository root, then run the install script:
 
 ```bash
-bun .minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
+bun .github-minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
 ```
 
 This sets up the GitHub Actions workflow and issue templates.
@@ -29,7 +29,7 @@ This sets up the GitHub Actions workflow and issue templates.
 **2. Install dependencies**
 
 ```bash
-cd .minimum-intelligence && bun install
+cd .github-minimum-intelligence && bun install
 ```
 
 **3. Add your API key**
@@ -80,7 +80,7 @@ Use the **🥚 Hatch** issue template (or create an issue with the `hatch` label
 
 This is optional. The agent works without hatching, but it's more fun with a personality.
 
-## What's in the `.minimum-intelligence` folder
+## What's in the `.github-minimum-intelligence` folder
 
 | Path | Purpose |
 |------|---------|
@@ -93,7 +93,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
 
 ## Common tweaks
 
-**Change the model** — edit `.minimum-intelligence/.pi/settings.json`:
+**Change the model** — edit `.github-minimum-intelligence/.pi/settings.json`:
 
 <details>
 <summary><strong>Anthropic (default)</strong></summary>
@@ -269,7 +269,7 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 ## Supported providers
 
-`.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.minimum-intelligence/.pi/settings.json` and add the matching API key to your workflow:
+`.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.github-minimum-intelligence/.pi/settings.json` and add the matching API key to your workflow:
 
 | Provider | `defaultProvider` | Example model | API key env var |
 |----------|-------------------|---------------|-----------------|
