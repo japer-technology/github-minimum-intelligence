@@ -1,20 +1,18 @@
 # .github-minimum-intelligence
 
-### Any LLM but an ANTHROPIC_API_KEY secret to quick-start
-
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
-### [🦞 Quick Start](.minimum-intelligence/MINIMUM-INTELLIGENCE-QUICKSTART.md)
-
-### Get an AI agent running in any GitHub repo in under 5 minutes.
+### Any LLM but an ANTHROPIC_API_KEY secret to quick-start
 
 A personal AI assistant that runs entirely through GitHub Issues and Actions. Drop a single `.minimum-intelligence` folder into any repo and you have a fully functional AI agent — no servers, no external services, no extra infrastructure.
 
 Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Every issue becomes a chat thread with an AI agent. Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
+
+### Get an AI agent running in any GitHub repo in under 5 minutes.
 
 Since the agent can read and write files, you can build an evolving software project that updates itself as you open issues. Try asking it to set up a GitHub Pages site, then iterate on it issue by issue.
 
