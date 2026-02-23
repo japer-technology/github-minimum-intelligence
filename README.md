@@ -121,7 +121,7 @@ In your GitHub repo, go to **Settings → Secrets and variables → Actions** an
 | Mistral | `MISTRAL_API_KEY` | [console.mistral.ai](https://console.mistral.ai/) |
 | Groq | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com/) |
 
-Then reference the secret in your workflow (`.github/workflows/MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml`) as an environment variable in the **Run** step.
+Then reference the secret in your workflow (`.github/workflows/github-minimum-intelligence-agent.yml`) as an environment variable in the **Run** step.
 
 **4. Commit and push**
 
@@ -166,8 +166,8 @@ This is optional. The agent works without hatching, but it's more fun with a per
     skills/                         # Modular skill packages
   install/
     MINIMUM-INTELLIGENCE-INSTALLER.ts            # Setup script — installs workflows & templates
-    MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml      # GitHub Actions workflow template
-    MINIMUM-INTELLIGENCE-TEMPLATE-HATCH.md       # Issue template for personality hatching
+    github-minimum-intelligence-agent.yml         # GitHub Actions workflow template
+    github-minimum-intelligence-hatch.md          # Issue template for personality hatching
     MINIMUM-INTELLIGENCE-AGENTS.md               # Default agent identity file
     package.json                    # Installer dependencies
   lifecycle/
@@ -354,7 +354,7 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 **Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts`.
 
-**Filter by label** — edit `.github/workflows/MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml` to only trigger on issues with a specific label.
+**Filter by label** — edit `.github/workflows/github-minimum-intelligence-agent.yml` to only trigger on issues with a specific label.
 
 **Adjust thinking level** — set `defaultThinkingLevel` to `"low"`, `"medium"`, or `"high"` in `settings.json` for different task complexities.
 

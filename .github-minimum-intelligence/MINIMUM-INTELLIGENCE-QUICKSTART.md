@@ -46,7 +46,7 @@ In your GitHub repo, go to **Settings → Secrets and variables → Actions** an
 | Mistral | `MISTRAL_API_KEY` | [console.mistral.ai](https://console.mistral.ai/) |
 | Groq | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com/) |
 
-Then reference the secret in your workflow (`.github/workflows/MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml`) as an environment variable in the **Run** step.
+Then reference the secret in your workflow (`.github/workflows/github-minimum-intelligence-agent.yml`) as an environment variable in the **Run** step.
 
 **4. Commit and push**
 
@@ -265,7 +265,7 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 **Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts`.
 
-**Filter by label** — edit `.github/workflows/MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml` to only trigger on issues with a specific label.
+**Filter by label** — edit `.github/workflows/github-minimum-intelligence-agent.yml` to only trigger on issues with a specific label.
 
 ## Supported providers
 
