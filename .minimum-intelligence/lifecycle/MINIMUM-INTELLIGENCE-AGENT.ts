@@ -14,10 +14,9 @@
  * LIFECYCLE POSITION
  * ─────────────────────────────────────────────────────────────────────────────
  * Workflow step order:
- *   1. Guard       (MINIMUM-INTELLIGENCE-ENABLED.ts)   — verify opt-in sentinel exists
- *   2. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) — add 👀 reaction indicator
- *   3. Install     (bun install)            — install npm/bun dependencies
- *   4. Run         (MINIMUM-INTELLIGENCE-AGENT.ts)     ← YOU ARE HERE
+ *   1. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) — add 👀 reaction indicator
+ *   2. Install     (bun install)            — install npm/bun dependencies
+ *   3. Run         (MINIMUM-INTELLIGENCE-AGENT.ts)     ← YOU ARE HERE
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * AGENT EXECUTION PIPELINE

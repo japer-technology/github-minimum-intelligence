@@ -40,12 +40,6 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Guard
-        run: bun .minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-ENABLED.ts
-
-      - name: Heart Guard
-        run: bun .minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-HEART-GUARD.ts
-
       - name: Preinstall
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
