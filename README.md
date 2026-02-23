@@ -218,7 +218,7 @@ The included [`app-manifest.json`](./app-manifest.json) is a declarative descrip
 Use the included [`app-manifest.json`](./app-manifest.json) to register the app automatically via GitHub's manifest flow:
 
 1. Go to **GitHub → Settings → Developer settings → GitHub Apps → New GitHub App**.
-2. Scroll to the bottom and click **"Create GitHub App from a manifest"**.
+2. Scroll to the bottom and click **"Register a GitHub App from a manifest"**.
 3. Paste the contents of `app-manifest.json` and submit.
 
 Or use the [GitHub Apps API](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app-from-a-manifest) to register programmatically:
