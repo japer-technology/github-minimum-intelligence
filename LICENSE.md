@@ -4,7 +4,7 @@
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/minimum-intelligence/main/.minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
