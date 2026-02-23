@@ -1,0 +1,11 @@
+# .minimum-intelligence 🦞 Life Cycle
+
+### The magic lives here...
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/minimum-intelligence/main/.minimum-intelligence/MINIMUM-INTELLIGENCE-LOGO.png" alt="Minimum Intelligence" width="500">
+  </picture>
+</p>
+
+GitHub offers many ways to interact

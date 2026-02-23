@@ -1,10 +1,10 @@
-# .GITCLAW 🦞 Quick Start
+# .minimum-intelligence 🦞 Quick Start
 
 ### Get an AI agent running in any GitHub repo in under 5 minutes.
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/gitclaw/main/.GITCLAW/GITCLAW-LOGO.png" alt="GitClaw" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/minimum-intelligence/main/.minimum-intelligence/MINIMUM-INTELLIGENCE-LOGO.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
@@ -16,12 +16,12 @@
 
 ## Setup
 
-**1. Add gitclaw to your repo**
+**1. Add minimum-intelligence to your repo**
 
-Copy the `.GITCLAW` folder into your repository root, then run the install script:
+Copy the `.minimum-intelligence` folder into your repository root, then run the install script:
 
 ```bash
-bun .GITCLAW/install/GITCLAW-INSTALLER.ts
+bun .minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
 ```
 
 This sets up the GitHub Actions workflow and issue templates.
@@ -29,7 +29,7 @@ This sets up the GitHub Actions workflow and issue templates.
 **2. Install dependencies**
 
 ```bash
-cd .GITCLAW && bun install
+cd .minimum-intelligence && bun install
 ```
 
 **3. Add your API key**
@@ -46,13 +46,13 @@ In your GitHub repo, go to **Settings → Secrets and variables → Actions** an
 | Mistral | `MISTRAL_API_KEY` | [console.mistral.ai](https://console.mistral.ai/) |
 | Groq | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com/) |
 
-Then reference the secret in your workflow (`.github/workflows/GITCLAW-WORKFLOW-AGENT.yml`) as an environment variable in the **Run** step.
+Then reference the secret in your workflow (`.github/workflows/MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml`) as an environment variable in the **Run** step.
 
 **4. Commit and push**
 
 ```bash
 git add -A
-git commit -m "Add gitclaw"
+git commit -m "Add minimum-intelligence"
 git push
 ```
 
@@ -80,12 +80,12 @@ Use the **🥚 Hatch** issue template (or create an issue with the `hatch` label
 
 This is optional. The agent works without hatching, but it's more fun with a personality.
 
-## What's in the `.GITCLAW` folder
+## What's in the `.minimum-intelligence` folder
 
 | Path | Purpose |
 |------|---------|
 | `AGENTS.md` | Agent identity — name, personality, instructions |
-| `lifecycle/GITCLAW-AGENT.ts` | Core orchestrator that runs on every issue |
+| `lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts` | Core orchestrator that runs on every issue |
 | `.pi/settings.json` | LLM provider, model, and thinking level |
 | `.pi/APPEND_SYSTEM.md` | System prompt loaded every session |
 | `.pi/skills/` | Modular skill packages |
@@ -93,7 +93,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
 
 ## Common tweaks
 
-**Change the model** — edit `.GITCLAW/.pi/settings.json`:
+**Change the model** — edit `.minimum-intelligence/.pi/settings.json`:
 
 <details>
 <summary><strong>Anthropic (default)</strong></summary>
@@ -263,13 +263,13 @@ Requires `GROQ_API_KEY`.
 Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https://openrouter.ai/).
 </details>
 
-**Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/GITCLAW-AGENT.ts`.
+**Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts`.
 
-**Filter by label** — edit `.github/workflows/GITCLAW-WORKFLOW-AGENT.yml` to only trigger on issues with a specific label.
+**Filter by label** — edit `.github/workflows/MINIMUM-INTELLIGENCE-WORKFLOW-AGENT.yml` to only trigger on issues with a specific label.
 
 ## Supported providers
 
-`.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.GITCLAW/.pi/settings.json` and add the matching API key to your workflow:
+`.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.minimum-intelligence/.pi/settings.json` and add the matching API key to your workflow:
 
 | Provider | `defaultProvider` | Example model | API key env var |
 |----------|-------------------|---------------|-----------------|
@@ -287,4 +287,4 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 ## Next steps
 
 - Read [the full README](README.md) for details on security, configuration, and how storage works
-- Explore [the onboarding docs](docs/GITCLAW-Pi/GITCLAW-Pi-README.md) for deep dives into architecture, capabilities, skills, and personality
+- Explore [the onboarding docs](docs/MINIMUM-INTELLIGENCE-Pi/MINIMUM-INTELLIGENCE-Pi-README.md) for deep dives into architecture, capabilities, skills, and personality

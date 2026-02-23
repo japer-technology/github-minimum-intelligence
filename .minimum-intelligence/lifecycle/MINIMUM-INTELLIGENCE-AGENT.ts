@@ -1,10 +1,10 @@
 /**
- * GITCLAW-AGENT.ts — Core agent orchestrator for GitClaw.
+ * MINIMUM-INTELLIGENCE-AGENT.ts — Core agent orchestrator for Minimum Intelligence.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * PURPOSE
  * ─────────────────────────────────────────────────────────────────────────────
- * This is the main entry point for the GitClaw AI coding agent.  It receives
+ * This is the main entry point for the Minimum Intelligence AI coding agent.  It receives
  * a GitHub issue (or issue comment) event, runs the `pi` AI agent against the
  * user's prompt, and posts the result back as an issue comment.  It also
  * manages all session state so that multi-turn conversations across multiple
@@ -14,10 +14,10 @@
  * LIFECYCLE POSITION
  * ─────────────────────────────────────────────────────────────────────────────
  * Workflow step order:
- *   1. Guard       (GITCLAW-ENABLED.ts)   — verify opt-in sentinel exists
- *   2. Preinstall  (GITCLAW-INDICATOR.ts) — add 👀 reaction indicator
+ *   1. Guard       (MINIMUM-INTELLIGENCE-ENABLED.ts)   — verify opt-in sentinel exists
+ *   2. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) — add 👀 reaction indicator
  *   3. Install     (bun install)            — install npm/bun dependencies
- *   4. Run         (GITCLAW-AGENT.ts)     ← YOU ARE HERE
+ *   4. Run         (MINIMUM-INTELLIGENCE-AGENT.ts)     ← YOU ARE HERE
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * AGENT EXECUTION PIPELINE
@@ -36,15 +36,15 @@
  *   7. Stage, commit, and push all changes (session log, mapping, repo edits)
  *      back to the default branch with an automatic retry-on-conflict loop.
  *   8. Post the extracted reply as a new comment on the originating issue.
- *   9. [finally] Remove the 👀 reaction that `GITCLAW-INDICATOR.ts` added,
+ *   9. [finally] Remove the 👀 reaction that `MINIMUM-INTELLIGENCE-INDICATOR.ts` added,
  *      guaranteeing cleanup even if the agent threw an unhandled error.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * SESSION CONTINUITY
  * ─────────────────────────────────────────────────────────────────────────────
- * GitClaw maintains per-issue session state in:
- *   .GITCLAW/state/issues/<number>.json   — maps issue # → session file path
- *   .GITCLAW/state/sessions/<timestamp>.jsonl — the `pi` session transcript
+ * Minimum Intelligence maintains per-issue session state in:
+ *   .minimum-intelligence/state/issues/<number>.json   — maps issue # → session file path
+ *   .minimum-intelligence/state/sessions/<timestamp>.jsonl — the `pi` session transcript
  *
  * On every run the agent checks for an existing mapping.  If the mapped session
  * file is still present, the run "resumes" by passing `--session <path>` to `pi`,
@@ -78,17 +78,17 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
 // ─── Paths and event context ───────────────────────────────────────────────────
-// `import.meta.dir` resolves to `.GITCLAW/lifecycle/`; stepping up one level
-// gives us the `.GITCLAW/` directory which contains `state/` and `node_modules/`.
-const gitclawDir = resolve(import.meta.dir, "..");
-const stateDir = resolve(gitclawDir, "state");
+// `import.meta.dir` resolves to `.minimum-intelligence/lifecycle/`; stepping up one level
+// gives us the `.minimum-intelligence/` directory which contains `state/` and `node_modules/`.
+const minimumIntelligenceDir = resolve(import.meta.dir, "..");
+const stateDir = resolve(minimumIntelligenceDir, "state");
 const issuesDir = resolve(stateDir, "issues");
 const sessionsDir = resolve(stateDir, "sessions");
-const piSettingsPath = resolve(gitclawDir, ".pi", "settings.json");
+const piSettingsPath = resolve(minimumIntelligenceDir, ".pi", "settings.json");
 
 // The `pi` CLI requires a repo-root-relative path for `--session-dir`, not an
 // absolute one, so we keep this as a relative string constant.
-const sessionsDirRelative = ".GITCLAW/state/sessions";
+const sessionsDirRelative = ".minimum-intelligence/state/sessions";
 
 // GitHub enforces a ~65 535 character limit on issue comments; cap at 60 000
 // characters to leave a comfortable safety margin and avoid API rejections.
@@ -156,8 +156,8 @@ async function gh(...args: string[]): Promise<string> {
   return stdout;
 }
 
-// ─── Restore reaction state from GITCLAW-INDICATOR.ts ────────────────────────
-// `GITCLAW-INDICATOR.ts` runs before dependency installation and writes the 👀
+// ─── Restore reaction state from MINIMUM-INTELLIGENCE-INDICATOR.ts ────────────────────────
+// `MINIMUM-INTELLIGENCE-INDICATOR.ts` runs before dependency installation and writes the 👀
 // reaction metadata to `/tmp/reaction-state.json`.  We read it here so the
 // `finally` block can delete the reaction when the agent finishes (or errors).
 // If the file is absent (e.g., indicator step was skipped), we default to null.
@@ -200,8 +200,8 @@ try {
 
   // ── Configure git identity ───────────────────────────────────────────────────
   // Set the bot identity for all git commits made during this run.
-  await run(["git", "config", "user.name", "gitclaw[bot]"]);
-  await run(["git", "config", "user.email", "gitclaw[bot]@users.noreply.github.com"]);
+  await run(["git", "config", "user.name", "minimum-intelligence[bot]"]);
+  await run(["git", "config", "user.email", "minimum-intelligence[bot]@users.noreply.github.com"]);
 
   // ── Build prompt from event context ─────────────────────────────────────────
   // For `issue_comment` events, use the new comment body as the full prompt so
@@ -251,7 +251,7 @@ try {
   // Pipe agent output through `tee` so we get:
   //   • a live stream to stdout (visible in the Actions log in real time), and
   //   • a persisted copy at `/tmp/agent-raw.jsonl` for post-processing below.
-  const piBin = resolve(gitclawDir, "node_modules", ".bin", "pi");
+  const piBin = resolve(minimumIntelligenceDir, "node_modules", ".bin", "pi");
   const piArgs = [
     piBin,
     "--mode",
@@ -326,7 +326,7 @@ try {
   const { exitCode } = await run(["git", "diff", "--cached", "--quiet"]);
   if (exitCode !== 0) {
     // exitCode !== 0 means there are staged changes to commit.
-    await run(["git", "commit", "-m", `gitclaw: work on issue #${issueNumber}`]);
+    await run(["git", "commit", "-m", `minimum-intelligence: work on issue #${issueNumber}`]);
   }
 
   // Retry push up to 3 times, rebasing on each conflict to avoid force-pushing.

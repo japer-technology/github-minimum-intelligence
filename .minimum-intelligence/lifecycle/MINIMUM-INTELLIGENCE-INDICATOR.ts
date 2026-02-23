@@ -1,10 +1,10 @@
 /**
- * GITCLAW-INDICATOR.ts — Adds a 👀 reaction to signal that the agent is working.
+ * MINIMUM-INTELLIGENCE-INDICATOR.ts — Adds a 👀 reaction to signal that the agent is working.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * PURPOSE
  * ─────────────────────────────────────────────────────────────────────────────
- * This script serves as the "activity indicator" for GitClaw.  It runs
+ * This script serves as the "activity indicator" for Minimum Intelligence.  It runs
  * *before* dependency installation (hence "pre-install") so that users
  * receive immediate visual feedback on the triggering issue or comment —
  * in the form of a 👀 (eyes) emoji reaction — the moment the workflow starts.
@@ -13,10 +13,10 @@
  * LIFECYCLE POSITION
  * ─────────────────────────────────────────────────────────────────────────────
  * Workflow step order:
- *   1. Guard       (GITCLAW-ENABLED.ts)   — verify opt-in sentinel exists
- *   2. Preinstall  (GITCLAW-INDICATOR.ts) ← YOU ARE HERE
+ *   1. Guard       (MINIMUM-INTELLIGENCE-ENABLED.ts)   — verify opt-in sentinel exists
+ *   2. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) ← YOU ARE HERE
  *   3. Install     (bun install)            — install npm/bun dependencies
- *   4. Run         (GITCLAW-AGENT.ts)      — execute the AI coding agent
+ *   4. Run         (MINIMUM-INTELLIGENCE-AGENT.ts)      — execute the AI coding agent
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * REACTION STATE HANDOFF
@@ -25,7 +25,7 @@
  * (reaction ID, target type, comment ID if applicable) to a temporary JSON
  * file at `/tmp/reaction-state.json`.
  *
- * `GITCLAW-AGENT.ts` reads that file in its `finally` block and uses the
+ * `MINIMUM-INTELLIGENCE-AGENT.ts` reads that file in its `finally` block and uses the
  * stored IDs to DELETE the 👀 reaction once the agent finishes — regardless
  * of whether the run succeeded or failed.  This guarantees the indicator is
  * always cleaned up.
@@ -46,7 +46,7 @@
  * Failures to add the reaction are caught and logged but do NOT abort the
  * workflow — a missing indicator emoji is not a critical error.  The state
  * file is always written (with `reactionId: null` on failure) so that
- * `GITCLAW-AGENT.ts` does not crash when it tries to read it.
+ * `MINIMUM-INTELLIGENCE-AGENT.ts` does not crash when it tries to read it.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * DEPENDENCIES
@@ -86,7 +86,7 @@ async function gh(...args: string[]): Promise<string> {
 }
 
 // ─── Add 👀 reaction ──────────────────────────────────────────────────────────
-// Track three pieces of information that `GITCLAW-AGENT.ts` needs for cleanup:
+// Track three pieces of information that `MINIMUM-INTELLIGENCE-AGENT.ts` needs for cleanup:
 //   reactionId     — the numeric GitHub reaction ID returned by the API
 //   reactionTarget — "comment" or "issue" (determines which API endpoint to DELETE)
 //   commentId      — the comment's ID, only set when reactionTarget === "comment"
@@ -118,8 +118,8 @@ try {
   console.error("Failed to add reaction:", e);
 }
 
-// ─── Persist reaction state for GITCLAW-AGENT.ts cleanup ────────────────────
-// Write all fields to a well-known temp path.  `GITCLAW-AGENT.ts` reads this
+// ─── Persist reaction state for MINIMUM-INTELLIGENCE-AGENT.ts cleanup ────────────────────
+// Write all fields to a well-known temp path.  `MINIMUM-INTELLIGENCE-AGENT.ts` reads this
 // file inside its `finally` block and uses the IDs to DELETE the reaction
 // once the agent finishes — ensuring the indicator is always cleaned up,
 // even if the agent itself throws an error.

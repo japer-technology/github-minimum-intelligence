@@ -1,13 +1,13 @@
 /**
- * GITCLAW-ENABLED.ts — Fail-closed guard for the GITCLAW-ENABLED.md sentinel file.
+ * MINIMUM-INTELLIGENCE-ENABLED.ts — Fail-closed guard for the MINIMUM-INTELLIGENCE-ENABLED.md sentinel file.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * PURPOSE
  * ─────────────────────────────────────────────────────────────────────────────
- * This script is the very first step executed in every GITCLAW-* workflow.
+ * This script is the very first step executed in every MINIMUM-INTELLIGENCE-* workflow.
  * Its sole job is to verify that the operator has deliberately opted-in to
- * GitClaw automation by checking for the presence of the sentinel file
- * `.GITCLAW/GITCLAW-ENABLED.md`.
+ * Minimum Intelligence automation by checking for the presence of the sentinel file
+ * `.minimum-intelligence/MINIMUM-INTELLIGENCE-ENABLED.md`.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * SECURITY MODEL — "FAIL-CLOSED"
@@ -19,7 +19,7 @@
  *      downstream step (dependency install, agent run, git push, etc.) from
  *      executing.
  *
- * This "fail-closed" design means GitClaw is ALWAYS disabled by default on
+ * This "fail-closed" design means Minimum Intelligence is ALWAYS disabled by default on
  * a freshly cloned repository until the operator explicitly creates (or
  * restores) the sentinel file, preventing accidental automation.
  *
@@ -29,10 +29,10 @@
  * The workflow invokes this file as the "Guard" step:
  *
  *   - name: Guard
- *     run: bun .GITCLAW/lifecycle/GITCLAW-ENABLED.ts
+ *     run: bun .minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-ENABLED.ts
  *
- * To ENABLE  GitClaw: ensure `.GITCLAW/GITCLAW-ENABLED.md` exists in the repo.
- * To DISABLE GitClaw: delete `.GITCLAW/GITCLAW-ENABLED.md` and commit the removal.
+ * To ENABLE  Minimum Intelligence: ensure `.minimum-intelligence/MINIMUM-INTELLIGENCE-ENABLED.md` exists in the repo.
+ * To DISABLE Minimum Intelligence: delete `.minimum-intelligence/MINIMUM-INTELLIGENCE-ENABLED.md` and commit the removal.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * DEPENDENCIES
@@ -50,20 +50,20 @@ import { resolve } from "path";
 
 // ─── Resolve the absolute path to the sentinel file ───────────────────────────
 // `import.meta.dir` resolves to the directory containing THIS script, i.e.
-// `.GITCLAW/lifecycle/`.  We step one level up (`..`) to reach `.GITCLAW/`,
+// `.minimum-intelligence/lifecycle/`.  We step one level up (`..`) to reach `.minimum-intelligence/`,
 // then join with the sentinel filename.
-const enabledFile = resolve(import.meta.dir, "..", "GITCLAW-ENABLED.md");
+const enabledFile = resolve(import.meta.dir, "..", "MINIMUM-INTELLIGENCE-ENABLED.md");
 
 // ─── Guard: fail-closed if the sentinel is missing ────────────────────────────
 // Print a clear, actionable error message before exiting so that operators
 // immediately understand why the workflow stopped and what to do about it.
 if (!existsSync(enabledFile)) {
   console.error(
-    "GitClaw disabled — sentinel file `.GITCLAW/GITCLAW-ENABLED.md` is missing.\n" +
-    "To enable GitClaw, restore that file and push it to the repository."
+    "Minimum Intelligence disabled — sentinel file `.minimum-intelligence/MINIMUM-INTELLIGENCE-ENABLED.md` is missing.\n" +
+    "To enable Minimum Intelligence, restore that file and push it to the repository."
   );
   process.exit(1);
 }
 
 // ─── Sentinel found: log confirmation and let the workflow continue ───────────
-console.log("GitClaw enabled — GITCLAW-ENABLED.md found.");
+console.log("Minimum Intelligence enabled — MINIMUM-INTELLIGENCE-ENABLED.md found.");
