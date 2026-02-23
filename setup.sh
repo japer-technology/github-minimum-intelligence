@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# setup.sh — One-command installer for Minimum Intelligence
+# setup.sh — One-command installer for GitHub Minimum Intelligence
 #
 # Downloads the latest release of .github-minimum-intelligence into the
 # current repository and runs the installer to set up workflows and templates.
@@ -39,14 +39,14 @@ if ! command -v bun &>/dev/null; then
 fi
 
 if [ -d "$TARGET_DIR" ]; then
-  echo "⚠️  $TARGET_DIR already exists. Remove it first if you want a fresh install." >&2
+  echo "⚠️ $TARGET_DIR already exists. Remove it first if you want a fresh install." >&2
   exit 1
 fi
 
 # ─── Download ──────────────────────────────────────────────────────────────────
 
 echo ""
-echo "🧠 Minimum Intelligence Setup"
+echo "GitHub Minimum Intelligence Setup"
 echo ""
 echo "  Downloading from $REPO..."
 
