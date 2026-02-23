@@ -1,6 +1,6 @@
 {
   "name": "github-minimum-intelligence",
-  "description": "A personal AI assistant that runs through GitHub Issues and Actions — no servers required.",
+  "description": "An AI agent that lives in your GitHub repository",
   "url": "https://github.com/japer-technology/github-minimum-intelligence",
   "public": true,
   "default_permissions": {
