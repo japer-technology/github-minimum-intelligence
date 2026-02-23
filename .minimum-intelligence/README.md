@@ -27,7 +27,6 @@ Since the agent can read and write files, you can build an evolving software pro
 | **Multi-provider LLM support** | Works with Anthropic, OpenAI, Google Gemini, xAI, DeepSeek, Mistral, Groq, and any OpenRouter model. |
 | **Modular skill system** | Agent capabilities are self-contained Markdown files — user-extensible and composable. |
 | **Personality hatching** | Give the agent a name, personality, and vibe through a guided conversation. |
-| **Fail-closed security** | Agent does nothing unless explicitly opted in via a sentinel file. |
 
 ## How It Works
 
@@ -94,12 +93,10 @@ Use the **🥚 Hatch** issue template (or create an issue with the `hatch` label
   lifecycle/
     MINIMUM-INTELLIGENCE-AGENT.ts                # Core agent orchestrator
     MINIMUM-INTELLIGENCE-INDICATOR.ts            # Adds/removes 👀 reaction on issue activity
-    MINIMUM-INTELLIGENCE-ENABLED.ts              # Fail-closed guard — verifies opt-in sentinel
   docs/                             # Architecture, roadmap, and design docs
   tests/                            # Validation tests
   state/                            # Session history and issue mappings (git-tracked)
   AGENTS.md                         # Agent identity file
-  MINIMUM-INTELLIGENCE-ENABLED.md                # Sentinel file — delete to disable the agent
   MINIMUM-INTELLIGENCE-QUICKSTART.md             # Quick start guide
   LICENSE.md                        # MIT license
   package.json                      # Runtime dependencies
@@ -125,8 +122,6 @@ Set `defaultProvider` and `defaultModel` in `.minimum-intelligence/.pi/settings.
 ## Security
 
 The workflow only responds to repository **owners, members, and collaborators**. Random users cannot trigger the agent on public repos.
-
-The agent uses a **fail-closed guard**: every workflow run checks for the sentinel file `MINIMUM-INTELLIGENCE-ENABLED.md`. If it's missing, the workflow exits immediately. Delete or rename this file to disable the agent without removing any code.
 
 If you plan to use minimum-intelligence for anything private, **make the repo private**. Public repos mean your conversation history is visible to everyone, but get generous GitHub Actions usage.
 
