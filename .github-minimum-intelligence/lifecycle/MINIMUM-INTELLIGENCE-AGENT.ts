@@ -42,8 +42,8 @@
  * SESSION CONTINUITY
  * ─────────────────────────────────────────────────────────────────────────────
  * Minimum Intelligence maintains per-issue session state in:
- *   .minimum-intelligence/state/issues/<number>.json   — maps issue # → session file path
- *   .minimum-intelligence/state/sessions/<timestamp>.jsonl — the `pi` session transcript
+ *   .github-minimum-intelligence/state/issues/<number>.json   — maps issue # → session file path
+ *   .github-minimum-intelligence/state/sessions/<timestamp>.jsonl — the `pi` session transcript
  *
  * On every run the agent checks for an existing mapping.  If the mapped session
  * file is still present, the run "resumes" by passing `--session <path>` to `pi`,
@@ -77,8 +77,8 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { resolve } from "path";
 
 // ─── Paths and event context ───────────────────────────────────────────────────
-// `import.meta.dir` resolves to `.minimum-intelligence/lifecycle/`; stepping up one level
-// gives us the `.minimum-intelligence/` directory which contains `state/` and `node_modules/`.
+// `import.meta.dir` resolves to `.github-minimum-intelligence/lifecycle/`; stepping up one level
+// gives us the `.github-minimum-intelligence/` directory which contains `state/` and `node_modules/`.
 const minimumIntelligenceDir = resolve(import.meta.dir, "..");
 const stateDir = resolve(minimumIntelligenceDir, "state");
 const issuesDir = resolve(stateDir, "issues");
@@ -87,7 +87,7 @@ const piSettingsPath = resolve(minimumIntelligenceDir, ".pi", "settings.json");
 
 // The `pi` CLI requires a repo-root-relative path for `--session-dir`, not an
 // absolute one, so we keep this as a relative string constant.
-const sessionsDirRelative = ".minimum-intelligence/state/sessions";
+const sessionsDirRelative = ".github-minimum-intelligence/state/sessions";
 
 // GitHub enforces a ~65 535 character limit on issue comments; cap at 60 000
 // characters to leave a comfortable safety margin and avoid API rejections.
