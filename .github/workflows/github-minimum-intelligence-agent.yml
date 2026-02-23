@@ -1,4 +1,4 @@
-name: MINIMUM-INTELLIGENCE-WORKFLOW-AGENT
+name: github-minimum-intelligence-agent
 
 on:
   issues:
