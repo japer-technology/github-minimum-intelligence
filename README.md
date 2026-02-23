@@ -1,22 +1,61 @@
-# .github-minimum-intelligence
-
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
-### Any LLM but an ANTHROPIC_API_KEY secret will quick-start
+<h1 align="center">Minimum Intelligence</h1>
 
-A personal AI assistant that runs entirely through GitHub Issues and Actions. Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent — no servers, no external services, no extra infrastructure.
+<p align="center">
+  <strong>An AI agent that lives in your GitHub repo.<br/>No servers. No infrastructure. Just Issues and Actions.</strong>
+</p>
 
-Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Every issue becomes a chat thread with an AI agent. Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
+<p align="center">
+  <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Install</a> · <a href="#supported-providers">Providers</a> · <a href="#configuration">Config</a>
+</p>
 
-### Get an AI agent running in any GitHub repo in under 5 minutes.
+---
 
-Since the agent can read and write files, you can build an evolving software project that updates itself as you open issues. Try asking it to set up a GitHub Pages site, then iterate on it issue by issue.
+Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work — all inside your repository.
 
-### Why Minimum Intelligence
+Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
+
+> **Quick-start**: An `ANTHROPIC_API_KEY` secret is all you need — but any [supported LLM provider](#supported-providers) works.
+
+---
+
+## Your Data, Your Environment
+
+With a typical LLM, every question you ask and every answer you receive lives on _someone else's_ platform. You copy code out of a chat window, paste it into your editor, and hope you grabbed the right version. The knowledge you build up is trapped in a third-party service — scattered across browser tabs and chat logs you'll never find again.
+
+**Minimum Intelligence flips that model.** Every prompt you write and every response the agent produces is committed directly to your repository as part of its normal workflow. There is nothing to copy, nothing to paste, and nothing stored outside your control.
+
+- **Ask a question** → the answer is already in your repo.
+- **Request a file change** → the agent commits the edit for you.
+- **Continue a conversation weeks later** → the full history is right there in git.
+
+Your repository _is_ the AI workspace. The questions, the results, the code, the context — it all lives where your work already lives, versioned and searchable, owned entirely by you.
+
+---
+
+## Quick Start
+
+Get an AI agent running in any GitHub repo in under 5 minutes:
+
+```bash
+# From the root of any git repository
+curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+```
+
+Then:
+
+1. Add your LLM API key as a repository secret ([details below](#add-your-api-key)).
+2. `git add -A && git commit -m "Add minimum-intelligence" && git push`
+3. Open an issue — the agent replies automatically.
+
+---
+
+## Why Minimum Intelligence
 
 | Capability | Why it matters |
 |---|---|
@@ -58,9 +97,7 @@ flowchart TD
     style N fill:#9C27B0,color:#fff
 ```
 
----
-
-### Key concepts
+### Key Concepts
 
 | Concept | Description |
 |---|---|
@@ -69,7 +106,7 @@ flowchart TD
 | **Actions = Runtime** | GitHub Actions is the only compute layer. No servers, no containers, no external services. |
 | **Repo = Storage** | All state — sessions, mappings, and agent edits — lives in the repository itself. |
 
-### State management
+### State Management
 
 All state lives in the repo:
 
@@ -188,7 +225,8 @@ That's it. The agent replies as a comment on the issue.
 
 Running minimum-intelligence as a **GitHub App** gives it its own bot identity, consistent permissions across repositories, and a path toward multi-repo installation without copy-pasting files.
 
-#### How the GitHub App manifest flow works
+<details>
+<summary><strong>How the GitHub App manifest flow works</strong></summary>
 
 The included [`app-manifest.json`](./app-manifest.json) is a declarative description of the App's name, permissions, and events. GitHub's **manifest flow** lets you register an App by submitting this JSON instead of filling out every form field by hand. After registration GitHub gives you credentials (App ID + private key) that your workflow uses to authenticate.
 
@@ -212,6 +250,8 @@ The included [`app-manifest.json`](./app-manifest.json) is a declarative descrip
 │    the agent under the App's bot identity                   │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+</details>
 
 #### 1. Register the GitHub App
 
@@ -257,7 +297,9 @@ In each target repo, go to **Settings → Secrets and variables → Actions** an
 
 After installing the App on a repo that already has the `.github-minimum-intelligence/` folder, just open an issue — the agent is ready. If the repo does not have the folder yet, run the [quick setup script](#method-1-quick-setup-script) first.
 
-## What happens when you open an issue
+---
+
+## What Happens When You Open an Issue
 
 ```
 You open an issue
@@ -269,13 +311,17 @@ You open an issue
 
 Comment on the same issue to continue the conversation. The agent picks up where it left off.
 
-## Hatching — give the agent a personality
+---
+
+## Hatching — Give the Agent a Personality
 
 Use the **🥚 Hatch** issue template (or create an issue with the `hatch` label) to go through a guided conversation where you and the agent figure out its name, personality, and vibe together.
 
 This is optional. The agent works without hatching, but it's more fun with a personality.
 
-## What's Inside `.github-minimum-intelligence/`
+---
+
+## Project Structure
 
 ```
 .github-minimum-intelligence/
@@ -299,6 +345,8 @@ This is optional. The agent works without hatching, but it's more fun with a per
 ```
 
 Additionally, [`setup.sh`](./setup.sh) at the repo root provides a one-command installer for adding minimum-intelligence to any repository (see [Quick Setup Script](#method-1-quick-setup-script)).
+
+---
 
 ## Configuration
 
@@ -478,7 +526,9 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 **Adjust thinking level** — set `defaultThinkingLevel` to `"low"`, `"medium"`, or `"high"` in `settings.json` for different task complexities.
 
-## Supported providers
+---
+
+## Supported Providers
 
 `.pi` supports a wide range of LLM providers out of the box. Set `defaultProvider` and `defaultModel` in `.github-minimum-intelligence/.pi/settings.json` and add the matching API key to your workflow:
 
@@ -495,15 +545,21 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 > **Tip:** The `pi` agent supports many more providers and models. Run `pi --help` or see the [pi-mono docs](https://github.com/badlogic/pi-mono) for the full list.
 
+---
+
 ## Security
 
 The workflow only responds to repository **owners, members, and collaborators**. Random users cannot trigger the agent on public repos.
 
 If you plan to use minimum-intelligence for anything private, **make the repo private**. Public repos mean your conversation history is visible to everyone, but get generous GitHub Actions usage.
 
+---
+
 ## Repo Size
 
-The repo is overwhelmingly dominated by node_modules ~99%). The actual project files (README, LICENSE, config, GitHub workflows, GMI state/lifecycle) are only about ~1 MB
+The repo is overwhelmingly dominated by node_modules (~99%). The actual project files (README, LICENSE, config, GitHub workflows, GMI state/lifecycle) are only about ~1 MB.
+
+---
 
 <p align="center">
   <picture>
