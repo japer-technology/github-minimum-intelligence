@@ -77,8 +77,8 @@ The entire system runs as a closed loop inside your GitHub repository. When you 
 flowchart TD
     A["Start<br/>User opens or comments<br/>on a GitHub Issue"] --> B["GitHub Actions<br/>triggers workflow"]
     B --> C{"Authorize<br/>collaborator?"}
-    C -- No --> D["Rejected"]
-    C -- Yes --> E["👀 Add reaction<br/>indicator"]
+    C -- No --> D["👎 Rejected"]
+    C -- Yes --> E["🚀 Add reaction<br/>indicator"]
     E --> F["Install<br/>dependencies"]
     F --> G{"Existing session<br/>for this issue?"}
     G -- Yes --> H["Load prior<br/>session context"]
@@ -305,7 +305,7 @@ After installing the App on a repo that already has the `.github-minimum-intelli
 You open an issue
     → GitHub Actions triggers the agent workflow
     → The agent reads your issue, thinks, and responds
-    → Its reply appears as a comment (👀 shows while it's working)
+    → Its reply appears as a comment (🚀 shows while it's working, 👍 on success)
     → The conversation is saved to git for future context
 ```
 
@@ -338,7 +338,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
     package.json                    # Installer dependencies
   lifecycle/
     MINIMUM-INTELLIGENCE-AGENT.ts                # Core agent orchestrator
-    MINIMUM-INTELLIGENCE-INDICATOR.ts            # Adds/removes 👀 reaction on issue activity
+    MINIMUM-INTELLIGENCE-INDICATOR.ts            # Adds 🚀 reaction on issue activity
   state/                            # Session history and issue mappings (git-tracked)
   AGENTS.md                         # Agent identity file
   package.json                      # Runtime dependencies

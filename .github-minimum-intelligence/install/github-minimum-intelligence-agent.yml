@@ -19,6 +19,7 @@ jobs:
       || (github.event_name == 'issue_comment' && !endsWith(github.event.comment.user.login, '[bot]'))
     steps:
       - name: Authorize
+        id: authorize
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -27,6 +28,17 @@ jobs:
           if [[ "$PERM" != "admin" && "$PERM" != "maintain" && "$PERM" != "write" ]]; then
             echo "::error::Unauthorized: ${{ github.actor }} has '$PERM' permission"
             exit 1
+          fi
+
+      - name: Reject
+        if: ${{ failure() && steps.authorize.outcome == 'failure' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=-1
+          else
+            gh api "repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/reactions" -f content=-1
           fi
 
       - name: Checkout
