@@ -58,6 +58,8 @@ flowchart TD
     style N fill:#9C27B0,color:#fff
 ```
 
+---
+
 ### Key concepts
 
 | Concept | Description |
@@ -381,14 +383,8 @@ The workflow only responds to repository **owners, members, and collaborators**.
 
 If you plan to use minimum-intelligence for anything private, **make the repo private**. Public repos mean your conversation history is visible to everyone, but get generous GitHub Actions usage.
 
-## Documentation
-
-| Document | Description |
-|---|---|
-| [Quick Start](.github-minimum-intelligence/MINIMUM-INTELLIGENCE-QUICKSTART.md) | Get running in under 5 minutes — setup, providers, and common tweaks |
-
-## Acknowledgments
-
-Built on top of [pi-mono](https://github.com/badlogic/pi-mono) by [Mario Zechner](https://github.com/badlogic).
-
-Thanks to [ymichael](https://github.com/ymichael) for nerdsniping me with the idea of an agent that runs in GitHub Actions.
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
+  </picture>
+</p>
