@@ -1,4 +1,6 @@
-# .minimum-intelligence 🦞 An AI Agent As A Drop In
+# .minimum-intelligence
+
+### An AI Agent As A Drop-In
 
 <p align="center">
   <picture>
