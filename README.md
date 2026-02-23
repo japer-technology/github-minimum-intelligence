@@ -36,7 +36,7 @@ The entire system runs as a closed loop inside your GitHub repository. When you 
 
 ```mermaid
 flowchart TD
-    A["👤 User opens or comments<br/>on a GitHub Issue"] --> B["⚡ GitHub Actions<br/>triggers workflow"]
+    A["👤 User opens or comments<br/>on a GitHub Issue"] --> B["GitHub Actions<br/>triggers workflow"]
     B --> C{"Authorize<br/>collaborator?"}
     C -- No --> D["Rejected"]
     C -- Yes --> E["👀 Add reaction<br/>indicator"]
@@ -49,7 +49,7 @@ flowchart TD
     J --> K["Persist session<br/>& issue mapping"]
     K --> L["Commit & push<br/>state to repo"]
     L --> M["Post reply as<br/>issue comment"]
-    M --> N["Remove 👀<br/>reaction"]
+    M --> N["End"]
 
     style A fill:#4CAF50,color:#fff
     style J fill:#2196F3,color:#fff
