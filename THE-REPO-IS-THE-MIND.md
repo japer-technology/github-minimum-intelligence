@@ -6,12 +6,6 @@ The `pi` coding agent and the Minimum Intelligence framework eliminate that cont
 
 This document breaks down the architecture along five axes.
 
-<p align="center">
-  <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
-  </picture>
-</p>
-
 ## What - A `devDependency`, Not a Platform
 
 `@mariozechner/pi-coding-agent` is an npm package. Minimum Intelligence is a repo-local configuration layer. There is no hosted backend, no OAuth handshake, no tenant isolation to think about.
