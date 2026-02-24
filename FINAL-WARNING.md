@@ -14,7 +14,7 @@
 
 ### What This Software Is
 
-This is an AI-powered coding infrastructure. It is intended for use by qualified developers for the purpose of building, maintaining, and deploying software systems.
+This is an AI-powered coding infrastructure. It is intended for use by qualified developers for the purpose of building, maintaining, and deploying complex software systems.
 
 ---
 
