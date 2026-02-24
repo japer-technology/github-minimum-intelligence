@@ -1,6 +1,6 @@
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
@@ -337,8 +337,8 @@ This is optional. The agent works without hatching, but it's more fun with a per
     MINIMUM-INTELLIGENCE-AGENTS.md               # Default agent identity file
     package.json                    # Installer dependencies
   lifecycle/
-    MINIMUM-INTELLIGENCE-AGENT.ts                # Core agent orchestrator
-    MINIMUM-INTELLIGENCE-INDICATOR.ts            # Adds 🚀 reaction on issue activity
+    agent.ts                # Core agent orchestrator
+    indicator.ts            # Adds 🚀 reaction on issue activity
   state/                            # Session history and issue mappings (git-tracked)
   AGENTS.md                         # Agent identity file
   package.json                      # Runtime dependencies
@@ -520,7 +520,7 @@ Requires `GROQ_API_KEY`.
 Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https://openrouter.ai/).
 </details>
 
-**Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts`.
+**Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/agent.ts`.
 
 **Filter by label** — edit `.github/workflows/github-minimum-intelligence-agent.yml` to only trigger on issues with a specific label.
 
@@ -563,6 +563,6 @@ The repo is overwhelmingly dominated by node_modules (~99%). The actual project 
 
 <p align="center">
   <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/github-minimum-intelligence.png" alt="Minimum Intelligence" width="500">
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>

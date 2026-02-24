@@ -1,5 +1,5 @@
 /**
- * MINIMUM-INTELLIGENCE-INDICATOR.ts — Adds a 🚀 reaction to signal that the agent is working.
+ * indicator.ts — Adds a 🚀 reaction to signal that the agent is working.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * PURPOSE
@@ -13,9 +13,9 @@
  * LIFECYCLE POSITION
  * ─────────────────────────────────────────────────────────────────────────────
  * Workflow step order:
- *   1. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) ← YOU ARE HERE
+ *   1. Preinstall  (indicator.ts) ← YOU ARE HERE
  *   2. Install     (bun install)            — install npm/bun dependencies
- *   3. Run         (MINIMUM-INTELLIGENCE-AGENT.ts)      — execute the AI coding agent
+ *   3. Run         (agent.ts)      — execute the AI coding agent
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * REACTION STATE HANDOFF
@@ -24,7 +24,7 @@
  * (reaction ID, target type, comment ID if applicable) to a temporary JSON
  * file at `/tmp/reaction-state.json`.
  *
- * `MINIMUM-INTELLIGENCE-AGENT.ts` reads that file in its `finally` block and uses the
+ * `agent.ts` reads that file in its `finally` block and uses the
  * stored IDs to add an outcome reaction (👍 on success, 👎 on error) while
  * leaving the 🚀 rocket in place.  On authorization rejection, the rocket
  * is never added and only a 👎 is posted by the workflow.
@@ -45,7 +45,7 @@
  * Failures to add the reaction are caught and logged but do NOT abort the
  * workflow — a missing indicator emoji is not a critical error.  The state
  * file is always written (with `reactionId: null` on failure) so that
- * `MINIMUM-INTELLIGENCE-AGENT.ts` does not crash when it tries to read it.
+ * `agent.ts` does not crash when it tries to read it.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * DEPENDENCIES
@@ -85,7 +85,7 @@ async function gh(...args: string[]): Promise<string> {
 }
 
 // ─── Add 🚀 reaction ──────────────────────────────────────────────────────────
-// Track three pieces of information that `MINIMUM-INTELLIGENCE-AGENT.ts` needs for
+// Track three pieces of information that `agent.ts` needs for
 // adding the outcome reaction:
 //   reactionId     — the numeric GitHub reaction ID returned by the API
 //   reactionTarget — "comment" or "issue" (determines which API endpoint to use)
@@ -118,8 +118,8 @@ try {
   console.error("Failed to add reaction:", e);
 }
 
-// ─── Persist reaction state for MINIMUM-INTELLIGENCE-AGENT.ts outcome ────────────────────
-// Write all fields to a well-known temp path.  `MINIMUM-INTELLIGENCE-AGENT.ts` reads this
+// ─── Persist reaction state for agent.ts outcome ────────────────────
+// Write all fields to a well-known temp path.  `agent.ts` reads this
 // file inside its `finally` block and uses the IDs to add an outcome reaction
 // (👍 or 👎) once the agent finishes.
 writeFileSync("/tmp/reaction-state.json", JSON.stringify({

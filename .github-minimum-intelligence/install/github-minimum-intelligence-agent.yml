@@ -55,7 +55,7 @@ jobs:
       - name: Preinstall
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun .github-minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-INDICATOR.ts
+        run: bun .github-minimum-intelligence/lifecycle/indicator.ts
 
       - name: Install dependencies
         run: cd .github-minimum-intelligence && bun install --frozen-lockfile
@@ -70,4 +70,4 @@ jobs:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun .github-minimum-intelligence/lifecycle/MINIMUM-INTELLIGENCE-AGENT.ts
+        run: bun .github-minimum-intelligence/lifecycle/agent.ts

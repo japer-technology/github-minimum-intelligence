@@ -1,5 +1,5 @@
 /**
- * MINIMUM-INTELLIGENCE-AGENT.ts — Core agent orchestrator for Minimum Intelligence.
+ * agent.ts — Core agent orchestrator for Minimum Intelligence.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * PURPOSE
@@ -14,9 +14,9 @@
  * LIFECYCLE POSITION
  * ─────────────────────────────────────────────────────────────────────────────
  * Workflow step order:
- *   1. Preinstall  (MINIMUM-INTELLIGENCE-INDICATOR.ts) — add 🚀 reaction indicator
+ *   1. Preinstall  (indicator.ts) — add 🚀 reaction indicator
  *   2. Install     (bun install)            — install npm/bun dependencies
- *   3. Run         (MINIMUM-INTELLIGENCE-AGENT.ts)     ← YOU ARE HERE
+ *   3. Run         (agent.ts)     ← YOU ARE HERE
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * AGENT EXECUTION PIPELINE
@@ -36,7 +36,7 @@
  *      back to the default branch with an automatic retry-on-conflict loop.
  *   8. Post the extracted reply as a new comment on the originating issue.
  *   9. [finally] Add an outcome reaction: 👍 (thumbs up) on success or
- *      👎 (thumbs down) on error.  The 🚀 rocket from `MINIMUM-INTELLIGENCE-INDICATOR.ts`
+ *      👎 (thumbs down) on error.  The 🚀 rocket from `indicator.ts`
  *      is left in place for both success and error cases.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -156,8 +156,8 @@ async function gh(...args: string[]): Promise<string> {
   return stdout;
 }
 
-// ─── Restore reaction state from MINIMUM-INTELLIGENCE-INDICATOR.ts ────────────────────────
-// `MINIMUM-INTELLIGENCE-INDICATOR.ts` runs before dependency installation and writes the 🚀
+// ─── Restore reaction state from indicator.ts ────────────────────────
+// `indicator.ts` runs before dependency installation and writes the 🚀
 // reaction metadata to `/tmp/reaction-state.json`.  We read it here so the
 // `finally` block can add the outcome reaction (👍 or 👎) when the agent finishes.
 // If the file is absent (e.g., indicator step was skipped), we default to null.
@@ -355,7 +355,7 @@ try {
 } finally {
   // ── Guaranteed outcome reaction: 👍 on success, 👎 on error ─────────────────
   // This block always executes — even when the try block throws.  The 🚀 rocket
-  // from `MINIMUM-INTELLIGENCE-INDICATOR.ts` is intentionally left in place; we only
+  // from `indicator.ts` is intentionally left in place; we only
   // ADD the outcome reaction here.
   if (reactionState) {
     try {
