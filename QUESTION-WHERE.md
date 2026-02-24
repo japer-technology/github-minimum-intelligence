@@ -1,8 +1,8 @@
-# QUESTION: WHERE?
+# Question: Where?
 
 ## Where does intelligence actually live?
 
-If *The Repo Is the Mind* is the thesis, then this repository is its field evidence. The “where” is not metaphorical. Minimum Intelligence answers it with a physical address: inside the repository’s own boundaries, executed by the same automation that already builds and ships code.
+If *[The Repo Is the Mind](THE-REPO-IS-THE-MIND.md)* is the thesis, then this repository is its field evidence. The “where” is not metaphorical. Minimum Intelligence answers it with a physical address: inside the repository’s own boundaries, executed by the same automation that already builds and ships code.
 
 Most AI tooling treats your codebase like an export format. You copy snippets out, paste context in, and hope nothing important gets lost in transit. This project refuses that architecture. Here, the repo is not an attachment to intelligence—it is the substrate of intelligence.
 
@@ -67,7 +67,7 @@ This is subtle but essential. By making installation file-centric, the project e
 
 ## Where is the boundary between model and system?
 
-`THE-REPO-IS-THE-MIND.md` describes a clean split:
+[THE-REPO-IS-THE-MIND.md](THE-REPO-IS-THE-MIND.md) describes a clean split:
 
 - LLM handles planning and synthesis.
 - `pi` tool surface handles concrete actions.

@@ -1,6 +1,6 @@
-# What is GitHub Minimum Intelligence?
+# Question: What?
 
-## A repository-native theory of AI tooling
+## What is GitHub Minimum Intelligence?
 
 Most AI coding products answer the question *“what is this?”* with deployment vocabulary: platform, workspace, cloud memory, seat management, integration tier. GitHub Minimum Intelligence answers differently. It is not a destination you move your work into. It is a pattern you drop into the place your work already lives: the repository.
 

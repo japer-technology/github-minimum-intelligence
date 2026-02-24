@@ -27,7 +27,7 @@ In this design, “later” is no longer a weaker version of “now.” A respon
 
 ## 2) When Becomes a First-Class Constraint
 
-*The Repo Is the Mind* frames the agent as stateless per invocation, stateful across history. That is a precise and powerful asymmetry.
+*[The Repo Is the Mind](THE-REPO-IS-THE-MIND.md)* frames the agent as stateless per invocation, stateful across history. That is a precise and powerful asymmetry.
 
 - **Stateless execution** protects reliability: each run is fresh, deterministic, and reconstructible.
 - **Stateful history** protects continuity: each run inherits durable context from Git and Issues.
