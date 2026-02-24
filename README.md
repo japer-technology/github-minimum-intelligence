@@ -1,4 +1,4 @@
-<h1 align="center">GitHub Minimum Intelligence</h1>
+# GitHub Minimum Intelligence
 
 <p align="center">
   <picture>
@@ -6,9 +6,7 @@
   </picture>
 </p>
 
-<p align="center">
-  <strong>An AI agent that lives in your GitHub Repo</strong>
-</p>
+### An AI agent that lives in your GitHub Repo
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Install</a> · <a href="#supported-providers">Providers</a> · <a href="#configuration">Config</a>
