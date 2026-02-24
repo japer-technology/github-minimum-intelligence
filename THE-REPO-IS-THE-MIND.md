@@ -1,6 +1,6 @@
 # The Repo Is the Mind
 
-You manage your infrastructure as code. Your CI/CD is declarative. Your secrets are rotated, your environments reproducible, your deploys immutable. And then you alt-tab to a stateless chatbot, paste in half a stack trace, and hope it infers the rest.
+Many AI tools can hover around Git: they can read files, suggest changes, even generate patches. But they remain outsiders. They don’t live with the code, they don’t carry the project’s conversation history inside the repo, and they don’t accumulate the intent, constraints, tradeoffs, and decisions that shaped the work over time. That gap is the real problem. The breakthrough isn’t merely AI that can see code - it’s AI that remembers the why behind the code: the false starts, the hard choices, and the reasoning that got you here. Without that memory, it isn’t collaboration; it’s starting from zero every time.
 
 The `pi` coding agent and the Minimum Intelligence framework eliminate that context gap by embedding the AI directly in the repository - not as a service integration, but as a versioned dependency that operates inside your existing Git, Actions, and Issues infrastructure.
 
