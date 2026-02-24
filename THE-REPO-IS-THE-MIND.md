@@ -104,3 +104,9 @@ But the architectural argument runs deeper than any checklist. Centralizing AI b
 ---
 
 The repository is already where your team coordinates, where decisions are recorded, and where the canonical state of your system lives. Making it the AI's native habitat isn't a philosophical statement - it's an engineering decision that eliminates an entire class of context-synchronization problems and keeps your toolchain under your control.
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
+  </picture>
+</p>
