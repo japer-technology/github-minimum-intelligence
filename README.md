@@ -6,11 +6,11 @@
   </picture>
 </p>
 
-### An AI agent that lives in your GitHub Repo
+<h3 align="right">
+  <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Install</a> · <a href="#supported-providers">Provider</a> · <a href="#configuration">Confign</a>
+</h3>
 
-<p align="center">
-  <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Install</a> · <a href="#supported-providers">Providers</a> · <a href="#configuration">Config</a>
-</p>
+### An AI agent that lives in your GitHub Repo
 
 Powered by [pi mono](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
@@ -51,7 +51,7 @@ Then:
 
 ---
 
-## Why Minimum Intelligence
+## Why GitHub Minimum Intelligence
 
 | Capability | Why it matters |
 |---|---|
