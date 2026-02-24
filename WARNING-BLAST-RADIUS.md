@@ -323,6 +323,6 @@ The GMI agent, out-of-the-box, operates with **extraordinary privilege** relativ
 5. **Docker with privileged mode**
 6. **Full compiler toolchains** and language runtimes
 
-...means that a single rogue agent invocation — triggered by nothing more than opening a GitHub issue — could compromise an entire organization's codebase, exfiltrate all secrets and source code, establish persistence across 24 repositories, and potentially attack downstream consumers of that code.
+...means that a single rogue agent invocation — triggered by nothing more than opening a GitHub issue — could compromise an entire organization's codebase, exfiltrate all secrets and source code, establish persistence across all repositories, and potentially attack downstream consumers of that code.
 
 **The blast radius is not this repository. The blast radius is the entire organization and its downstream dependents.**
