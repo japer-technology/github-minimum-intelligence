@@ -4,10 +4,10 @@
   </picture>
 </p>
 
-<h1 align="center">Minimum Intelligence</h1>
+<h1 align="center">GitHub Minimum Intelligence</h1>
 
 <p align="center">
-  <strong>An AI agent that lives in your GitHub repo.<br/>No servers. No infrastructure. Just Issues and Actions.</strong>
+  <strong>An AI agent that lives in your GitHub Repo<br/>Just Issues and Actions and your Repo</strong>
 </p>
 
 <p align="center">
@@ -16,17 +16,17 @@
 
 ---
 
-Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work — all inside your repository.
+Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work - all inside your repository.
 
-Powered by the [pi coding agent](https://github.com/badlogic/pi-mono). Conversation history is committed to git, giving the agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
+Powered by [pi mono](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
-> **Quick-start**: An `ANTHROPIC_API_KEY` secret is all you need — but any [supported LLM provider](#supported-providers) works.
+> **Quick-start**: An `ANTHROPIC_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
 
 ---
 
 ## Your Data, Your Environment
 
-With a typical LLM, every question you ask and every answer you receive lives on _someone else's_ platform. You copy code out of a chat window, paste it into your editor, and hope you grabbed the right version. The knowledge you build up is trapped in a third-party service — scattered across browser tabs and chat logs you'll never find again.
+With a typical LLM, every question you ask and every answer you receive lives on _someone else's_ platform. You copy code out of a chat window, paste it into your editor, and hope you grabbed the right version. The knowledge you build up is trapped in a third-party service - scattered across browser tabs and chat logs you'll never find again.
 
 **Minimum Intelligence flips that model.** Every prompt you write and every response the agent produces is committed directly to your repository as part of its normal workflow. There is nothing to copy, nothing to paste, and nothing stored outside your control.
 
@@ -34,7 +34,7 @@ With a typical LLM, every question you ask and every answer you receive lives on
 - **Request a file change** → the agent commits the edit for you.
 - **Continue a conversation weeks later** → the full history is right there in git.
 
-Your repository _is_ the AI workspace. The questions, the results, the code, the context — it all lives where your work already lives, versioned and searchable, owned entirely by you.
+Your repository _is_ the AI workspace. The questions, the results, the code, the context - it all lives where your work already lives, versioned and searchable, owned entirely by you.
 
 ---
 
@@ -51,7 +51,7 @@ Then:
 
 1. Add your LLM API key as a repository secret ([details below](#add-your-api-key)).
 2. `git add -A && git commit -m "Add minimum-intelligence" && git push`
-3. Open an issue — the agent replies automatically.
+3. Open an issue - the agent replies automatically.
 
 ---
 
@@ -61,17 +61,17 @@ Then:
 |---|---|
 | **Single folder, any repo** | Copy `.github-minimum-intelligence/` in and run the install script. Nothing to host or maintain. |
 | **Zero infrastructure** | Runs on GitHub Actions with your repo as the only backend. |
-| **Persistent memory** | Conversations are committed to git — the agent remembers everything across sessions. |
+| **Persistent memory** | Conversations are committed to git - the agent remembers everything across sessions. |
 | **Full auditability** | Every interaction is versioned; review or roll back any change the agent made. |
 | **Multi-provider LLM support** | Works with Anthropic, OpenAI, Google Gemini, xAI, DeepSeek, Mistral, Groq, and any OpenRouter model. |
-| **Modular skill system** | Agent capabilities are self-contained Markdown files — user-extensible and composable. |
+| **Modular skill system** | Agent capabilities are self-contained Markdown files - user-extensible and composable. |
 | **Personality hatching** | Give the agent a name, personality, and vibe through a guided conversation. |
 
 ---
 
 ## How It Works
 
-The entire system runs as a closed loop inside your GitHub repository. When you open an issue (or comment on one), a GitHub Actions workflow launches the AI agent, which reads your message, thinks, responds, and commits its work — all without leaving GitHub.
+The entire system runs as a closed loop inside your GitHub repository. When you open an issue (or comment on one), a GitHub Actions workflow launches the AI agent, which reads your message, thinks, responds, and commits its work - all without leaving GitHub.
 
 ```mermaid
 flowchart TD
@@ -104,7 +104,7 @@ flowchart TD
 | **Issue = Conversation** | Each GitHub issue maps to a persistent AI conversation. Comment again to continue where you left off. |
 | **Git = Memory** | Session transcripts are committed to the repo. The agent has full recall of every prior exchange. |
 | **Actions = Runtime** | GitHub Actions is the only compute layer. No servers, no containers, no external services. |
-| **Repo = Storage** | All state — sessions, mappings, and agent edits — lives in the repository itself. |
+| **Repo = Storage** | All state - sessions, mappings, and agent edits - lives in the repository itself. |
 
 ### State Management
 
@@ -118,7 +118,7 @@ All state lives in the repo:
     2026-02-04T..._abc123.jsonl    # full conversation for issue #1
 ```
 
-Each issue number is a stable conversation key — `issue #N` → `state/issues/N.json` → `state/sessions/<session>.jsonl`. When you comment on an issue weeks later, the agent loads that linked session and continues. No database, no session cookies — just git.
+Each issue number is a stable conversation key - `issue #N` → `state/issues/N.json` → `state/sessions/<session>.jsonl`. When you comment on an issue weeks later, the agent loads that linked session and continues. No database, no session cookies - just git.
 
 ---
 
@@ -136,7 +136,7 @@ There are three ways to add Minimum Intelligence to a repository. Pick whichever
 
 | Method | Best for | GitHub App identity? |
 |--------|----------|---------------------|
-| [**Quick setup script**](#method-1-quick-setup-script) | Fastest — one command from your terminal | No (uses `GITHUB_TOKEN`) |
+| [**Quick setup script**](#method-1-quick-setup-script) | Fastest - one command from your terminal | No (uses `GITHUB_TOKEN`) |
 | [**Manual copy**](#method-2-manual-copy) | Full control, offline-friendly | No (uses `GITHUB_TOKEN`) |
 | [**GitHub App**](#method-3-github-app) | Multi-repo, bot identity, centralised permissions | Yes |
 
@@ -156,7 +156,7 @@ After it finishes:
 
 1. Add your LLM API key as a repository secret (see [step 3 below](#add-your-api-key)).
 2. `git add -A && git commit -m "Add minimum-intelligence" && git push`
-3. Open an issue — the agent replies automatically.
+3. Open an issue - the agent replies automatically.
 
 <details>
 <summary>Prefer to download manually?</summary>
@@ -215,7 +215,7 @@ git push
 
 **5. Open an issue**
 
-Go to your repo's **Issues** tab and create a new issue. Write anything — ask a question, request a file, start a conversation. The agent picks it up automatically.
+Go to your repo's **Issues** tab and create a new issue. Write anything - ask a question, request a file, start a conversation. The agent picks it up automatically.
 
 That's it. The agent replies as a comment on the issue.
 
@@ -295,7 +295,7 @@ In each target repo, go to **Settings → Secrets and variables → Actions** an
 
 #### Quick start after installing the GitHub App
 
-After installing the App on a repo that already has the `.github-minimum-intelligence/` folder, just open an issue — the agent is ready. If the repo does not have the folder yet, run the [quick setup script](#method-1-quick-setup-script) first.
+After installing the App on a repo that already has the `.github-minimum-intelligence/` folder, just open an issue - the agent is ready. If the repo does not have the folder yet, run the [quick setup script](#method-1-quick-setup-script) first.
 
 ---
 
@@ -313,7 +313,7 @@ Comment on the same issue to continue the conversation. The agent picks up where
 
 ---
 
-## Hatching — Give the Agent a Personality
+## Hatching - Give the Agent a Personality
 
 Use the **🥚 Hatch** issue template (or create an issue with the `hatch` label) to go through a guided conversation where you and the agent figure out its name, personality, and vibe together.
 
@@ -331,7 +331,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
     BOOTSTRAP.md                    # First-run identity prompt
     skills/                         # Modular skill packages
   install/
-    MINIMUM-INTELLIGENCE-INSTALLER.ts            # Setup script — installs workflows & templates
+    MINIMUM-INTELLIGENCE-INSTALLER.ts            # Setup script - installs workflows & templates
     github-minimum-intelligence-agent.yml         # GitHub Actions workflow template
     github-minimum-intelligence-hatch.md          # Issue template for personality hatching
     MINIMUM-INTELLIGENCE-AGENTS.md               # Default agent identity file
@@ -350,7 +350,7 @@ Additionally, [`setup.sh`](./setup.sh) at the repo root provides a one-command i
 
 ## Configuration
 
-**Change the model** — edit `.github-minimum-intelligence/.pi/settings.json`:
+**Change the model** - edit `.github-minimum-intelligence/.pi/settings.json`:
 
 <details>
 <summary><strong>Anthropic (default)</strong></summary>
@@ -367,7 +367,7 @@ Requires `ANTHROPIC_API_KEY`.
 </details>
 
 <details>
-<summary><strong>OpenAI — GPT-5.3 Codex Spark</strong></summary>
+<summary><strong>OpenAI - GPT-5.3 Codex Spark</strong></summary>
 
 ```json
 {
@@ -381,7 +381,7 @@ Requires `OPENAI_API_KEY`.
 </details>
 
 <details>
-<summary><strong>OpenAI — GPT-5.3 Codex</strong></summary>
+<summary><strong>OpenAI - GPT-5.3 Codex</strong></summary>
 
 ```json
 {
@@ -409,7 +409,7 @@ Requires `OPENROUTER_API_KEY`.
 </details>
 
 <details>
-<summary><strong>xAI — Grok</strong></summary>
+<summary><strong>xAI - Grok</strong></summary>
 
 ```json
 {
@@ -423,7 +423,7 @@ Requires `XAI_API_KEY`.
 </details>
 
 <details>
-<summary><strong>Google Gemini — gemini-2.5-pro</strong></summary>
+<summary><strong>Google Gemini - gemini-2.5-pro</strong></summary>
 
 ```json
 {
@@ -437,7 +437,7 @@ Requires `GEMINI_API_KEY`.
 </details>
 
 <details>
-<summary><strong>Google Gemini — gemini-2.5-flash</strong></summary>
+<summary><strong>Google Gemini - gemini-2.5-flash</strong></summary>
 
 ```json
 {
@@ -451,7 +451,7 @@ Requires `GEMINI_API_KEY`. Faster and cheaper than gemini-2.5-pro.
 </details>
 
 <details>
-<summary><strong>xAI — Grok Mini</strong></summary>
+<summary><strong>xAI - Grok Mini</strong></summary>
 
 ```json
 {
@@ -520,11 +520,11 @@ Requires `GROQ_API_KEY`.
 Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https://openrouter.ai/).
 </details>
 
-**Make it read-only** — add `--tools read,grep,find,ls` to the agent args in `lifecycle/agent.ts`.
+**Make it read-only** - add `--tools read,grep,find,ls` to the agent args in `lifecycle/agent.ts`.
 
-**Filter by label** — edit `.github/workflows/github-minimum-intelligence-agent.yml` to only trigger on issues with a specific label.
+**Filter by label** - edit `.github/workflows/github-minimum-intelligence-agent.yml` to only trigger on issues with a specific label.
 
-**Adjust thinking level** — set `defaultThinkingLevel` to `"low"`, `"medium"`, or `"high"` in `settings.json` for different task complexities.
+**Adjust thinking level** - set `defaultThinkingLevel` to `"low"`, `"medium"`, or `"high"` in `settings.json` for different task complexities.
 
 ---
 
