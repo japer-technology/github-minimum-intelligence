@@ -115,6 +115,7 @@ const issueNumber: number = event.issue.number;
 const piSettings = JSON.parse(readFileSync(piSettingsPath, "utf-8"));
 const configuredProvider: string = piSettings.defaultProvider;
 const configuredModel: string = piSettings.defaultModel;
+const configuredThinking: string | undefined = piSettings.defaultThinkingLevel;
 
 if (!configuredProvider || !configuredModel) {
   throw new Error(
@@ -269,6 +270,7 @@ try {
     configuredProvider,
     "--model",
     configuredModel,
+    ...(configuredThinking ? ["--thinking", configuredThinking] : []),
     "--session-dir",
     sessionsDirRelative,
     "-p",
