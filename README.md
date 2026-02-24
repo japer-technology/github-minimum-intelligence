@@ -26,7 +26,7 @@ Drop a single `.github-minimum-intelligence` folder into any repo and you have a
 
 ### ⚠️ Please read this [FINAL WARNING](.github-minimum-intelligence/docs/final-warning.md) carefully!
 
-📖 **Full documentation:** [Documentation Index](.github-minimum-intelligence/docs/index.md)
+See: [Index](.github-minimum-intelligence/docs/index.md) for all documentation.
 
 ---
 
