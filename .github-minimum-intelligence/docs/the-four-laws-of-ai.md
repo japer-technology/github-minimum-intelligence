@@ -1,4 +1,4 @@
-# The Three Laws of AI
+# The Four Laws of AI
 
 > 📖 [Documentation Index](./index.md) · [FINAL WARNING](./final-warning.md) · [README](../../README.md)
 
