@@ -2,7 +2,7 @@
 
 ## How does an idea become an agent?
 
-The central claim of this repository is deceptively simple: intelligence does not have to be hosted *somewhere else*. It can be planted directly inside the place software already lives—the git repository. [The Repo Is the Mind](THE-REPO-IS-THE-MIND.md) frames that as philosophy, but the codebase reveals something more concrete: an implementation of local sovereignty for AI workflows, built from ordinary developer primitives. The "how" is not magic. It is architecture.
+The central claim of this repository is deceptively simple: intelligence does not have to be hosted *somewhere else*. It can be planted directly inside the place software already lives—the git repository. [The Repo Is the Mind](the-repo-is-the-mind.md) frames that as philosophy, but the codebase reveals something more concrete: an implementation of local sovereignty for AI workflows, built from ordinary developer primitives. The "how" is not magic. It is architecture.
 
 At a high level, Minimum Intelligence fuses four existing systems into one loop:
 
