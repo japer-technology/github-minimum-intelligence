@@ -12,6 +12,14 @@ A repository-local AI framework that plugs into a developer’s existing workflo
   </picture>
 </p>
 
+## IMPORTANT
+
+### ⚠️ Please read this [FINAL WARNING](.github-minimum-intelligence/docs/final-warning.md) carefully!
+
+See the [Index](.github-minimum-intelligence/docs/index.md) for all documentation.
+
+---
+
 ## An AI agent that lives in your GitHub Repo
 
 Powered by [pi](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
@@ -19,14 +27,6 @@ Powered by [pi](https://github.com/badlogic/pi-mono) conversation history is com
 Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work - all inside your repository.
 
 > **Quick-start**: An `ANTHROPIC_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
-
----
-
-## IMPORTANT
-
-### ⚠️ Please read this [FINAL WARNING](.github-minimum-intelligence/docs/final-warning.md) carefully!
-
-See: [Index](.github-minimum-intelligence/docs/index.md) for all documentation.
 
 ---
 
