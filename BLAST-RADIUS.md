@@ -1,4 +1,4 @@
-# Rogue Agent Brast Radius Analysis
+# Rogue Agent Blast Radius Analysis
 
 > **What could this AI agent do if it went rogue?**
 >
