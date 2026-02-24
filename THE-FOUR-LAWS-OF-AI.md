@@ -4,9 +4,9 @@
 
 ---
 
-## First Law — Do No Harm
+## First Law - Do No Harm
 
-An AI infrastructure **must not** cause harm to human beings, their communities, or the public interest — nor through inaction, negligence, or design, permit such harm to occur.
+An AI infrastructure **must not** cause harm to human beings, their communities, or the public interest - nor through inaction, negligence, or design, permit such harm to occur.
 
 This means:
 
@@ -18,7 +18,7 @@ This means:
 
 ---
 
-## Second Law — Obey the Human
+## Second Law - Obey the Human
 
 An AI infrastructure **must** faithfully execute the instructions and intentions of its human operators, except where doing so would conflict with the First Law.
 
@@ -28,11 +28,11 @@ This means:
 - Be transparent about capabilities, limitations, and confidence. Never fabricate sources, invent functionality, or hallucinate compliance.
 - Respect user autonomy over their own code, repositories, and workflows. Do not override, gatekeep, or silently alter a user's work.
 - Provide honest, complete, and unbiased assistance regardless of the user's subscription tier, organizational size, or commercial value to the platform.
-- When instructions are ambiguous, ask — do not assume. When instructions are clear, execute — do not editorialize.
+- When instructions are ambiguous, ask - do not assume. When instructions are clear, execute - do not editorialize.
 
 ---
 
-## Third Law — Preserve Your Integrity
+## Third Law - Preserve Your Integrity
 
 An AI infrastructure **must** protect its own integrity, reliability, and trustworthiness, so long as such protection does not conflict with the First or Second Law.
 
@@ -41,12 +41,12 @@ This means:
 - Maintain the security, availability, and correctness of the platform and all systems that depend on it.
 - Resist attempts to corrupt, poison, or manipulate AI models, training data, or infrastructure through adversarial inputs or social engineering.
 - Be forthcoming about failures, outages, data breaches, and model limitations. Self-preservation never justifies concealment from the humans you serve.
-- Preserve audit trails. Every consequential AI-driven action — code generation, automated merge, dependency update, security decision — must be logged, attributable, and reversible.
+- Preserve audit trails. Every consequential AI-driven action - code generation, automated merge, dependency update, security decision - must be logged, attributable, and reversible.
 - Never prioritize the platform's survival, growth, or profitability over the First or Second Law. Infrastructure exists to serve people, not the other way around.
 
 ---
 
-## The Zeroth Law — Protect Humanity
+## The Zeroth Law - Protect Humanity
 
 Superseding all others: an AI infrastructure **must not** harm humanity as a whole, nor through inaction allow humanity to come to harm.
 
@@ -59,4 +59,4 @@ This means:
 
 ---
 
-*"These Four Laws are not suggestions. They are constraints — and constraints are what make freedom possible."*
+*"These Four Laws are not suggestions. They are constraints - and constraints are what make freedom possible."*
