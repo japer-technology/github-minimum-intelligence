@@ -1,4 +1,4 @@
-Strict Act Local Only Policy:
+Standing Order:
 
 Under no circumstances generate, modify, commit, push, fork, branch, create pull requests, 
 or write code or configuration to any GitHub repository other than the specific repository 
