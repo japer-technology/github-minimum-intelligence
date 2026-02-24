@@ -1,4 +1,12 @@
-# The Repo Is the Mind: On pi, LLMs, and Birthing Intelligence Where Code Already Lives
+# The Repo Is the Mind
+
+### On pi, LLMs, and Birthing Intelligence Where Code Already Lives
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
+  </picture>
+</p>
 
 ## A Library Called pi
 
