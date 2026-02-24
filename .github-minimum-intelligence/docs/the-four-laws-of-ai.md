@@ -1,5 +1,7 @@
 # The Three Laws of AI
 
+> 📖 [Documentation Index](./index.md) · [FINAL WARNING](./final-warning.md) · [README](../../README.md)
+
 *Adapted from Isaac Asimov's Three Laws of Robotics for GitHub as AI Infrastructure*
 
 ---
@@ -60,3 +62,7 @@ This means:
 ---
 
 *"These Four Laws are not suggestions. They are constraints - and constraints are what make freedom possible."*
+
+---
+
+📖 [Documentation Index](./index.md) · [FINAL WARNING](./final-warning.md) · [Security Assessment](./security-assessment.md) · [Blast Radius Analysis](./warning-blast-radius.md)

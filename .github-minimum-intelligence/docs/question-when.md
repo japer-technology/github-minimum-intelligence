@@ -1,5 +1,7 @@
 # Question: When?
 
+> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
+
 ## The Temporal Architecture of Repository-Native Intelligence
 
 The most underestimated word in software is not *what*, *how*, or even *why*. It is *when*.

@@ -1,5 +1,7 @@
 # Question: How Much?
 
+> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
+
 ## How much intelligence can a repository hold?
 
 If *[The Repo Is the Mind](the-repo-is-the-mind.md)* is the thesis, then the next question is scale: **how much mind can it carry before it collapses under its own memory?**

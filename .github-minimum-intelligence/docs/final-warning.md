@@ -1,5 +1,7 @@
 # ⚠️ FINAL WARNING
 
+> 📖 [Documentation Index](./index.md) · [The Four Laws of AI](./the-four-laws-of-ai.md) · [README](../../README.md)
+
 ## Important Safety Information
 
 **Read this entire document before using this software. Keep it for future reference.**
