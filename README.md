@@ -1,24 +1,22 @@
+<h1 align="center">GitHub Minimum Intelligence</h1>
+
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
 
-<h1 align="center">GitHub Minimum Intelligence</h1>
-
 <p align="center">
-  <strong>An AI agent that lives in your GitHub Repo<br/>Just Issues and Actions and your Repo</strong>
+  <strong>An AI agent that lives in your GitHub Repo</strong>
 </p>
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Install</a> · <a href="#supported-providers">Providers</a> · <a href="#configuration">Config</a>
 </p>
 
----
+Powered by [pi mono](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
 Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work - all inside your repository.
-
-Powered by [pi mono](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
 > **Quick-start**: An `ANTHROPIC_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
 
