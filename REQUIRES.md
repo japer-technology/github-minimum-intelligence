@@ -8,7 +8,7 @@
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [@mariozechner/pi-coding-agent](https://github.com/badlogic/pi-mono) | ^0.52.5 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system — it processes prompts, interacts with LLM providers, and manages conversation sessions. |
+| [@mariozechner/pi-coding-agent](https://github.com/badlogic/pi-mono) | ^0.52.5 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
 
 ## Infrastructure Dependencies
 
