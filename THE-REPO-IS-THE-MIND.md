@@ -6,7 +6,7 @@ Many AI tools can hover around Git: they can read files, suggest changes, even g
 
 The `pi` coding agent and the Minimum Intelligence framework eliminate that context gap by embedding the AI directly in the repository - not as a service integration, but as a versioned dependency that operates inside your existing Git, Actions, and Issues infrastructure.
 
-# What Where How Who When Why
+#### What Where How Who When Why
 
 ## What - A `devDependency`, Not a Platform
 
@@ -108,8 +108,6 @@ The practical case is straightforward:
 | **Offline/air-gapped** | Runs anywhere you can host a runner and reach an LLM endpoint |
 
 But the architectural argument runs deeper than any checklist. Centralizing AI behind a platform means your codebase becomes a second-class citizen in someone else's system. Repository-native AI inverts that: the codebase is the primary system, and the AI is a tool within it - subject to the same governance, the same review process, and the same version control as everything else you ship.
-
----
 
 The repository is already where your team coordinates, where decisions are recorded, and where the canonical state of your system lives. Making it the AI's native habitat isn't a philosophical statement - it's an engineering decision that eliminates an entire class of context-synchronization problems and keeps your toolchain under your control.
 
