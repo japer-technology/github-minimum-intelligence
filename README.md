@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![AI](https://img.shields.io/badge/Assisted-Development-2b2bff?logo=github&logoColor=white) 
 
-A technical framework designed to integrate a repository-local AI agent directly into a developer's existing workflow. Unlike external chat platforms, this system uses GitHub Issues as a conversational interface and leverages Git as a persistent memory bank, ensuring all interactions and code changes are versioned and owned by the user. Operating entirely through GitHub Actions, the tool provides a low-infrastructure solution that can be installed by adding a single folder to any repository. The project emphasizes full auditability and data sovereignty by committing every prompt and response to the codebase, allowing the agent to perform tasks such as editing files and summarizing long-term project history.
+A repository-local AI framework that plugs into a developer’s existing workflow. Instead of external chat tools, it uses GitHub Issues for conversation, Git for persistent versioned memory, and GitHub Actions for execution. Installed by adding one folder to a repo, it delivers low-infrastructure, auditable, user-owned automation by committing every prompt/response and code change to the codebase.
 
 <h3 align="right">
   <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Installation Methods</a> · <a href="#supported-providers">Supported Providers</a> · <a href="#configuration">Configuration</a>
@@ -97,6 +97,7 @@ flowchart TD
     style N fill:#9C27B0,color:#fff
 ```
 
+A technical framework designed to integrate a repository-local AI agent directly into a developer's existing workflow. Unlike external chat platforms, this system uses GitHub Issues as a conversational interface and leverages Git as a persistent memory bank, ensuring all interactions and code changes are versioned and owned by the user. Operating entirely through GitHub Actions, the tool provides a low-infrastructure solution that can be installed by adding a single folder to any repository. The project emphasizes full auditability and data sovereignty by committing every prompt and response to the codebase, allowing the agent to perform tasks such as editing files and summarizing long-term project history.
 ### Key Concepts
 
 | Concept | Description |
