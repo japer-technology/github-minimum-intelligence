@@ -1,11 +1,5 @@
 # ⚠️ FINAL WARNING
 
-<p align="center">
-  <picture>
-    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
-  </picture>
-</p>
-
 ## Important Safety Information
 
 **Read this entire document before using this software. Keep it for future reference.**
@@ -198,3 +192,9 @@ Maintained by humans, for humans.
 ---
 
 **⚠️ IN CASE OF EMERGENCY:** `git revert`, then think.
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
+  </picture>
+</p>
