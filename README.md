@@ -1,14 +1,14 @@
 # GitHub Minimum Intelligence
 
+<h3 align="right">
+  <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Installation Methods</a> · <a href="#supported-providers">Supported Providers</a> · <a href="#configuration">Configuration</a>
+</h3>
+
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
-
-<h3 align="right">
-  <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Install</a> · <a href="#supported-providers">Provider</a> · <a href="#configuration">Confign</a>
-</h3>
 
 ### An AI agent that lives in your GitHub Repo
 
