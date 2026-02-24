@@ -1,4 +1,6 @@
-# Dependancies
+# Required Dependencies
+
+> No repo is an island.
 
 ## Direct Dependencies
 
