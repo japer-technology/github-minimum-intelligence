@@ -83,20 +83,20 @@ The entire system runs as a closed loop inside your GitHub repository. When you 
 
 ```mermaid
 flowchart TD
-    A["START ACTION<br/>User opens or comments<br/>on an Issue"] --> B["GitHub Actions<br/>Workflow Started"]
+    A["START<br/>User opens or comments<br/>on an Issue"] --> B["START WORKFLOW"]
     B --> C{"Is Authorised User?"}
-    C -- No --> D["👎<br/>Show Rejected"]
-    C -- Yes --> E["🚀<br/>Show Launched"]
-    E --> F["LOAD<br/>Dependencies"]
+    C -- No --> D["Show Rejected<br/>👎"]
+    C -- Yes --> E["Show Launched<br/>🚀"]
+    E --> F["LOAD DEPENDANCIES"]
     F --> G{"Is this an<br/>Existing Session?"}
-    G -- Yes --> H["LOAD<br/>Prior Session"]
-    G -- No --> I["CREATE<br/>New Session"]
-    H --> J["PROCESS<br/>Agent [pi-mono]<br/>with Session Context"]
+    G -- Yes --> H["LOAD SESSION"]
+    G -- No --> I["CREATE SESSION"]
+    H --> J["PROCESS Pi Agent"]
     I --> J
-    J --> K["PROCESS<br/>Session Issue Mapping"]
-    K --> L["SAVE<br/>State Commit & Push"]
-    L --> M["SAVE<br/>Reply Issue Comment"]
-    M --> N["END ACTION<br/>User sees the reply"]
+    J --> K["PROCESS Issue"]
+    K --> L["SAVE STATE<br/>Commit and Push"]
+    L --> M["SAVE REPLY<br/>Issue Comment<br/>👍"]
+    M --> N["END<br/>User sees the reply"]
 
     style A fill:#000000,color:#fff
     style B fill:#4CAF50,color:#fff
@@ -108,8 +108,8 @@ flowchart TD
     style H fill:#4CAF50,color:#fff
     style I fill:#4CAF50,color:#fff
     style J fill:#AC43D9,color:#fff
-    style K fill:#504caf,color:#fff
-    style L fill:#504caf,color:#fff
+    style K fill:#4CAF50,color:#fff
+    style L fill:#4CAF50,color:#fff
     style M fill:#af544c,color:#fff
     style N fill:#000000,color:#fff
 ```
