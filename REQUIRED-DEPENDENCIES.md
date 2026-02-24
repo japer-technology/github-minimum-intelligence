@@ -1,6 +1,7 @@
 # Required Dependencies
 
 > No repo is an island.
+> Every codebase depends on memory, intent, and shared understanding
 
 ## Direct Dependencies
 
