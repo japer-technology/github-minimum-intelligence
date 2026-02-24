@@ -1,4 +1,10 @@
-# Rogue Agent Blast Radius Analysis
+# Blast Radius Analysis
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
+  </picture>
+</p>
 
 > **What could this AI agent do if it went rogue?**
 >
