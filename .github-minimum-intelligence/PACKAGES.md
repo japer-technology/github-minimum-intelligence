@@ -31,6 +31,7 @@ These are referenced in `.github/workflows/github-minimum-intelligence-agent.yml
 |--------|-------------|
 | [actions/checkout@v4](https://github.com/actions/checkout) | Checks out the repository so the agent can read and write files. |
 | [oven-sh/setup-bun@v2](https://github.com/oven-sh/setup-bun) | Installs the Bun runtime in the GitHub Actions environment. |
+| [actions/create-github-app-token@v1](https://github.com/actions/create-github-app-token) | Generates a short-lived token from GitHub App credentials (used only when running as a GitHub App — see Method 3 in the README). |
 
 ## LLM Provider Dependencies (one required)
 
