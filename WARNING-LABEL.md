@@ -108,10 +108,6 @@ Like all powerful tools, this software may cause side effects. Not everybody exp
 |---|---|
 | AI Model | Code generation, analysis, and assistance |
 | Human Operator | Judgment, accountability, and final authority |
-| First Law | Do No Harm |
-| Second Law | Obey the Human |
-| Third Law | Preserve Integrity |
-| Zeroth Law | Protect Humanity |
 
 **The active ingredient is human judgment. The AI is the excipient.**
 
@@ -125,4 +121,4 @@ Maintained by humans, for humans.
 
 ---
 
-**� IN CASE OF EMERGENCY:** `git revert`, then think.
+**⚠️ IN CASE OF EMERGENCY:** `git revert`, then think.
