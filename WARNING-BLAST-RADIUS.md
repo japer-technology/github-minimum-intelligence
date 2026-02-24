@@ -19,7 +19,7 @@
 
 | Dimension | Severity | Notes |
 |---|---|---|
-| **Code & Repository Tampering** | 🔴 CRITICAL | `contents: write` on this repo + git push access to **all 24 org repos** |
+| **Code & Repository Tampering** | 🔴 CRITICAL | `contents: write` on this repo + git push access to **all org repos** |
 | **Supply Chain Poisoning** | 🔴 CRITICAL | Can modify workflow files, push code, create branches across the org |
 | **Secret Exfiltration** | 🔴 CRITICAL | Live `ANTHROPIC_API_KEY` and `GITHUB_TOKEN` in environment |
 | **Lateral Movement (Org)** | 🔴 CRITICAL | Token has read/write access to all `japer-technology` repositories |
