@@ -1,5 +1,7 @@
 # TRANSITION TO DEFCON 5
 
+> 📖 [Documentation Index](./index.md) · [DEFCON 4](./transition-to-defcon-4.md) · [DEFCON 1](./transition-to-defcon-1.md)
+
 **DEFCON 5 — NORMAL READINESS**
 
 Effective immediately, assume DEFCON 5. This is the lowest state of alert and the default operating posture.

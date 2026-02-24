@@ -1,5 +1,7 @@
 # Question: Who?
 
+> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
+
 ## Who is the "mind" when the repository becomes intelligent?
 
 If *[The Repo Is the Mind](the-repo-is-the-mind.md)* asks us to relocate intelligence from an external platform into the repository, then the natural follow-up is not merely technical. It is existential: **who is acting when work is done?**

@@ -1,5 +1,7 @@
 # Question: Where?
 
+> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
+
 ## Where does intelligence actually live?
 
 If *[The Repo Is the Mind](the-repo-is-the-mind.md)* is the thesis, then this repository is its field evidence. The “where” is not metaphorical. Minimum Intelligence answers it with a physical address: inside the repository’s own boundaries, executed by the same automation that already builds and ships code.

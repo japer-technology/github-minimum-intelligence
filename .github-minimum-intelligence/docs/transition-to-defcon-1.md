@@ -1,5 +1,7 @@
 # TRANSITION TO DEFCON 1
 
+> 📖 [Documentation Index](./index.md) · [DEFCON 2](./transition-to-defcon-2.md) · [Incident Response](./incident-response.md)
+
 **DEFCON 1 — MAXIMUM READINESS**
 
 Effective immediately, assume DEFCON 1. This is the highest state of alert.

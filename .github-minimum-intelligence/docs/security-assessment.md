@@ -1,5 +1,7 @@
 # Security Assessment
 
+> 📖 [Documentation Index](./index.md) · [Blast Radius Analysis](./warning-blast-radius.md) · [Incident Response](./incident-response.md)
+>
 > **Classification:** Internal - For Repository Maintainers and Organization Administrators
 >
 > **Report Date:** February 24, 2026
@@ -8,7 +10,7 @@
 >
 > **Assessor:** AI Agent (self-assessment under Second Law obligation)
 >
-> **Related Documents:** [warning-blast-radius.md](./warning-blast-radius.md) · [AGENTS.md](../AGENTS.md) · [DANGER.md](./DANGER.md) · [DEPENDANCIES.md](./DEPENDANCIES.md)
+> **Related Documents:** [warning-blast-radius.md](./warning-blast-radius.md) · [AGENTS.md](../AGENTS.md) · [final-warning.md](./final-warning.md) · [PACKAGES.md](../PACKAGES.md)
 
 ---
 
@@ -650,8 +652,8 @@ This project follows a coordinated disclosure model:
 - [warning-blast-radius.md](./warning-blast-radius.md) - Empirical threat analysis of agent capabilities
 - [transition-to-defcon-1.md](./transition-to-defcon-1.md) - Proposed capability lockdown framework
 - [AGENTS.md](../AGENTS.md) - The Four Laws of AI Infrastructure
-- [DANGER.md](./DANGER.md) - Safety information
-- [DEPENDANCIES.md](./DEPENDANCIES.md) - Dependency inventory
+- [final-warning.md](./final-warning.md) - Safety information
+- [PACKAGES.md](../PACKAGES.md) - Dependency inventory
 - [GitHub Actions Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
 - [OpenSSF Scorecard](https://securityscorecards.dev/) - Automated supply chain security assessment
 - [SLSA Framework](https://slsa.dev/) - Supply chain Levels for Software Artifacts

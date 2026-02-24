@@ -1,5 +1,7 @@
 # The Repo Is the Mind
 
+> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [README](../../README.md)
+
 > A repository is more than files - it's code, conversation, constraints, and history
 
 Many AI tools can hover around Git: they can read files, suggest changes, even generate patches. But they remain outsiders. They don’t live with the code, they don’t carry the project’s conversation history inside the repo, and they don’t accumulate the intent, constraints, tradeoffs, and decisions that shaped the work over time. That gap is the real problem. The breakthrough isn’t merely AI that can see code - it’s AI that remembers the why behind the code: the false starts, the hard choices, and the reasoning that got you here. Without that memory, it isn’t collaboration; it’s starting from zero every time.

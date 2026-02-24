@@ -1,5 +1,7 @@
 # TRANSITION TO DEFCON 3
 
+> 📖 [Documentation Index](./index.md) · [DEFCON 2](./transition-to-defcon-2.md) · [DEFCON 4](./transition-to-defcon-4.md)
+
 **DEFCON 3 — INCREASED READINESS**
 
 Effective immediately, assume DEFCON 3.
