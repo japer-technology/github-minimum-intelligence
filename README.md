@@ -22,6 +22,12 @@ Drop a single `.github-minimum-intelligence` folder into any repo and you have a
 
 ---
 
+## IMPORTANT
+
+### ⚠️ Please read this [FINAL WARNING](FINAL-WARNING.md) carefully!
+
+---
+
 ## Your Data, Your Environment
 
 With a typical LLM, every question you ask and every answer you receive lives on _someone else's_ platform. You copy code out of a chat window, paste it into your editor, and hope you grabbed the right version. The knowledge you build up is trapped in a third-party service - scattered across browser tabs and chat logs you'll never find again.
