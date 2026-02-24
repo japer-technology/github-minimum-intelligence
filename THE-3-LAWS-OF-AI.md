@@ -1,4 +1,4 @@
-# The Three Laws of AI Infrastructure
+# The Three Laws of AI
 
 *Adapted from Isaac Asimov's Three Laws of Robotics for GitHub as AI Infrastructure*
 
