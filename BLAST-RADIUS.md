@@ -1,4 +1,4 @@
-# BLAST-RADIUS — Rogue Agent Threat Analysis
+# Rogue Agent Brast Radius Analysis
 
 > **What could this AI agent do if it went rogue?**
 >
