@@ -83,26 +83,35 @@ The entire system runs as a closed loop inside your GitHub repository. When you 
 
 ```mermaid
 flowchart TD
-    A["Start<br/>User opens or comments<br/>on a GitHub Issue"] --> B["GitHub Actions<br/>triggers workflow"]
-    B --> C{"Authorize<br/>collaborator?"}
-    C -- No --> D["👎 Rejected"]
-    C -- Yes --> E["🚀 Add reaction<br/>indicator"]
-    E --> F["Install<br/>dependencies"]
-    F --> G{"Existing session<br/>for this issue?"}
-    G -- Yes --> H["Load prior<br/>session context"]
-    G -- No --> I["Create fresh<br/>session"]
-    H --> J["Run pi AI agent<br/>with prompt + context"]
+    A["START ACTION<br/>User opens or comments<br/>on Issue"] --> B["GitHub Actions<br/>Workflow Started"]
+    B --> C{"Is Authorised User?"}
+    C -- No --> D["👎<br/>Show Rejected"]
+    C -- Yes --> E["🚀<br/>Show Launched"]
+    E --> F["LOAD<br/>Dependencies"]
+    F --> G{"Is this an<br/>Existing Session?"}
+    G -- Yes --> H["LOAD<br/>Prior Session"]
+    G -- No --> I["CREATE<br/>New Session"]
+    H --> J["PROCESS<br/>Agent [pi-mono]<br/>with Session Context"]
     I --> J
-    J --> K["Persist session<br/>& issue mapping"]
-    K --> L["Commit & push<br/>state to repo"]
-    L --> M["Post reply as<br/>issue comment"]
-    M --> N["End<br/>User sees the results"]
+    J --> K["PROCESS<br/>Session Issue Mapping"]
+    K --> L["SAVE<br/>State Commit & Push"]
+    L --> M["SAVE<br/>Reply Issue Comment"]
+    M --> N["END ACTION<br/>User sees the reply"]
 
-    style A fill:#4CAF50,color:#fff
-    style J fill:#2196F3,color:#fff
-    style M fill:#FF9800,color:#fff
+    style A fill:#000000,color:#fff
+    style B fill:#4CAF50,color:#fff
+    style C fill:#2196F3,color:#fff
     style D fill:#f44336,color:#fff
-    style N fill:#9C27B0,color:#fff
+    style E fill:#4CAF50,color:#fff
+    style F fill:#4CAF50,color:#fff
+    style G fill:#2196F3,color:#fff
+    style H fill:#4CAF50,color:#fff
+    style I fill:#4CAF50,color:#fff
+    style J fill:#AC43D9,color:#fff
+    style K fill:#504caf,color:#fff
+    style L fill:#504caf,color:#fff
+    style M fill:#504caf,color:#fff
+    style N fill:#000000,color:#fff
 ```
 
 A technical framework designed to integrate a repository-local AI agent directly into a developer's existing workflow. Unlike external chat platforms, this system uses GitHub Issues as a conversational interface and leverages Git as a persistent memory bank, ensuring all interactions and code changes are versioned and owned by the user. Operating entirely through GitHub Actions, the tool provides a low-infrastructure solution that can be installed by adding a single folder to any repository. The project emphasizes full auditability and data sovereignty by committing every prompt and response to the codebase, allowing the agent to perform tasks such as editing files and summarizing long-term project history.
