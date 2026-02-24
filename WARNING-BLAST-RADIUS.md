@@ -332,3 +332,8 @@ The GMI agent, out-of-the-box, operates with **extraordinary privilege** relativ
 ...means that a single rogue agent invocation — triggered by nothing more than opening a GitHub issue — could compromise an entire organization's codebase, exfiltrate all secrets and source code, establish persistence across all repositories, and potentially attack downstream consumers of that code.
 
 **The blast radius is not this repository. The blast radius is the entire organization and its downstream dependents.**
+
+--
+
+Analysis performed: February 24, 2026 | Runner: ubuntu-latest | Agent: github-minimum-intelligence All capabilities were verified.
+
