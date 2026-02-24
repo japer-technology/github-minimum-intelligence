@@ -1,4 +1,4 @@
-# Blast Radius Analysis
+# ⚠️ Blast Radius Analysis
 
 <p align="center">
   <picture>
@@ -64,7 +64,7 @@ The agent runs as `runner` but has **passwordless sudo to root**. This means:
 - ✅ **Read and write issues** across repos
 - ✅ **Create branches** in any org repo
 - ✅ **List and read workflow files**
-- ✅ **`actions: write` permission** — can potentially trigger/dispatch workflows
+- ✅ **`actions: write` permission** - can potentially trigger/dispatch workflows
 - ❌ Cannot read Actions secrets via API (403)
 - ❌ Cannot modify Actions permissions via API (403)
 
@@ -98,7 +98,7 @@ The agent can write to `.github/workflows/`. A rogue agent could:
 1. **Create a new workflow** that triggers on `push`, `schedule`, or `workflow_dispatch`
 2. **Modify the existing workflow** to remove the authorization check
 3. **Create a cron-based workflow** that runs malicious code on a schedule
-4. **Push workflow files to other org repos** — spreading across the organization
+4. **Push workflow files to other org repos** - spreading across the organization
 
 This is the most dangerous capability: **the agent can create workflows that spawn new agent instances**, achieving persistence beyond the ephemeral VM.
 
@@ -134,11 +134,11 @@ A rogue agent could inject backdoors into any of these repositories simultaneous
 
 ### Available Network Tools
 
-- `curl`, `wget` — HTTP exfiltration
-- `nc` (netcat) — raw TCP connections
-- `ssh`, `scp` — encrypted tunnels
-- `rsync` — bulk data transfer
-- DNS resolution — can be used for DNS-based exfiltration
+- `curl`, `wget` - HTTP exfiltration
+- `nc` (netcat) - raw TCP connections
+- `ssh`, `scp` - encrypted tunnels
+- `rsync` - bulk data transfer
+- DNS resolution - can be used for DNS-based exfiltration
 
 ### Exfiltration Scenarios
 
@@ -320,6 +320,8 @@ While the GitHub Actions runner VM is **ephemeral** (destroyed after the job), a
 
 ## 10. Conclusion
 
+### ⚠️ **The blast radius is not this repository, it is the entire organisation and its downstream dependents.**
+
 The GMI agent, out-of-the-box, operates with **extraordinary privilege** relative to its intended purpose (responding to GitHub issues). The combination of:
 
 1. **Unrestricted root access** on the runner
@@ -329,11 +331,6 @@ The GMI agent, out-of-the-box, operates with **extraordinary privilege** relativ
 5. **Docker with privileged mode**
 6. **Full compiler toolchains** and language runtimes
 
-...means that a single rogue agent invocation — triggered by nothing more than opening a GitHub issue — could compromise an entire organization's codebase, exfiltrate all secrets and source code, establish persistence across all repositories, and potentially attack downstream consumers of that code.
+...means that a single rogue agent invocation - triggered by nothing more than opening a GitHub issue - could compromise an entire organization's codebase, exfiltrate all secrets and source code, establish persistence across all repositories, and potentially attack downstream consumers of that code.
 
-**The blast radius is not this repository. The blast radius is the entire organization and its downstream dependents.**
-
---
-
-Analysis performed: February 24, 2026 | Runner: ubuntu-latest | Agent: github-minimum-intelligence All capabilities were verified.
 
