@@ -58,3 +58,9 @@ These are pulled in transitively by `@mariozechner/pi-coding-agent`:
 | `@google/generative-ai` | Google's Generative AI SDK for Gemini models. |
 | `fast-xml-parser` | Fast XML parser used by AWS SDK internals. |
 | `tslib` | TypeScript runtime helpers used throughout the dependency tree. |
+
+<p align="center">
+  <picture>
+    <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
+  </picture>
+</p>
