@@ -36,6 +36,20 @@ Before deploying this system, understand what could go wrong. The [Blast Radius 
 
 ---
 
+### Warnings and Precautions
+
+⚠️ **WARNING:** AI-generated code may contain errors, hallucinations, or security vulnerabilities. Never deploy to production without human review.
+
+⚠️ **WARNING:** Do not use AI output as the sole basis for decisions affecting human safety, liberty, or livelihood.
+
+⚠️ **WARNING:** This software may produce confident-sounding responses that are factually incorrect. Verify all claims independently.
+
+⚠️ **WARNING:** Outputs may reflect biases present in training data. Exercise professional judgment at all times.
+
+⚠️ **WARNING:** Do not feed secrets, API keys, passwords, or private credentials into AI prompts.
+
+---
+
 ### Before You Use This Software
 
 **Do not use this software if you:**
@@ -51,20 +65,6 @@ Before deploying this system, understand what could go wrong. The [Blast Radius 
 - Are handling sensitive personal data or regulated information.
 - Are building safety-critical systems (medical, aviation, automotive, infrastructure).
 - Are operating in a jurisdiction with specific AI compliance requirements.
-
----
-
-### Warnings and Precautions
-
-⚠️ **WARNING:** AI-generated code may contain errors, hallucinations, or security vulnerabilities. Never deploy to production without human review.
-
-⚠️ **WARNING:** Do not use AI output as the sole basis for decisions affecting human safety, liberty, or livelihood.
-
-⚠️ **WARNING:** This software may produce confident-sounding responses that are factually incorrect. Verify all claims independently.
-
-⚠️ **WARNING:** Outputs may reflect biases present in training data. Exercise professional judgment at all times.
-
-⚠️ **WARNING:** Do not feed secrets, API keys, passwords, or private credentials into AI prompts.
 
 ---
 
