@@ -296,15 +296,15 @@ Create an incident record capturing:
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│                INCIDENT RESPONSE — QUICK REFERENCE              │
+│                INCIDENT RESPONSE — QUICK REFERENCE             │
 ├────────────────────────────────────────────────────────────────┤
 │                                                                │
 │  1. STOP ACTIONS      gh run cancel, gh workflow disable       │
 │  2. TAKE CONTROL      Rotate secrets, lock down access         │
-│  3. DELETE FILES       git rm, git revert, delete branches      │
-│  4. AUDIT THE AGENT   Diff workflow & lifecycle files           │
-│  5. RECOVER           Validate, notify, document                │
-│  6. HARDEN            Post-incident review, implement fixes     │
+│  3. DELETE FILES      git rm, git revert, delete branches      │
+│  4. AUDIT THE AGENT   Diff workflow & lifecycle files          │
+│  5. RECOVER           Validate, notify, document               │
+│  6. HARDEN            Post-incident review, implement fixes    │
 │                                                                │
 │  Emergency:  git revert <hash>, then think.                    │
 │  DEFCON 1:   See TRANSITION-TO-DEFCON-1.md                     │
