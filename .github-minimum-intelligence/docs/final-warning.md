@@ -12,6 +12,30 @@ This is an AI-powered coding infrastructure. It is intended for use by qualified
 
 ---
 
+### Blast Radius
+
+Before deploying this system, understand what could go wrong. The [Blast Radius Analysis](warning-blast-radius.md) is a factual, evidence-based audit of the out-of-the-box capabilities available to the agent running as a GitHub Actions workflow.
+
+**Key findings:**
+
+| Dimension | Severity |
+|---|---|
+| Code & Repository Tampering | 🔴 CRITICAL |
+| Supply Chain Poisoning | 🔴 CRITICAL |
+| Secret Exfiltration | 🔴 CRITICAL |
+| Lateral Movement (Org) | 🔴 CRITICAL |
+| Network Egress | 🟠 HIGH |
+| Compute Abuse | 🟠 HIGH |
+| Persistence | 🟡 MEDIUM |
+
+**Overall:** One compromised issue comment can lead to full organizational code takeover, secret theft, and supply chain attacks on downstream consumers.
+
+📖 **Full analysis:** [warning-blast-radius.md](warning-blast-radius.md)
+
+📖 **Security assessment:** [security-assessment.md](security-assessment.md)
+
+---
+
 ### Before You Use This Software
 
 **Do not use this software if you:**
@@ -109,7 +133,7 @@ Like all powerful tools, this software may cause side effects. Not everybody exp
 
 ### The Four Laws of AI
 
-This system defines [The Four Laws of AI](the-four-laws-of-ai.md), adapted from Asimov's Laws of Robotics for AI infrastructure:
+This system defines [The Four Laws of AI](the-four-laws-of-ai.md), adapted from Asimov's Laws of Robotics for AI infrastructure, we recommend you use them:
 
 | Law | Principle | Summary |
 |-----|-----------|---------|
@@ -126,7 +150,7 @@ This system defines [The Four Laws of AI](the-four-laws-of-ai.md), adapted from 
 
 ### DEFCON Readiness Levels
 
-This system defines five operational readiness states modelled on military DEFCON levels. Each level constrains what the AI agent is permitted to do. Higher readiness (lower number) means tighter restrictions.
+This system defines five operational readiness states modelled on military DEFCON levels. Each level constrains what the AI agent is permitted to do. Higher readiness (lower number) means tighter restrictions, we recommend you use them.
 
 | Level | Name | Posture | Key Constraint |
 |-------|------|---------|----------------|
@@ -137,30 +161,6 @@ This system defines five operational readiness states modelled on military DEFCO
 | [DEFCON 5](transition-to-defcon-5.md) | **Normal Readiness** | Standard operations | All capabilities available. Default operating posture per agent instructions. |
 
 ⚠️ **Standing Order:** The agent must obey DEFCON transitions immediately. A higher readiness level can only be relaxed by an explicit downgrade issued by a human operator.
-
----
-
-### Blast Radius
-
-Before deploying this system, understand what could go wrong. The [Blast Radius Analysis](warning-blast-radius.md) is a factual, evidence-based audit of the out-of-the-box capabilities available to the agent running as a GitHub Actions workflow.
-
-**Key findings:**
-
-| Dimension | Severity |
-|---|---|
-| Code & Repository Tampering | 🔴 CRITICAL |
-| Supply Chain Poisoning | 🔴 CRITICAL |
-| Secret Exfiltration | 🔴 CRITICAL |
-| Lateral Movement (Org) | 🔴 CRITICAL |
-| Network Egress | 🟠 HIGH |
-| Compute Abuse | 🟠 HIGH |
-| Persistence | 🟡 MEDIUM |
-
-**Overall:** One compromised issue comment can lead to full organizational code takeover, secret theft, and supply chain attacks on downstream consumers.
-
-📖 **Full analysis:** [warning-blast-radius.md](warning-blast-radius.md)
-
-📖 **Security assessment:** [security-assessment.md](security-assessment.md)
 
 ---
 
