@@ -10,7 +10,7 @@ The `pi` coding agent and the Minimum Intelligence framework eliminate that cont
 
 ## What - A `devDependency`, Not a Platform
 
-> ?
+> An npm package you install in your tree—no hosted backend, no OAuth handshake, no new trust boundary beyond what you configure in Actions YAML.
 
 `@mariozechner/pi-coding-agent` is an npm package. Minimum Intelligence is a repo-local configuration layer. There is no hosted backend, no OAuth handshake, no tenant isolation to think about.
 
@@ -24,7 +24,7 @@ If the upstream package disappears tomorrow, your pinned version still works. If
 
 ## Where - Colocation With the Worktree
 
-> ?
+> Inside a GitHub Actions runner with a full checkout of your repository—direct filesystem access, no API abstraction layer, no context-window packing heuristics.
 
 The agent runs inside a GitHub Actions runner with a full checkout of your repository. It has direct filesystem access to your worktree - no API abstraction layer, no context-window packing heuristics on your end.
 
@@ -42,7 +42,7 @@ This also means the agent's actions produce first-class Git artifacts. Every cha
 
 ## How - LLM Reasoning + `pi` Tool Execution
 
-> ?
+> The LLM reasons and plans; `pi` executes—a ReAct-style agent loop where the tool surface is your actual development environment, not a sandboxed approximation.
 
 The architecture cleanly separates cognition from action.
 
@@ -62,7 +62,7 @@ This is a standard ReAct-style agent loop, but the critical differentiator is th
 
 ## Who - Agent Identity as Checked-In Config
 
-> ?
+> A Markdown persona file committed to your repository—diffable, reviewable, and governed by your normal pull request process.
 
 On initialization, you "hatch" the agent by opening an issue and defining its persona through dialogue. The result is a Markdown file committed to the repository - typically in `.github-minimum-intelligence/` - that governs the agent's tone, priorities, and behavioral constraints.
 
@@ -78,7 +78,7 @@ There is no hidden system prompt controlled by a vendor. The full instruction se
 
 ## When - Stateless Execution, Stateful History
 
-> ?
+> Each invocation is a fresh process; continuity is a property of the repository, reconstructed from durable artifacts—issues, commits, and repo state at HEAD.
 
 Each agent invocation is a fresh process - no warm session, no in-memory conversation cache. State is reconstructed from durable artifacts: the issue thread, the commit log, the repo contents at HEAD.
 
@@ -94,7 +94,7 @@ Continuity is a property of the repository, not of the agent process. As long as
 
 ## Why - Sovereignty and Auditability by Default
 
-> ?
+> Repository-native AI keeps the codebase as the primary system—auditable, sovereign, and under the same governance as everything else you ship.
 
 The practical case is straightforward:
 
