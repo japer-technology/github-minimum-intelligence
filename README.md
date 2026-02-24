@@ -83,7 +83,7 @@ The entire system runs as a closed loop inside your GitHub repository. When you 
 
 ```mermaid
 flowchart TD
-    A["START ACTION<br/>User opens or comments<br/>on Issue"] --> B["GitHub Actions<br/>Workflow Started"]
+    A["START ACTION<br/>User opens or comments<br/>on an Issue"] --> B["GitHub Actions<br/>Workflow Started"]
     B --> C{"Is Authorised User?"}
     C -- No --> D["👎<br/>Show Rejected"]
     C -- Yes --> E["🚀<br/>Show Launched"]
