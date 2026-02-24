@@ -2,9 +2,9 @@
 
 A repository-local AI framework that plugs into a developer’s existing workflow. Instead of external chat tools, it uses GitHub Issues for conversation, Git for persistent versioned memory, and GitHub Actions for execution. Installed by adding one folder to a repo, it delivers low-infrastructure, auditable, user-owned automation by committing every prompt/response and code change to the codebase.
 
-<h3 align="right">
+<p align="right">
   <a href="#quick-start">Quick Start</a> · <a href="#how-it-works">How It Works</a> · <a href="#installation-methods">Installation Methods</a> · <a href="#supported-providers">Supported Providers</a> · <a href="#configuration">Configuration</a>
-</h3>
+</p>
 
 <p align="center">
   <picture>
@@ -12,9 +12,9 @@ A repository-local AI framework that plugs into a developer’s existing workflo
   </picture>
 </p>
 
-### An AI agent that lives in your GitHub Repo
+## An AI agent that lives in your GitHub Repo
 
-Powered by [pi mono](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
+Powered by [pi](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
 Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work - all inside your repository.
 
