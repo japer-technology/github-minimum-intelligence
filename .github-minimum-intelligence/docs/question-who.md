@@ -2,7 +2,7 @@
 
 ## Who is the "mind" when the repository becomes intelligent?
 
-If *[The Repo Is the Mind](THE-REPO-IS-THE-MIND.md)* asks us to relocate intelligence from an external platform into the repository, then the natural follow-up is not merely technical. It is existential: **who is acting when work is done?**
+If *[The Repo Is the Mind](the-repo-is-the-mind.md)* asks us to relocate intelligence from an external platform into the repository, then the natural follow-up is not merely technical. It is existential: **who is acting when work is done?**
 
 In most software systems, that question is easy. A person authors code, a bot runs checks, and infrastructure executes automation. Minimum Intelligence deliberately blurs those boundaries—but in a disciplined way. It does not pretend the agent is human, and it does not treat humans as interchangeable with automation. Instead, it introduces a new participant in the development process: a repository-native actor whose identity, memory, and authority are all governed by the same artifacts developers already trust.
 
@@ -50,7 +50,7 @@ Identity, then, becomes historical rather than purely instantaneous. The agent a
 
 ## 4) Who decides what kind of agent this is? Maintainers, in Markdown.
 
-The `Who` section in *[The Repo Is the Mind](THE-REPO-IS-THE-MIND.md)* is explicit: agent identity is checked-in configuration. Persona is authored through dialogue, stored in repository files, and changed through ordinary Git operations.
+The `Who` section in *[The Repo Is the Mind](the-repo-is-the-mind.md)* is explicit: agent identity is checked-in configuration. Persona is authored through dialogue, stored in repository files, and changed through ordinary Git operations.
 
 This matters because it relocates authorship of behavior. The agent is not "who the vendor says it is". It is who the maintainers define it to be:
 - tone can be adjusted,
@@ -81,7 +81,7 @@ The architecture distributes accountability instead of obscuring it.
 - **The agent process** is accountable through artifacts: comments, diffs, commits, logs.
 - **The model provider** is accountable for reasoning quality but cannot silently rewrite local governance.
 
-This is why "[The Repo Is the Mind](THE-REPO-IS-THE-MIND.md)" feels less like a metaphor and more like an operational doctrine. The repository already hosts accountability mechanisms—history, diff, review, rollback. Embedding the agent there means those mechanisms apply by default.
+This is why "[The Repo Is the Mind](the-repo-is-the-mind.md)" feels less like a metaphor and more like an operational doctrine. The repository already hosts accountability mechanisms—history, diff, review, rollback. Embedding the agent there means those mechanisms apply by default.
 
 ---
 

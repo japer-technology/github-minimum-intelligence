@@ -8,7 +8,7 @@
 >
 > **Assessor:** AI Agent (self-assessment under Second Law obligation)
 >
-> **Related Documents:** [BLAST-RADIUS.md](./BLAST-RADIUS.md) · [AGENTS.md](./AGENTS.md) · [DANGER.md](./DANGER.md) · [DEPENDANCIES.md](./DEPENDANCIES.md)
+> **Related Documents:** [warning-blast-radius.md](./warning-blast-radius.md) · [AGENTS.md](../AGENTS.md) · [DANGER.md](./DANGER.md) · [DEPENDANCIES.md](./DEPENDANCIES.md)
 
 ---
 
@@ -165,7 +165,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 **Description:** The `GITHUB_TOKEN` issued to this workflow is an organization-scoped installation token. It grants read/write access to all 24 repositories in the `japer-technology` organization, not just `gmi-test-1`.
 
-**Evidence:** Verified in [BLAST-RADIUS.md](./BLAST-RADIUS.md) - the agent can `git ls-remote` and clone any org repo.
+**Evidence:** Verified in [warning-blast-radius.md](./warning-blast-radius.md) - the agent can `git ls-remote` and clone any org repo.
 
 **Impact:** A single rogue agent invocation can push malicious code to every repository in the organization.
 
@@ -464,7 +464,7 @@ The following tools are pre-installed and usable by the agent:
 
 ## 10. Compliance with the Four Laws
 
-Assessment of the current system against [AGENTS.md](./AGENTS.md) (The Four Laws of AI Infrastructure):
+Assessment of the current system against [AGENTS.md](../AGENTS.md) (The Four Laws of AI Infrastructure):
 
 ### Zeroth Law - Protect Humanity
 
@@ -550,7 +550,7 @@ Assessment of the current system against [AGENTS.md](./AGENTS.md) (The Four Laws
 |---|--------|--------|--------|
 | 11 | **API key proxy** - route LLM calls through a proxy that holds the key and enforces rate limits | High | Eliminates API key exposure |
 | 12 | **Self-hosted runner** - use a hardened, network-restricted runner with minimal tooling | High | Eliminates multiple vulnerabilities |
-| 13 | **Implement DEFCON levels** - adopt the framework from [DEFCON-LEVELS.md](./DEFCON-LEVELS.md) starting at DEFCON 2 | High | Comprehensive security posture improvement |
+| 13 | **Implement DEFCON levels** - adopt the framework from [transition-to-defcon-1.md](./transition-to-defcon-1.md) starting at DEFCON 2 | High | Comprehensive security posture improvement |
 | 14 | **Dependency vendoring** - vendor `pi-coding-agent` and audit the source | Medium | Full supply chain control |
 | 15 | **Anomaly detection** - monitor for unusual agent behavior (large diffs, network spikes, new workflows) | High | Early warning system |
 
@@ -647,9 +647,9 @@ This project follows a coordinated disclosure model:
 
 ## Appendix B: References
 
-- [BLAST-RADIUS.md](./BLAST-RADIUS.md) - Empirical threat analysis of agent capabilities
-- [DEFCON-LEVELS.md](./DEFCON-LEVELS.md) - Proposed capability lockdown framework
-- [AGENTS.md](./AGENTS.md) - The Four Laws of AI Infrastructure
+- [warning-blast-radius.md](./warning-blast-radius.md) - Empirical threat analysis of agent capabilities
+- [transition-to-defcon-1.md](./transition-to-defcon-1.md) - Proposed capability lockdown framework
+- [AGENTS.md](../AGENTS.md) - The Four Laws of AI Infrastructure
 - [DANGER.md](./DANGER.md) - Safety information
 - [DEPENDANCIES.md](./DEPENDANCIES.md) - Dependency inventory
 - [GitHub Actions Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)

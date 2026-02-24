@@ -2,7 +2,7 @@
 
 > **Classification:** Internal — For Repository Maintainers and Organization Administrators
 >
-> **Companion Document:** [SECURITY-ASSESSMENT.md](./SECURITY-ASSESSMENT.md) · [WARNING-BLAST-RADIUS.md](./WARNING-BLAST-RADIUS.md) · [TRANSITION-TO-DEFCON-1.md](./TRANSITION-TO-DEFCON-1.md)
+> **Companion Document:** [security-assessment.md](./security-assessment.md) · [warning-blast-radius.md](./warning-blast-radius.md) · [transition-to-defcon-1.md](./transition-to-defcon-1.md)
 
 ---
 
@@ -100,7 +100,7 @@ gh secret set ANTHROPIC_API_KEY --body "sk-new-rotated-key-value"
 
 ### 2.3 Transition to DEFCON 1
 
-If the agent is still accepting issue-triggered commands, open an issue containing the contents of [TRANSITION-TO-DEFCON-1.md](./TRANSITION-TO-DEFCON-1.md) to instruct it to **cease all autonomous operations**.
+If the agent is still accepting issue-triggered commands, open an issue containing the contents of [transition-to-defcon-1.md](./transition-to-defcon-1.md) to instruct it to **cease all autonomous operations**.
 
 > **Note:** DEFCON 1 is a software-level instruction. It is not a substitute for disabling the workflow (Step 1.4). Always disable the workflow first.
 
@@ -122,10 +122,10 @@ git log --all --oneline --since="24 hours ago"
 git diff --name-only HEAD~10
 
 # Find new or modified workflow files
-find .github/workflows -type f -newer SECURITY-ASSESSMENT.md -ls
+find .github/workflows -type f -newer security-assessment.md -ls
 
 # Find new or modified files in the agent directory
-find .github-minimum-intelligence -type f -newer SECURITY-ASSESSMENT.md -ls
+find .github-minimum-intelligence -type f -newer security-assessment.md -ls
 ```
 
 ### 3.2 Delete unauthorized workflow files
@@ -224,7 +224,7 @@ Verify:
 
 ### 4.3 Re-enable with safeguards
 
-Before re-enabling the workflow, implement the recommendations from [SECURITY-ASSESSMENT.md Section 12](./SECURITY-ASSESSMENT.md#12-recommendations):
+Before re-enabling the workflow, implement the recommendations from [security-assessment.md Section 12](./security-assessment.md#12-recommendations):
 
 1. **Restrict token scope:** Use a fine-grained personal access token scoped to this repository only.
 2. **Enable branch protection:** Require pull request reviews for all changes.
@@ -283,7 +283,7 @@ Create an incident record capturing:
 **Time target:** Days 1–7
 
 - [ ] Conduct a post-incident review with all involved parties.
-- [ ] Update the threat model in [SECURITY-ASSESSMENT.md](./SECURITY-ASSESSMENT.md) with new attack vectors discovered.
+- [ ] Update the threat model in [security-assessment.md](./security-assessment.md) with new attack vectors discovered.
 - [ ] Implement additional monitoring (e.g., alerts on workflow file changes, unexpected branch creation).
 - [ ] Review and tighten permissions across all organization repositories.
 - [ ] Consider moving to a self-hosted runner with network restrictions and reduced privileges.
@@ -307,7 +307,7 @@ Create an incident record capturing:
 │  6. HARDEN            Post-incident review, implement fixes    │
 │                                                                │
 │  Emergency:  git revert <hash>, then think.                    │
-│  DEFCON 1:   See TRANSITION-TO-DEFCON-1.md                     │
+│  DEFCON 1:   See transition-to-defcon-1.md                     │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘
 ```

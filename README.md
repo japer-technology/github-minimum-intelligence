@@ -24,7 +24,7 @@ Drop a single `.github-minimum-intelligence` folder into any repo and you have a
 
 ## IMPORTANT
 
-### ⚠️ Please read this [FINAL WARNING](FINAL-WARNING.md) carefully!
+### ⚠️ Please read this [FINAL WARNING](.github-minimum-intelligence/docs/final-warning.md) carefully!
 
 ---
 

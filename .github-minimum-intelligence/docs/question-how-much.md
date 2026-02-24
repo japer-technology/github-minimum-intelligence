@@ -2,7 +2,7 @@
 
 ## How much intelligence can a repository hold?
 
-If *[The Repo Is the Mind](THE-REPO-IS-THE-MIND.md)* is the thesis, then the next question is scale: **how much mind can it carry before it collapses under its own memory?**
+If *[The Repo Is the Mind](the-repo-is-the-mind.md)* is the thesis, then the next question is scale: **how much mind can it carry before it collapses under its own memory?**
 
 There is a seduction in modern AI tooling: the promise that “intelligence” is something you stream from a distant endpoint, rent by token, and forget between browser tabs. In that world, intelligence is transient. It flickers on demand, answers quickly, and evaporates without residue.
 
