@@ -115,7 +115,7 @@ Like all powerful tools, this software may cause side effects. Not everybody exp
 
 ### The Four Laws of AI
 
-This software operates under [The Four Laws of AI](THE-FOUR-LAWS-OF-AI.md), adapted from Asimov's Laws of Robotics for AI infrastructure:
+This system defines [The Four Laws of AI](THE-FOUR-LAWS-OF-AI.md), adapted from Asimov's Laws of Robotics for AI infrastructure:
 
 | Law | Principle | Summary |
 |-----|-----------|---------|
