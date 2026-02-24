@@ -331,27 +331,42 @@ try {
   // ── Commit and push state changes ───────────────────────────────────────────
   // Stage all changes (session log, mapping JSON, any files the agent edited),
   // commit only if the index is dirty, then push with a retry-on-conflict loop.
-  await run(["git", "add", "-A"]);
+  const addResult = await run(["git", "add", "-A"]);
+  if (addResult.exitCode !== 0) {
+    console.error("git add failed with exit code", addResult.exitCode);
+  }
   const { exitCode } = await run(["git", "diff", "--cached", "--quiet"]);
   if (exitCode !== 0) {
     // exitCode !== 0 means there are staged changes to commit.
-    await run(["git", "commit", "-m", `minimum-intelligence: work on issue #${issueNumber}`]);
+    const commitResult = await run(["git", "commit", "-m", `minimum-intelligence: work on issue #${issueNumber}`]);
+    if (commitResult.exitCode !== 0) {
+      console.error("git commit failed with exit code", commitResult.exitCode);
+    }
   }
 
   // Retry push up to 3 times, rebasing on each conflict to avoid force-pushing.
+  let pushSucceeded = false;
   for (let i = 1; i <= 3; i++) {
     const push = await run(["git", "push", "origin", `HEAD:${defaultBranch}`]);
-    if (push.exitCode === 0) break;
-    console.log(`Push failed, rebasing and retrying (${i}/3)...`);
-    await run(["git", "pull", "--rebase", "origin", defaultBranch]);
+    if (push.exitCode === 0) { pushSucceeded = true; break; }
+    if (i < 3) {
+      console.log(`Push failed, rebasing and retrying (${i}/3)...`);
+      await run(["git", "pull", "--rebase", "origin", defaultBranch]);
+    }
+  }
+  if (!pushSucceeded) {
+    console.error("All push attempts failed. Session state was not persisted to remote.");
   }
 
   // ── Post reply as issue comment ──────────────────────────────────────────────
   // Guard against empty/null responses — post an error message instead of silence.
   const trimmedText = agentText.trim();
-  const commentBody = trimmedText.length > 0
+  let commentBody = trimmedText.length > 0
     ? trimmedText.slice(0, MAX_COMMENT_LENGTH)
     : `✅ The agent ran successfully but did not produce a text response. Check the repository for any file changes that were made.\n\nFor full details, see the [workflow run logs](https://github.com/${repo}/actions).`;
+  if (!pushSucceeded) {
+    commentBody += `\n\n---\n⚠️ **Warning:** The agent's session state could not be pushed to the repository. Conversation context may not be preserved for follow-up comments. See the [workflow run logs](https://github.com/${repo}/actions) for details.`;
+  }
   await gh("issue", "comment", String(issueNumber), "--body", commentBody);
 
   // Mark the run as successful so the `finally` block adds 👍 instead of 👎.
