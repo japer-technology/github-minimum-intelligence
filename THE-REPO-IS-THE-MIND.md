@@ -6,9 +6,11 @@ Many AI tools can hover around Git: they can read files, suggest changes, even g
 
 The `pi` coding agent and the Minimum Intelligence framework eliminate that context gap by embedding the AI directly in the repository - not as a service integration, but as a versioned dependency that operates inside your existing Git, Actions, and Issues infrastructure.
 
-This document breaks down the architecture along five axes.
+# What Where How Who When Why
 
 ## What - A `devDependency`, Not a Platform
+
+> ?
 
 `@mariozechner/pi-coding-agent` is an npm package. Minimum Intelligence is a repo-local configuration layer. There is no hosted backend, no OAuth handshake, no tenant isolation to think about.
 
@@ -21,6 +23,8 @@ If the upstream package disappears tomorrow, your pinned version still works. If
 ---
 
 ## Where - Colocation With the Worktree
+
+> ?
 
 The agent runs inside a GitHub Actions runner with a full checkout of your repository. It has direct filesystem access to your worktree - no API abstraction layer, no context-window packing heuristics on your end.
 
@@ -37,6 +41,8 @@ This also means the agent's actions produce first-class Git artifacts. Every cha
 ---
 
 ## How - LLM Reasoning + `pi` Tool Execution
+
+> ?
 
 The architecture cleanly separates cognition from action.
 
@@ -56,6 +62,8 @@ This is a standard ReAct-style agent loop, but the critical differentiator is th
 
 ## Who - Agent Identity as Checked-In Config
 
+> ?
+
 On initialization, you "hatch" the agent by opening an issue and defining its persona through dialogue. The result is a Markdown file committed to the repository - typically in `.github-minimum-intelligence/` - that governs the agent's tone, priorities, and behavioral constraints.
 
 This is configuration-as-code for agent personality. It's diffable, reviewable, and subject to your normal PR process. You can:
@@ -70,6 +78,8 @@ There is no hidden system prompt controlled by a vendor. The full instruction se
 
 ## When - Stateless Execution, Stateful History
 
+> ?
+
 Each agent invocation is a fresh process - no warm session, no in-memory conversation cache. State is reconstructed from durable artifacts: the issue thread, the commit log, the repo contents at HEAD.
 
 This maps cleanly to async workflows. There is no session timeout, no "conversation expired" error, no context window that silently truncated your earlier messages. You can:
@@ -83,6 +93,8 @@ Continuity is a property of the repository, not of the agent process. As long as
 ---
 
 ## Why - Sovereignty and Auditability by Default
+
+> ?
 
 The practical case is straightforward:
 
