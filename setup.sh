@@ -62,9 +62,9 @@ EXTRACTED=$(ls -d "$TMPDIR"/github-minimum-intelligence-*)
 # Copy the .github-minimum-intelligence directory
 cp -R "$EXTRACTED/$TARGET_DIR" "$TARGET_DIR"
 
-# Remove the status folder — it contains runtime state from the master repo
+# Remove the state folder — it contains runtime state from the master repo
 # and should not be carried over into a fresh installation.
-rm -rf "$TARGET_DIR/status"
+rm -rf "$TARGET_DIR/state"
 
 echo "  Copied $TARGET_DIR/"
 
