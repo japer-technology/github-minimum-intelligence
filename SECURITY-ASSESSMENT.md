@@ -8,7 +8,7 @@
 >
 > **Assessor:** AI Agent (self-assessment under Second Law obligation)
 >
-> **Related Documents:** [BLAST-RADIUS.md](./BLAST-RADIUS.md) · [DEFCON-LEVELS.md](./DEFCON-LEVELS.md) · [AGENTS.md](./AGENTS.md) · [DANGER.md](./DANGER.md) · [DEPENDANCIES.md](./DEPENDANCIES.md)
+> **Related Documents:** [BLAST-RADIUS.md](./BLAST-RADIUS.md) · [AGENTS.md](./AGENTS.md) · [DANGER.md](./DANGER.md) · [DEPENDANCIES.md](./DEPENDANCIES.md)
 
 ---
 
