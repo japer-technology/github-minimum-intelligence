@@ -17,9 +17,10 @@
  * ─────────────────────────────────────────────────────────────────────────────
  *   1. Creates `.github/workflows/` and `.github/ISSUE_TEMPLATE/` if missing.
  *   2. Copies the agent workflow template into `.github/workflows/`.
- *   3. Copies the hatch issue template into `.github/ISSUE_TEMPLATE/`.
+ *   3. Copies the hatch and chat issue templates into `.github/ISSUE_TEMPLATE/`.
  *   4. Initialises the `AGENTS.md` identity file if one does not exist.
- *   5. Installs runtime dependencies via `bun install`.
+ *   5. Initialises `.pi/settings.json` with default provider config if not customised.
+ *   6. Installs runtime dependencies via `bun install`.
  */
 
 import { existsSync, mkdirSync, copyFileSync, readFileSync, writeFileSync } from "fs";
@@ -37,12 +38,16 @@ const issueTemplateDir = resolve(repoRoot, ".github", "ISSUE_TEMPLATE");
 // Source templates inside install/
 const workflowSrc = resolve(installDir, "github-minimum-intelligence-agent.yml");
 const hatchSrc = resolve(installDir, "github-minimum-intelligence-hatch.md");
+const chatSrc = resolve(installDir, "github-minimum-intelligence-chat.md");
 const agentsSrc = resolve(installDir, "MINIMUM-INTELLIGENCE-AGENTS.md");
+const settingsSrc = resolve(installDir, "settings.json");
 
 // Destination paths
 const workflowDest = resolve(workflowsDir, "github-minimum-intelligence-agent.yml");
 const hatchDest = resolve(issueTemplateDir, "github-minimum-intelligence-hatch.md");
+const chatDest = resolve(issueTemplateDir, "github-minimum-intelligence-chat.md");
 const agentsDest = resolve(minimumIntelligenceDir, "AGENTS.md");
+const settingsDest = resolve(minimumIntelligenceDir, ".pi", "settings.json");
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -75,8 +80,9 @@ ensureDir(issueTemplateDir);
 // 2. Copy workflow template
 copyTemplate(workflowSrc, workflowDest);
 
-// 3. Copy issue template
+// 3. Copy issue templates
 copyTemplate(hatchSrc, hatchDest);
+copyTemplate(chatSrc, chatDest);
 
 // 4. Initialise AGENTS.md if it does not already contain an identity
 if (existsSync(agentsDest)) {
@@ -90,7 +96,10 @@ if (existsSync(agentsDest)) {
   copyTemplate(agentsSrc, agentsDest);
 }
 
-// 5. Install runtime dependencies
+// 5. Initialise .pi/settings.json with defaults if not already customised
+copyTemplate(settingsSrc, settingsDest);
+
+// 6. Install runtime dependencies
 console.log("\n  Installing dependencies...\n");
 const install = Bun.spawnSync(["bun", "install"], {
   cwd: minimumIntelligenceDir,

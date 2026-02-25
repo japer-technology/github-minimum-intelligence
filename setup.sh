@@ -66,6 +66,11 @@ cp -R "$EXTRACTED/$TARGET_DIR" "$TARGET_DIR"
 # and should not be carried over into a fresh installation.
 rm -rf "$TARGET_DIR/state"
 
+# Reset repo-specific files to their default templates so new installations
+# do not inherit the source repo's agent identity or model configuration.
+cp "$TARGET_DIR/install/MINIMUM-INTELLIGENCE-AGENTS.md" "$TARGET_DIR/AGENTS.md"
+cp "$TARGET_DIR/install/settings.json" "$TARGET_DIR/.pi/settings.json"
+
 echo "  Copied $TARGET_DIR/"
 
 # ─── Install ───────────────────────────────────────────────────────────────────
