@@ -12,6 +12,8 @@ A repository-local AI framework that plugs into a developer’s existing workflo
   </picture>
 </p>
 
+> This proves that a folder, a workflow, and an LLM API key can create an interactive AI collaborator as natural as talking to a teammate.
+
 ## IMPORTANT
 
 ### 📖 Please read [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) for important usage information.
