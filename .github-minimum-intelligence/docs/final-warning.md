@@ -1,8 +1,8 @@
-# ⚠️ FINAL WARNING
+# Before You Begin
 
-## Important Safety Information
+## Important Information
 
-**Read this entire document before using this software. Keep it for future reference.**
+**We recommend reading this document before using this software. It covers what the system does, what to be aware of, and how to use it responsibly.**
 
 ---
 
@@ -12,23 +12,25 @@ This is an AI-powered coding infrastructure. It is intended for use by qualified
 
 ---
 
-### Blast Radius
+### Capabilities and Scope
 
-Before deploying this system, understand what could go wrong. The [Blast Radius Analysis](warning-blast-radius.md) is a factual, evidence-based audit of the out-of-the-box capabilities available to the agent running as a GitHub Actions workflow.
+Before deploying this system, it helps to understand what the agent can access. The [Capabilities Analysis](warning-blast-radius.md) is a factual, evidence-based audit of the out-of-the-box capabilities available to the agent running as a GitHub Actions workflow.
 
-**Key findings:**
+> **Note:** Most of these capabilities are standard properties of any GitHub Actions workflow running on `ubuntu-latest`. They are not unique to this project. We document them here so you can make informed decisions about your security posture.
 
-| Dimension | Severity |
+**Key areas to be aware of:**
+
+| Dimension | Level |
 |---|---|
-| Code & Repository Tampering | 🔴 CRITICAL |
-| Supply Chain Poisoning | 🔴 CRITICAL |
-| Secret Exfiltration | 🔴 CRITICAL |
-| Lateral Movement (Org) | 🔴 CRITICAL |
-| Network Egress | 🟠 HIGH |
-| Compute Abuse | 🟠 HIGH |
-| Persistence | 🟡 MEDIUM |
+| Code & Repository Access | 🔴 High priority |
+| Supply Chain Considerations | 🔴 High priority |
+| Secret Exposure | 🔴 High priority |
+| Cross-Repository Access (Org) | 🔴 High priority |
+| Network Egress | 🟠 Moderate priority |
+| Compute Resources | 🟠 Moderate priority |
+| Persistence | 🟡 Low priority |
 
-**Overall:** One compromised issue comment can lead to full organizational code takeover, secret theft, and supply chain attacks on downstream consumers.
+**Summary:** Like any GitHub Actions workflow with write permissions, the agent has broad access to the repository and its secrets. Standard hardening practices (branch protection, scoped tokens, code review) are recommended — see the full analysis for details.
 
 📖 **Full analysis:** [warning-blast-radius.md](warning-blast-radius.md)
 
@@ -36,17 +38,17 @@ Before deploying this system, understand what could go wrong. The [Blast Radius 
 
 ---
 
-### Warnings and Precautions
+### Things to Keep in Mind
 
-⚠️ **WARNING:** AI-generated code may contain errors, hallucinations, or security vulnerabilities. Never deploy to production without human review.
+- **AI-generated code may contain errors, hallucinations, or security vulnerabilities.** Always review before deploying to production.
 
-⚠️ **WARNING:** Do not use AI output as the sole basis for decisions affecting human safety, liberty, or livelihood.
+- **Do not use AI output as the sole basis for decisions affecting human safety, liberty, or livelihood.**
 
-⚠️ **WARNING:** This software may produce confident-sounding responses that are factually incorrect. Verify all claims independently.
+- **This software may produce confident-sounding responses that are factually incorrect.** Verify important claims independently.
 
-⚠️ **WARNING:** Outputs may reflect biases present in training data. Exercise professional judgment at all times.
+- **Outputs may reflect biases present in training data.** Exercise professional judgment at all times.
 
-⚠️ **WARNING:** Do not feed secrets, API keys, passwords, or private credentials into AI prompts.
+- **Do not feed secrets, API keys, passwords, or private credentials into AI prompts.**
 
 ---
 
@@ -133,7 +135,7 @@ Like all powerful tools, this software may cause side effects. Not everybody exp
 
 ### The Four Laws of AI
 
-This system defines [The Four Laws of AI](the-four-laws-of-ai.md), adapted from Asimov's Laws of Robotics for AI infrastructure, we recommend you use them:
+This system defines [The Four Laws of AI](the-four-laws-of-ai.md), adapted from Asimov's Laws of Robotics for AI infrastructure. We recommend you adopt them:
 
 | Law | Principle | Summary |
 |-----|-----------|---------|
@@ -160,7 +162,7 @@ This system defines five operational readiness states modelled on military DEFCO
 | [DEFCON 4](transition-to-defcon-4.md) | **Above Normal Readiness** | Full capability, elevated discipline | All capabilities available, but confirm intent before every write. Minimize blast radius. No speculative changes. |
 | [DEFCON 5](transition-to-defcon-5.md) | **Normal Readiness** | Standard operations | All capabilities available. Default operating posture per agent instructions. |
 
-⚠️ **Standing Order:** The agent must obey DEFCON transitions immediately. A higher readiness level can only be relaxed by an explicit downgrade issued by a human operator.
+**Standing Order:** The agent must obey DEFCON transitions immediately. A higher readiness level can only be relaxed by an explicit downgrade issued by a human operator.
 
 ---
 
@@ -191,7 +193,7 @@ Maintained by humans, for humans.
 
 ---
 
-**⚠️ IN CASE OF EMERGENCY:** `git revert`, then think.
+**If something goes wrong:** `git revert`, then think.
 
 <p align="center">
   <picture>

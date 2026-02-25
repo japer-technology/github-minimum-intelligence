@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing. This project values transparency, auditability, and human judgment above all else. Every contribution — code, documentation, or discussion — becomes part of the repository's permanent history.
 
-Before contributing, please read the [FINAL WARNING](.github-minimum-intelligence/docs/final-warning.md) and the [Four Laws of AI](.github-minimum-intelligence/docs/the-four-laws-of-ai.md).
+Before contributing, please read [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) and the [Four Laws of AI](.github-minimum-intelligence/docs/the-four-laws-of-ai.md).
 
 ---
 
@@ -23,7 +23,7 @@ Open a [GitHub Issue](../../issues) describing:
 
 - The problem or gap the feature addresses.
 - How it fits within the existing architecture (issues as conversation, Git as memory, Actions as runtime).
-- Any security implications — review the [Blast Radius Analysis](.github-minimum-intelligence/docs/warning-blast-radius.md) to understand the threat model.
+- Any security implications — review the [Capabilities Analysis](.github-minimum-intelligence/docs/warning-blast-radius.md) to understand the access model.
 
 ### Submitting Changes
 
@@ -78,7 +78,7 @@ See the [README](README.md#project-structure) for a detailed breakdown of every 
 
 If you discover a security vulnerability, **do not open a public issue**. Instead, refer to the [Incident Response](.github-minimum-intelligence/docs/incident-response.md) plan and contact the maintainers privately.
 
-All contributions are subject to the project's [Security Assessment](.github-minimum-intelligence/docs/security-assessment.md) and [Blast Radius Analysis](.github-minimum-intelligence/docs/warning-blast-radius.md). Changes that expand the agent's capabilities or permissions require careful review.
+All contributions are subject to the project's [Security Assessment](.github-minimum-intelligence/docs/security-assessment.md) and [Capabilities Analysis](.github-minimum-intelligence/docs/warning-blast-radius.md). Changes that expand the agent's capabilities or permissions require careful review.
 
 ---
 

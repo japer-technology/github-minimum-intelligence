@@ -51,4 +51,4 @@ Maintainers have the right and responsibility to remove, edit, or reject comment
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1, with additions specific to this project's [Four Laws of AI](.github-minimum-intelligence/docs/the-four-laws-of-ai.md) and [FINAL WARNING](.github-minimum-intelligence/docs/final-warning.md).
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1, with additions specific to this project's [Four Laws of AI](.github-minimum-intelligence/docs/the-four-laws-of-ai.md) and [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) guide.
