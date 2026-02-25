@@ -85,34 +85,34 @@ The entire system runs as a closed loop inside your GitHub repository. When you 
 
 ```mermaid
 flowchart TD
-    A["START<br/>User opens or comments<br/>on an Issue"] --> B["START WORKFLOW"]
-    B --> C{"Is Authorised User?"}
+    A["START<br/>An Issue is created<br/>or commented"] --> B["START WORKFLOW"]
+    B --> C{"Is GitHub User<br/>Authorised?"}
     C -- No --> D["Show Rejected<br/>👎"]
     C -- Yes --> E["Show Launched<br/>🚀"]
     E --> F["LOAD DEPENDANCIES"]
     F --> G{"Is this an<br/>Existing Session?"}
     G -- Yes --> H["LOAD SESSION"]
     G -- No --> I["CREATE SESSION"]
-    H --> J["PROCESS Pi Agent"]
+    H --> J["AGENT PROCESS<br/>Pi-Mono"]
     I --> J
-    J --> K["PROCESS Issue"]
+    J --> K["ISSUE PROCESS<br/>Pi-Mono"]
     K --> L["SAVE STATE<br/>Commit and Push"]
     L --> M["SAVE REPLY<br/>Issue Comment<br/>👍"]
     M --> N["END<br/>User sees the reply"]
 
     style A fill:#000000,color:#fff
     style B fill:#4CAF50,color:#fff
-    style C fill:#2196F3,color:#fff
-    style D fill:#f44336,color:#fff
+    style C fill:#AF4C7A,color:#fff
+    style D fill:#AF504C,color:#fff
     style E fill:#4CAF50,color:#fff
     style F fill:#4CAF50,color:#fff
-    style G fill:#2196F3,color:#fff
+    style G fill:#AF4C7A,color:#fff
     style H fill:#4CAF50,color:#fff
     style I fill:#4CAF50,color:#fff
-    style J fill:#AC43D9,color:#fff
+    style J fill:#ABAF4C,color:#fff
     style K fill:#4CAF50,color:#fff
     style L fill:#4CAF50,color:#fff
-    style M fill:#af544c,color:#fff
+    style M fill:#4CAF50,color:#fff
     style N fill:#000000,color:#fff
 ```
 
