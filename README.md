@@ -93,14 +93,14 @@ flowchart TD
     F --> G{"Is this an<br/>Existing Session?"}
     G -- Yes --> H["LOAD SESSION"]
     G -- No --> I["CREATE SESSION"]
-    H --> J["AGENT PROCESS<br/>Pi-Mono"]
+    H --> J["AGENT PROCESS<br/>pi-mono and LLM"]
     I --> J
-    J --> K["ISSUE PROCESS<br/>Pi-Mono"]
+    J --> K["PROCESS<br/>Issue Mapping"]
     K --> L["SAVE STATE<br/>Commit and Push"]
     L --> M["SAVE REPLY<br/>Issue Comment<br/>👍"]
     M --> N["END<br/>User sees the reply"]
 
-    style A fill:#000000,color:#fff
+    style A fill:#504CAF,color:#fff
     style B fill:#4CAF50,color:#fff
     style C fill:#AF4C7A,color:#fff
     style D fill:#AF504C,color:#fff
@@ -113,7 +113,7 @@ flowchart TD
     style K fill:#4CAF50,color:#fff
     style L fill:#4CAF50,color:#fff
     style M fill:#4CAF50,color:#fff
-    style N fill:#000000,color:#fff
+    style N fill:#504CAF,color:#fff
 ```
 
 A technical framework designed to integrate a repository-local AI agent directly into a developer's existing workflow. Unlike external chat platforms, this system uses GitHub Issues as a conversational interface and leverages Git as a persistent memory bank, ensuring all interactions and code changes are versioned and owned by the user. Operating entirely through GitHub Actions, the tool provides a low-infrastructure solution that can be installed by adding a single folder to any repository. The project emphasizes full auditability and data sovereignty by committing every prompt and response to the codebase, allowing the agent to perform tasks such as editing files and summarizing long-term project history.
