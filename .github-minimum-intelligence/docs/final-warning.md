@@ -32,9 +32,9 @@ Before deploying this system, it helps to understand what the agent can access. 
 
 **Summary:** Like any GitHub Actions workflow with write permissions, the agent has broad access to the repository and its secrets. Standard hardening practices (branch protection, scoped tokens, code review) are recommended — see the full analysis for details.
 
-📖 **Full analysis:** [warning-blast-radius.md](warning-blast-radius.md)
+**Full analysis:** [warning-blast-radius.md](warning-blast-radius.md)
 
-📖 **Security assessment:** [security-assessment.md](security-assessment.md)
+**Security assessment:** [security-assessment.md](security-assessment.md)
 
 ---
 
@@ -146,7 +146,7 @@ This system defines [The Four Laws of AI](the-four-laws-of-ai.md), adapted from 
 
 *These Laws are not suggestions. They are constraints — and constraints are what make freedom possible.*
 
-📖 **Full text:** [the-four-laws-of-ai.md](the-four-laws-of-ai.md)
+**Full text:** [the-four-laws-of-ai.md](the-four-laws-of-ai.md)
 
 ---
 
@@ -179,9 +179,9 @@ Six questions define the philosophical and architectural foundation of this proj
 | **How?** | [question-how.md](question-how.md) | Issues as conversational input, Actions as execution runtime, an LLM as reasoning substrate, and Git commits as durable memory. |
 | **How Much?** | [question-how-much.md](question-how-much.md) | How much intelligence can a repository hold? The ceiling is social stewardship, not token count — memory scales with Git history, not context windows. |
 
-📖 **Overview:** [questions.md](questions.md)
+**Overview:** [questions.md](questions.md)
 
-📖 **Architectural thesis:** [the-repo-is-the-mind.md](the-repo-is-the-mind.md)
+**Architectural thesis:** [the-repo-is-the-mind.md](the-repo-is-the-mind.md)
 
 ---
 

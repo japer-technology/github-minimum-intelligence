@@ -16,7 +16,7 @@ A repository-local AI framework that plugs into a developer’s existing workflo
 
 ## IMPORTANT
 
-### 📖 Please read [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) for important usage information.
+### Please read [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) for important usage information.
 
 See the [Index](.github-minimum-intelligence/docs/index.md) for all documentation.
 

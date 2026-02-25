@@ -1,6 +1,6 @@
 # Question: What?
 
-> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
+> [Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
 
 ## What is GitHub Minimum Intelligence?
 

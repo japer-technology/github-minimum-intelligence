@@ -1,4 +1,4 @@
-# Documentation Index
+# Index
 
 > Comprehensive guide to all GitHub Minimum Intelligence documentation.
 >
@@ -63,7 +63,7 @@ Six questions define the philosophical and architectural foundation of this proj
 | **How?** | [question-how.md](./question-how.md) | Issues as input, Actions as runtime, LLM as reasoning, Git as memory. |
 | **How Much?** | [question-how-much.md](./question-how-much.md) | How much intelligence can a repository hold? The ceiling is stewardship, not token count. |
 
-📖 **Overview:** [questions.md](./questions.md) · **Architectural thesis:** [The Repo Is the Mind](./the-repo-is-the-mind.md)
+**Overview:** [questions.md](./questions.md) · **Architectural thesis:** [The Repo Is the Mind](./the-repo-is-the-mind.md)
 
 ---
 

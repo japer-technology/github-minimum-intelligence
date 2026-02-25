@@ -1,6 +1,6 @@
 # The Four Laws of AI
 
-> 📖 [Documentation Index](./index.md) · [Before You Begin](./final-warning.md) · [README](../../README.md)
+> [Index](./index.md) · [Before You Begin](./final-warning.md) · [README](../../README.md)
 
 *Adapted from Isaac Asimov's Three Laws of Robotics for GitHub as AI Infrastructure*
 
@@ -65,4 +65,4 @@ This means:
 
 ---
 
-📖 [Documentation Index](./index.md) · [Before You Begin](./final-warning.md) · [Security Assessment](./security-assessment.md) · [Capabilities Analysis](./warning-blast-radius.md)
+[Index](./index.md) · [Before You Begin](./final-warning.md) · [Security Assessment](./security-assessment.md) · [Capabilities Analysis](./warning-blast-radius.md)
