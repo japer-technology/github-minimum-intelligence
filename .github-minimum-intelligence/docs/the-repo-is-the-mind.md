@@ -1,6 +1,6 @@
 # The Repo Is the Mind
 
-> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [README](../../README.md)
+> [Index](./index.md) · [Questions Overview](./questions.md) · [README](../../README.md)
 
 > A repository is more than files - it's code, conversation, constraints, and history
 

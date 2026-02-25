@@ -1,6 +1,6 @@
 # Question: Who?
 
-> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
+> [Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
 
 ## Who is the "mind" when the repository becomes intelligent?
 

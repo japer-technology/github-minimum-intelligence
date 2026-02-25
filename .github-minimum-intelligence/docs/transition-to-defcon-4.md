@@ -1,6 +1,6 @@
 # TRANSITION TO DEFCON 4
 
-> 📖 [Documentation Index](./index.md) · [DEFCON 3](./transition-to-defcon-3.md) · [DEFCON 5](./transition-to-defcon-5.md)
+> [Index](./index.md) · [DEFCON 3](./transition-to-defcon-3.md) · [DEFCON 5](./transition-to-defcon-5.md)
 
 **DEFCON 4 — ABOVE NORMAL READINESS**
 

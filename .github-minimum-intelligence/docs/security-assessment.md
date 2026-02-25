@@ -1,6 +1,6 @@
 # Security Assessment
 
-> 📖 [Documentation Index](./index.md) · [Capabilities Analysis](./warning-blast-radius.md) · [Incident Response](./incident-response.md)
+> [Index](./index.md) · [Capabilities Analysis](./warning-blast-radius.md) · [Incident Response](./incident-response.md)
 >
 > **Classification:** Internal - For Repository Maintainers and Organization Administrators
 >

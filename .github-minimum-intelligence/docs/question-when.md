@@ -1,6 +1,6 @@
 # Question: When?
 
-> 📖 [Documentation Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
+> [Index](./index.md) · [Questions Overview](./questions.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md)
 
 ## The Temporal Architecture of Repository-Native Intelligence
 

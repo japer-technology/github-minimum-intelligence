@@ -1,6 +1,6 @@
 # Capabilities Analysis
 
-> 📖 [Documentation Index](./index.md) · [Security Assessment](./security-assessment.md) · [Incident Response](./incident-response.md) · [Before You Begin](./final-warning.md)
+> [Index](./index.md) · [Security Assessment](./security-assessment.md) · [Incident Response](./incident-response.md) · [Before You Begin](./final-warning.md)
 
 <p align="center">
   <picture>
