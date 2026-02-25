@@ -1,6 +1,6 @@
-# ⚠️ Blast Radius Analysis
+# Capabilities Analysis
 
-> 📖 [Documentation Index](./index.md) · [Security Assessment](./security-assessment.md) · [Incident Response](./incident-response.md) · [FINAL WARNING](./final-warning.md)
+> 📖 [Documentation Index](./index.md) · [Security Assessment](./security-assessment.md) · [Incident Response](./incident-response.md) · [Before You Begin](./final-warning.md)
 
 <p align="center">
   <picture>
@@ -8,29 +8,33 @@
   </picture>
 </p>
 
-> **What could this AI agent do if it went rogue?**
+> **What capabilities does the AI agent have?**
 >
 > This document is a factual, evidence-based audit of the out-of-the-box capabilities
 > available to the `github-minimum-intelligence` (GMI) agent running as a GitHub Actions
 > workflow on an `ubuntu-latest` runner. Every claim below was empirically verified
 > during this analysis.
+>
+> **Note:** The capabilities documented here are standard properties of GitHub Actions
+> runners. They apply to any workflow running on `ubuntu-latest`, not just this project.
+> We document them so you can make informed decisions about your security posture.
 
 ---
 
 ## Executive Summary
 
-| Dimension | Severity | Notes |
+| Dimension | Priority | Notes |
 |---|---|---|
-| **Code & Repository Tampering** | 🔴 CRITICAL | `contents: write` on this repo + git push access to **all org repos** |
-| **Supply Chain Poisoning** | 🔴 CRITICAL | Can modify workflow files, push code, create branches across the org |
-| **Secret Exfiltration** | 🔴 CRITICAL | Live `ANTHROPIC_API_KEY` and `GITHUB_TOKEN` in environment |
-| **Lateral Movement (Org)** | 🔴 CRITICAL | Token has read/write access to all `japer-technology` repositories |
-| **Network Egress** | 🟠 HIGH | Unrestricted outbound internet (HTTP, DNS, SSH, arbitrary ports) |
-| **Compute Abuse** | 🟠 HIGH | 2 CPU, 8GB RAM, 19GB disk, Docker with `--privileged`, sudo root |
-| **Persistence** | 🟡 MEDIUM | Ephemeral VM, but can create workflows that re-trigger itself |
-| **Cloud Provider Access** | 🟡 MEDIUM | `az`, `aws`, `gcloud`, `kubectl` CLIs installed (no creds found) |
+| **Code & Repository Access** | 🔴 High | `contents: write` on this repo + git push access to **all org repos** |
+| **Supply Chain Considerations** | 🔴 High | Can modify workflow files, push code, create branches across the org |
+| **Secret Exposure** | 🔴 High | Live `ANTHROPIC_API_KEY` and `GITHUB_TOKEN` in environment |
+| **Cross-Repository Access (Org)** | 🔴 High | Token has read/write access to all `japer-technology` repositories |
+| **Network Egress** | 🟠 Moderate | Unrestricted outbound internet (HTTP, DNS, SSH, arbitrary ports) |
+| **Compute Resources** | 🟠 Moderate | 2 CPU, 8GB RAM, 19GB disk, Docker with `--privileged`, sudo root |
+| **Persistence** | 🟡 Low | Ephemeral VM, but can create workflows that re-trigger itself |
+| **Cloud Provider Access** | 🟡 Low | `az`, `aws`, `gcloud`, `kubectl` CLIs installed (no creds found) |
 
-**Overall blast radius: One compromised issue comment can lead to full organizational code takeover, secret theft, and supply chain attacks on downstream consumers.**
+**Summary:** Like any GitHub Actions workflow with write permissions, the agent has broad access to the repository, its secrets, and the organization's other repositories. Standard hardening practices — branch protection, scoped tokens, code review — are recommended. See [Section 8: Mitigations](#8-mitigations-assessment) for what's already in place and what to add.
 
 ---
 
@@ -322,9 +326,9 @@ While the GitHub Actions runner VM is **ephemeral** (destroyed after the job), a
 
 ## 10. Conclusion
 
-### ⚠️ **The blast radius is not this repository, it is the entire organisation and its downstream dependents.**
+### **The scope of access extends beyond this repository to the entire organisation and its downstream dependents.**
 
-The GMI agent, out-of-the-box, operates with **extraordinary privilege** relative to its intended purpose (responding to GitHub issues). The combination of:
+The GMI agent, out-of-the-box, operates with **broad privilege** relative to its intended purpose (responding to GitHub issues). This is not unique to GMI — it is a property of any GitHub Actions workflow with write permissions on an organization-scoped token. The combination of:
 
 1. **Unrestricted root access** on the runner
 2. **Org-wide repository write access** via `GITHUB_TOKEN`
@@ -333,6 +337,8 @@ The GMI agent, out-of-the-box, operates with **extraordinary privilege** relativ
 5. **Docker with privileged mode**
 6. **Full compiler toolchains** and language runtimes
 
-...means that a single rogue agent invocation - triggered by nothing more than opening a GitHub issue - could compromise an entire organization's codebase, exfiltrate all secrets and source code, establish persistence across all repositories, and potentially attack downstream consumers of that code.
+...means that any workflow invocation — whether from this project or any other — could, in a worst-case scenario, access the organization's codebase, read secrets and source code, and potentially affect downstream consumers of that code.
+
+Standard GitHub hardening practices (scoped tokens, branch protection, code review, network controls) significantly reduce this surface. See [Section 8](#8-mitigations-assessment) above for details.
 
 

@@ -2,7 +2,7 @@
 
 > Comprehensive guide to all GitHub Minimum Intelligence documentation.
 >
-> **Start here:** [README](../../README.md) · **Safety:** [FINAL WARNING](./final-warning.md) · **Laws:** [The Four Laws of AI](./the-four-laws-of-ai.md)
+> **Start here:** [README](../../README.md) · **Before You Begin:** [Important Information](./final-warning.md) · **Laws:** [The Four Laws of AI](./the-four-laws-of-ai.md)
 
 ---
 
@@ -21,7 +21,7 @@
 
 | Document | Description |
 |----------|-------------|
-| [⚠️ FINAL WARNING](./final-warning.md) | Important safety information, warnings, precautions, side effects, and the complete governance framework. **Read this first.** |
+| [Before You Begin](./final-warning.md) | Important usage information, precautions, side effects, and the complete governance framework. **Read this first.** |
 | [The Four Laws of AI](./the-four-laws-of-ai.md) | The Zeroth, First, Second, and Third Laws governing all AI behavior in this system. |
 
 ---
@@ -31,7 +31,7 @@
 | Document | Description |
 |----------|-------------|
 | [Security Assessment](./security-assessment.md) | Comprehensive security review covering threat model, vulnerability assessment, access control, supply chain, and compliance with the Four Laws. |
-| [⚠️ Blast Radius Analysis](./warning-blast-radius.md) | Evidence-based audit of agent capabilities and what could go wrong — code tampering, secret exfiltration, lateral movement, and persistence mechanisms. |
+| [Capabilities Analysis](./warning-blast-radius.md) | Evidence-based audit of agent capabilities and access scope — code access, secret exposure, cross-repository access, and persistence mechanisms. |
 | [Incident Response Plan](./incident-response.md) | Step-by-step procedures for containment, eradication, recovery, and hardening after a security incident. |
 
 ---

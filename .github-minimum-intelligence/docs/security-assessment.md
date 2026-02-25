@@ -1,6 +1,6 @@
 # Security Assessment
 
-> 📖 [Documentation Index](./index.md) · [Blast Radius Analysis](./warning-blast-radius.md) · [Incident Response](./incident-response.md)
+> 📖 [Documentation Index](./index.md) · [Capabilities Analysis](./warning-blast-radius.md) · [Incident Response](./incident-response.md)
 >
 > **Classification:** Internal - For Repository Maintainers and Organization Administrators
 >
@@ -35,9 +35,11 @@
 
 ## 1. Executive Summary
 
-### Overall Security Posture: 🔴 CRITICAL
+### Overall Security Posture: Needs Hardening
 
 The `github-minimum-intelligence` system is an AI coding agent that runs autonomously inside GitHub Actions, triggered by issue events. It can read files, execute arbitrary bash commands, edit code, and push changes to the repository.
+
+> **Note:** Many of the findings below are standard properties of GitHub Actions workflows running on `ubuntu-latest` runners. They are documented here for completeness so you can make informed decisions about hardening your deployment.
 
 **Key Findings:**
 
@@ -54,7 +56,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 | SEC-009 | Single dependency on third-party agent package | 🟡 Medium | Open |
 | SEC-010 | No runtime command allowlist or sandbox | 🟠 High | Open |
 
-**Bottom Line:** Any user with write access to this repository can trigger an AI agent that has the capability to compromise the entire `japer-technology` GitHub organization. The authorization check in the workflow mitigates casual abuse, but does not protect against compromised contributor accounts, social engineering, or prompt injection attacks delivered via issue content.
+**Bottom Line:** Any user with write access to this repository can trigger the AI agent, which has the same access as any GitHub Actions workflow — including repository write access and environment secrets. The authorization check in the workflow ensures only trusted collaborators can trigger it. For additional hardening, see the recommendations in [Section 12](#12-recommendations).
 
 ---
 
@@ -531,7 +533,7 @@ Assessment of the current system against [AGENTS.md](../AGENTS.md) (The Four Law
 | # | Action | Effort | Impact |
 |---|--------|--------|--------|
 | 1 | **Enable branch protection on `main`** - require PR reviews, prevent direct pushes | Low | Eliminates unreviewed code deployment |
-| 2 | **Scope GITHUB_TOKEN** - replace with fine-grained PAT limited to `gmi-test-1` | Medium | Eliminates org-wide blast radius |
+| 2 | **Scope GITHUB_TOKEN** - replace with fine-grained PAT limited to `gmi-test-1` | Medium | Reduces scope of access to this repository only |
 | 3 | **Add CODEOWNERS** - require admin review for `.github/` directory changes | Low | Prevents workflow injection |
 | 4 | **Pin dependency versions** - remove `^` from `package.json`, pin Actions to SHAs | Low | Reduces supply chain risk |
 | 5 | **Rotate ANTHROPIC_API_KEY** - as a precautionary measure | Low | Invalidates any prior exposure |
@@ -649,10 +651,10 @@ This project follows a coordinated disclosure model:
 
 ## Appendix B: References
 
-- [warning-blast-radius.md](./warning-blast-radius.md) - Empirical threat analysis of agent capabilities
+- [warning-blast-radius.md](./warning-blast-radius.md) - Capabilities analysis of agent access
 - [transition-to-defcon-1.md](./transition-to-defcon-1.md) - Proposed capability lockdown framework
 - [AGENTS.md](../AGENTS.md) - The Four Laws of AI Infrastructure
-- [final-warning.md](./final-warning.md) - Safety information
+- [final-warning.md](./final-warning.md) - Important usage information
 - [PACKAGES.md](../PACKAGES.md) - Dependency inventory
 - [GitHub Actions Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
 - [OpenSSF Scorecard](https://securityscorecards.dev/) - Automated supply chain security assessment

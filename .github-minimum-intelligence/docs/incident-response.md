@@ -1,6 +1,6 @@
 # 13. Incident Response Plan
 
-> 📖 [Documentation Index](./index.md) · [Security Assessment](./security-assessment.md) · [Blast Radius Analysis](./warning-blast-radius.md)
+> 📖 [Documentation Index](./index.md) · [Security Assessment](./security-assessment.md) · [Capabilities Analysis](./warning-blast-radius.md)
 >
 > **Classification:** Internal — For Repository Maintainers and Organization Administrators
 >
