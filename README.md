@@ -28,7 +28,7 @@ Powered by [pi](https://github.com/badlogic/pi-mono) conversation history is com
 
 Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work - all inside your repository.
 
-> **Quick-start**: An `ANTHROPIC_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
+> **Quick-start**: An `OPENAI_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
 
 ---
 
@@ -373,7 +373,21 @@ Additionally, [`setup.sh`](./setup.sh) at the repo root provides a one-command i
 **Change the model** - edit `.github-minimum-intelligence/.pi/settings.json`:
 
 <details>
-<summary><strong>Anthropic (default)</strong></summary>
+<summary><strong>OpenAI - GPT-5.3 Codex (default)</strong></summary>
+
+```json
+{
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.3-codex",
+  "defaultThinkingLevel": "high"
+}
+```
+
+Requires `OPENAI_API_KEY`. Full-featured coding model with 400k context window.
+</details>
+
+<details>
+<summary><strong>Anthropic</strong></summary>
 
 ```json
 {
@@ -398,20 +412,6 @@ Requires `ANTHROPIC_API_KEY`.
 ```
 
 Requires `OPENAI_API_KEY`.
-</details>
-
-<details>
-<summary><strong>OpenAI - GPT-5.3 Codex</strong></summary>
-
-```json
-{
-  "defaultProvider": "openai",
-  "defaultModel": "gpt-5.3-codex",
-  "defaultThinkingLevel": "medium"
-}
-```
-
-Requires `OPENAI_API_KEY`. Full-featured coding model with 400k context window.
 </details>
 
 <details>
@@ -554,8 +554,8 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 | Provider | `defaultProvider` | Example model | API key env var |
 |----------|-------------------|---------------|-----------------|
+| OpenAI | `openai` | `gpt-5.3-codex` (default), `gpt-5.3-codex-spark` | `OPENAI_API_KEY` |
 | Anthropic | `anthropic` | `claude-sonnet-4-20250514` | `ANTHROPIC_API_KEY` |
-| OpenAI | `openai` | `gpt-5.3-codex`, `gpt-5.3-codex-spark` | `OPENAI_API_KEY` |
 | Google Gemini | `google` | `gemini-2.5-pro`, `gemini-2.5-flash` | `GEMINI_API_KEY` |
 | xAI (Grok) | `xai` | `grok-3`, `grok-3-mini` | `XAI_API_KEY` |
 | DeepSeek | `openrouter` | `deepseek/deepseek-r1`, `deepseek/deepseek-chat` | `OPENROUTER_API_KEY` |
