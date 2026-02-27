@@ -39,8 +39,8 @@ An API key from at least one supported LLM provider is needed:
 
 | Provider | API Key Secret | Description |
 |----------|---------------|-------------|
-| [Anthropic](https://console.anthropic.com/) | `ANTHROPIC_API_KEY` | Claude models (default provider). |
-| [OpenAI](https://platform.openai.com/) | `OPENAI_API_KEY` | GPT models including GPT-5.3 Codex. |
+| [OpenAI](https://platform.openai.com/) | `OPENAI_API_KEY` | GPT models including GPT-5.3 Codex (default provider). |
+| [Anthropic](https://console.anthropic.com/) | `ANTHROPIC_API_KEY` | Claude models. |
 | [Google Gemini](https://aistudio.google.com/) | `GEMINI_API_KEY` | Gemini 2.5 Pro and Flash models. |
 | [xAI](https://console.x.ai/) | `XAI_API_KEY` | Grok 3 and Grok 3 Mini models. |
 | [OpenRouter](https://openrouter.ai/) | `OPENROUTER_API_KEY` | Access to DeepSeek, and hundreds of other models via a unified API. |

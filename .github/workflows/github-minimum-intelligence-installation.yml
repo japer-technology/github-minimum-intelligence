@@ -56,7 +56,7 @@ jobs:
           ### 2. Add your LLM API key
 
           Go to **Settings → Secrets and variables → Actions** and add a secret for your AI provider
-          (e.g. `ANTHROPIC_API_KEY`). See the [supported providers list](https://github.com/japer-technology/github-minimum-intelligence#supported-providers).
+          (e.g. `OPENAI_API_KEY`). See the [supported providers list](https://github.com/japer-technology/github-minimum-intelligence#supported-providers).
 
           ### 3. Start chatting
 

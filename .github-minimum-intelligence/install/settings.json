@@ -1,5 +1,5 @@
 {
-  "defaultProvider": "anthropic",
-  "defaultModel": "claude-sonnet-4-20250514",
-  "defaultThinkingLevel": "low"
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.3-codex",
+  "defaultThinkingLevel": "high"
 }

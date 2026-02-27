@@ -114,7 +114,7 @@ if (install.exitCode !== 0) {
 console.log("\n✅ Minimum Intelligence is installed.\n");
 console.log("Next steps:");
 console.log("  1. Add your LLM API key as a GitHub repository secret");
-console.log("     (e.g. ANTHROPIC_API_KEY — see README.md for all providers)");
+console.log("     (e.g. OPENAI_API_KEY — see README.md for all providers)");
 console.log("  2. Commit and push:");
 console.log("       git add -A && git commit -m 'Add minimum-intelligence' && git push");
 console.log("  3. Open an issue in your repo to start chatting with the agent\n");
