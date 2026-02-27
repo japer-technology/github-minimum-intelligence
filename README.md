@@ -354,7 +354,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
     MINIMUM-INTELLIGENCE-INSTALLER.ts            # Setup script - installs workflows & templates
     github-minimum-intelligence-agent.yml         # GitHub Actions workflow template
     github-minimum-intelligence-hatch.md          # Issue template for personality hatching
-    MINIMUM-INTELLIGENCE-AGENTS.md               # Default agent identity file
+    MINIMUM-INTELLIGENCE-AGENTS.md               # Default agent identity template (copied to AGENTS.md on install)
     package.json                    # Installer dependencies
   lifecycle/
     agent.ts                # Core agent orchestrator
