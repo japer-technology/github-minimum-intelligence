@@ -34,6 +34,17 @@ Drop a single `.github-minimum-intelligence` folder into any repo and you have a
 
 ---
 
+## Proof
+
+This is a proof that a full AI agent can live as a single folder in any GitHub repository, powered by a production-grade runtime, with zero external infrastructure. It demonstrates:
+
+- GitHub as compute (Actions)
+- Git as storage (Persistence)
+- GitHub secrets as credential store (Security)
+- Issues as UI (Communication)
+
+---
+
 ## Your Data, Your Environment
 
 With a typical LLM, every question you ask and every answer you receive lives on _someone else's_ platform. You copy code out of a chat window, paste it into your editor, and hope you grabbed the right version. The knowledge you build up is trapped in a third-party service - scattered across browser tabs and chat logs you'll never find again.
