@@ -54,8 +54,9 @@
  * PUSH CONFLICT RESOLUTION
  * ─────────────────────────────────────────────────────────────────────────────
  * Multiple agents may race to push to the same branch.  To handle this gracefully
- * the script retries a failed `git push` up to 3 times, pulling with `--rebase`
- * between attempts.
+ * the script retries a failed `git push` up to 10 times with increasing backoff
+ * delays, pulling with `--rebase -X theirs` between attempts.  If all attempts
+ * fail, the run throws a clear error.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * GITHUB COMMENT SIZE LIMIT
@@ -346,18 +347,24 @@ try {
     }
   }
 
-  // Retry push up to 3 times, rebasing on each conflict to avoid force-pushing.
+  // Retry push up to 10 times with increasing backoff delays, rebasing on
+  // each conflict with `-X theirs` to auto-resolve in favour of the remote.
+  const pushBackoffs = [1000, 2000, 3000, 5000, 7000, 8000, 10000, 12000, 12000];
   let pushSucceeded = false;
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 10; i++) {
     const push = await run(["git", "push", "origin", `HEAD:${defaultBranch}`]);
     if (push.exitCode === 0) { pushSucceeded = true; break; }
-    if (i < 3) {
-      console.log(`Push failed, rebasing and retrying (${i}/3)...`);
-      await run(["git", "pull", "--rebase", "origin", defaultBranch]);
+    if (i < 10) {
+      console.log(`Push failed, rebasing and retrying (${i}/10)...`);
+      await run(["git", "pull", "--rebase", "-X", "theirs", "origin", defaultBranch]);
+      await new Promise(r => setTimeout(r, pushBackoffs[i - 1]));
     }
   }
   if (!pushSucceeded) {
-    console.error("All push attempts failed. Session state was not persisted to remote.");
+    throw new Error(
+      "All 10 push attempts failed. Auto-reconciliation could not be completed. " +
+      "Session state was not persisted to remote. Check the workflow logs for details."
+    );
   }
 
   // ── Post reply as issue comment ──────────────────────────────────────────────
