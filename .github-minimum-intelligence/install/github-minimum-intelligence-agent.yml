@@ -15,7 +15,7 @@ jobs:
   run-agent:
     runs-on: ubuntu-latest
     concurrency:
-      group: github-claw-${{ github.repository }}-issue-${{ github.event.issue.number }}-${{ github.run_id }}
+      group: github-minimum-intelligence-${{ github.repository }}-issue-${{ github.event.issue.number }}
       cancel-in-progress: false
     if: >-
       (github.event_name == 'issues')

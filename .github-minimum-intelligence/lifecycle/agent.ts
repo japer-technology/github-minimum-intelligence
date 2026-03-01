@@ -349,7 +349,7 @@ try {
 
   // Retry push up to 10 times with increasing backoff delays, rebasing on
   // each conflict with `-X theirs` to auto-resolve in favour of the remote.
-  const pushBackoffs = [1000, 2000, 3000, 5000, 7000, 8000, 10000, 12000, 12000];
+  const pushBackoffs = [1000, 2000, 3000, 5000, 7000, 8000, 10000, 12000, 12000, 15000];
   let pushSucceeded = false;
   for (let i = 1; i <= 10; i++) {
     const push = await run(["git", "push", "origin", `HEAD:${defaultBranch}`]);

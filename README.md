@@ -100,7 +100,7 @@ flowchart TD
     B --> C{"Is GitHub User<br/>Authorised?"}
     C -- No --> D["Show Rejected<br/>👎"]
     C -- Yes --> E["Show Launched<br/>🚀"]
-    E --> F["LOAD DEPENDANCIES"]
+    E --> F["LOAD DEPENDENCIES"]
     F --> G{"Is this an<br/>Existing Session?"}
     G -- Yes --> H["LOAD SESSION"]
     G -- No --> I["CREATE SESSION"]
