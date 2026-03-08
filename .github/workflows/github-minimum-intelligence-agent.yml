@@ -55,6 +55,12 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: .github-minimum-intelligence/node_modules
+          key: mi-deps-${{ hashFiles('.github-minimum-intelligence/bun.lock') }}
+
       - name: Preinstall
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
