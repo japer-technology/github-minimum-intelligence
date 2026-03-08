@@ -336,7 +336,7 @@ if (body.length >= 65536) {
 
 **Expected saving:** 2–4 seconds (eliminates two `gh` API calls in the common case).
 
-**Risk:** Low. The truncation threshold (65,536 characters) is well-documented. Issues with bodies approaching this limit are rare.
+**Risk:** Low. GitHub webhook payloads truncate string fields at 65,536 characters (per [GitHub's webhook payload size documentation](https://docs.github.com/en/webhooks/webhook-events-and-payloads#webhook-payload-object-common-properties)). Issues with bodies approaching this limit are rare.
 
 ---
 
