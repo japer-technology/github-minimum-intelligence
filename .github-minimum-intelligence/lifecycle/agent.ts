@@ -14,9 +14,9 @@
  * LIFECYCLE POSITION
  * ─────────────────────────────────────────────────────────────────────────────
  * Workflow step order:
- *   1. Preinstall  (indicator.ts) — add 🚀 reaction indicator
+ *   1. Authorize   (inline shell)            — auth check + add 🚀 reaction indicator
  *   2. Install     (bun install)            — install npm/bun dependencies
- *   3. Run         (agent.ts)     ← YOU ARE HERE
+ *   3. Run         (agent.ts)               ← YOU ARE HERE
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * AGENT EXECUTION PIPELINE
@@ -36,7 +36,7 @@
  *      back to the default branch with an automatic retry-on-conflict loop.
  *   8. Post the extracted reply as a new comment on the originating issue.
  *   9. [finally] Add an outcome reaction: 👍 (thumbs up) on success or
- *      👎 (thumbs down) on error.  The 🚀 rocket from `indicator.ts`
+ *      👎 (thumbs down) on error.  The 🚀 rocket from the Authorize step
  *      is left in place for both success and error cases.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -158,11 +158,11 @@ async function gh(...args: string[]): Promise<string> {
   return stdout;
 }
 
-// ─── Restore reaction state from indicator.ts ────────────────────────
-// `indicator.ts` runs before dependency installation and writes the 🚀
-// reaction metadata to `/tmp/reaction-state.json`.  We read it here so the
-// `finally` block can add the outcome reaction (👍 or 👎) when the agent finishes.
-// If the file is absent (e.g., indicator step was skipped), we default to null.
+// ─── Restore reaction state from Authorize step ─────────────────────
+// The Authorize step writes the 🚀 reaction metadata to
+// `/tmp/reaction-state.json`.  We read it here so the `finally` block can
+// add the outcome reaction (👍 or 👎) when the agent finishes.
+// If the file is absent (e.g., authorization was skipped), we default to null.
 const reactionState = existsSync("/tmp/reaction-state.json")
   ? JSON.parse(readFileSync("/tmp/reaction-state.json", "utf-8"))
   : null;
@@ -384,7 +384,7 @@ try {
 } finally {
   // ── Guaranteed outcome reaction: 👍 on success, 👎 on error ─────────────────
   // This block always executes — even when the try block throws.  The 🚀 rocket
-  // from `indicator.ts` is intentionally left in place; we only
+  // from the Authorize step is intentionally left in place; we only
   // ADD the outcome reaction here.
   if (reactionState) {
     try {

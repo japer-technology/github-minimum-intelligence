@@ -371,7 +371,6 @@ This is optional. The agent works without hatching, but it's more fun with a per
     package.json                    # Installer dependencies
   lifecycle/
     agent.ts                # Core agent orchestrator
-    indicator.ts            # Adds 🚀 reaction on issue activity
   state/                            # Session history and issue mappings (git-tracked)
   AGENTS.md                         # Agent identity file
   package.json                      # Runtime dependencies
