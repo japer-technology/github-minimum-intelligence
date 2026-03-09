@@ -32,6 +32,14 @@ jobs:
             echo "::error::Unauthorized: ${{ github.actor }} has '$PERM' permission"
             exit 1
           fi
+          # Add indicator reaction (moved from indicator.ts)
+          if [[ "${{ github.event_name }}" == "issue_comment" ]]; then
+            REACTION_ID=$(gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=rocket --jq '.id' 2>/dev/null || echo "")
+            echo '{"reactionId":"'"$REACTION_ID"'","reactionTarget":"comment","commentId":${{ github.event.comment.id }},"issueNumber":${{ github.event.issue.number }},"repo":"${{ github.repository }}"}' > /tmp/reaction-state.json
+          else
+            REACTION_ID=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/reactions" -f content=rocket --jq '.id' 2>/dev/null || echo "")
+            echo '{"reactionId":"'"$REACTION_ID"'","reactionTarget":"issue","commentId":null,"issueNumber":${{ github.event.issue.number }},"repo":"${{ github.repository }}"}' > /tmp/reaction-state.json
+          fi
 
       - name: Reject
         if: ${{ failure() && steps.authorize.outcome == 'failure' }}
@@ -54,11 +62,6 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-
-      - name: Preinstall
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun .github-minimum-intelligence/lifecycle/indicator.ts
 
       - name: Install dependencies
         run: cd .github-minimum-intelligence && bun install --frozen-lockfile
