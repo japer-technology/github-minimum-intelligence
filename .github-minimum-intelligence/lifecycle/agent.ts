@@ -172,11 +172,15 @@ const reactionState = existsSync("/tmp/reaction-state.json")
 let succeeded = false;
 
 try {
-  // ── Fetch issue title and body ───────────────────────────────────────────────
-  // We always fetch the issue content from the API rather than relying solely on
-  // the event payload, because the payload body can be truncated for very long issues.
-  const title = await gh("issue", "view", String(issueNumber), "--json", "title", "--jq", ".title");
-  const body = await gh("issue", "view", String(issueNumber), "--json", "body", "--jq", ".body");
+  // ── Read issue title and body from the event payload ──────────────────────────
+  // Use the webhook payload directly to avoid two `gh` API round-trips (~2–4 s).
+  // GitHub truncates string fields at 65 536 characters in webhook payloads, so
+  // we fall back to the API only when the body hits that limit.
+  const title = event.issue.title;
+  let body: string = event.issue.body ?? "";
+  if (body.length >= 65536) {
+    body = await gh("issue", "view", String(issueNumber), "--json", "body", "--jq", ".body");
+  }
 
   // ── Resolve or create session mapping ───────────────────────────────────────
   // Each issue maps to exactly one `pi` session file via `state/issues/<n>.json`.
