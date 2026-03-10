@@ -9,7 +9,7 @@
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [@mariozechner/pi-coding-agent](https://github.com/badlogic/pi-mono) | ^0.52.5 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
+| [@mariozechner/pi-coding-agent](https://github.com/badlogic/pi-mono) | 0.57.1 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
 
 ## Infrastructure Dependencies
 
@@ -25,13 +25,16 @@ These are not package dependencies but are required for the system to function:
 
 ## GitHub Actions Workflow Dependencies
 
-These are referenced in `.github/workflows/github-minimum-intelligence-agent.yml`:
+These are referenced in `.github/workflows/`:
 
-| Action | Description |
-|--------|-------------|
-| [actions/checkout@v4](https://github.com/actions/checkout) | Checks out the repository so the agent can read and write files. |
-| [oven-sh/setup-bun@v2](https://github.com/oven-sh/setup-bun) | Installs the Bun runtime in the GitHub Actions environment. |
-| [actions/create-github-app-token@v1](https://github.com/actions/create-github-app-token) | Generates a short-lived token from GitHub App credentials (used only when running as a GitHub App — see Method 3 in the README). |
+| Action | Workflow | Description |
+|--------|----------|-------------|
+| [actions/checkout@v4](https://github.com/actions/checkout) | agent, pages | Checks out the repository so the agent can read and write files. |
+| [oven-sh/setup-bun@v2](https://github.com/oven-sh/setup-bun) | agent | Installs the Bun runtime in the GitHub Actions environment. |
+| [actions/cache@v4](https://github.com/actions/cache) | agent | Caches `node_modules` keyed on the `bun.lock` hash to speed up dependency installation. |
+| [actions/configure-pages@v5](https://github.com/actions/configure-pages) | pages | Configures GitHub Pages deployment (auto-enables Pages when the repo is used as a template). |
+| [actions/upload-pages-artifact@v3](https://github.com/actions/upload-pages-artifact) | pages | Uploads the static site artifact from `.github-minimum-intelligence/public-fabric/`. |
+| [actions/deploy-pages@v4](https://github.com/actions/deploy-pages) | pages | Deploys the uploaded artifact to GitHub Pages. |
 
 ## LLM Provider Dependencies (one required)
 
@@ -39,7 +42,7 @@ An API key from at least one supported LLM provider is needed:
 
 | Provider | API Key Secret | Description |
 |----------|---------------|-------------|
-| [OpenAI](https://platform.openai.com/) | `OPENAI_API_KEY` | GPT models including GPT-5.3 Codex (default provider). |
+| [OpenAI](https://platform.openai.com/) | `OPENAI_API_KEY` | GPT models including GPT-5.4 (default provider). |
 | [Anthropic](https://console.anthropic.com/) | `ANTHROPIC_API_KEY` | Claude models. |
 | [Google Gemini](https://aistudio.google.com/) | `GEMINI_API_KEY` | Gemini 2.5 Pro and Flash models. |
 | [xAI](https://console.x.ai/) | `XAI_API_KEY` | Grok 3 and Grok 3 Mini models. |
@@ -56,7 +59,7 @@ These are pulled in transitively by `@mariozechner/pi-coding-agent`:
 | `@anthropic-ai/sdk` | Official Anthropic API client for Claude models. |
 | `@aws-sdk/client-bedrock-runtime` | AWS Bedrock client for accessing models via AWS infrastructure. |
 | `openai` | Official OpenAI API client. |
-| `@google/generative-ai` | Google's Generative AI SDK for Gemini models. |
+| `@google/genai` | Google's Generative AI SDK for Gemini models. |
 | `fast-xml-parser` | Fast XML parser used by AWS SDK internals. |
 | `tslib` | TypeScript runtime helpers used throughout the dependency tree. |
 
