@@ -124,6 +124,18 @@ if (!configuredProvider || !configuredModel) {
   );
 }
 
+// Catch whitespace-only or obviously malformed model identifiers early so the
+// pi agent doesn't start up only to fail with an opaque API error.
+if (configuredModel.trim() !== configuredModel || /\s/.test(configuredModel)) {
+  throw new Error(
+    `Invalid model identifier "${configuredModel}" in ${piSettingsPath}: ` +
+    `model IDs must not contain whitespace. ` +
+    `Update the "defaultModel" field in .pi/settings.json to a valid model ID for the "${configuredProvider}" provider.`
+  );
+}
+
+console.log(`Configured provider: ${configuredProvider}, model: ${configuredModel}${configuredThinking ? `, thinking: ${configuredThinking}` : ""}`);
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /**
@@ -293,7 +305,14 @@ try {
   // Check if the pi agent exited successfully.
   const piExitCode = await pi.exited;
   if (piExitCode !== 0) {
-    throw new Error(`pi agent exited with code ${piExitCode}. Check the workflow logs above for details.`);
+    // Surface the provider/model in the error so that an invalid or
+    // misspelled model ID doesn't fail silently — the most common cause of
+    // unexpected non-zero exits from the pi agent is an unrecognised model.
+    throw new Error(
+      `pi agent exited with code ${piExitCode} (provider: ${configuredProvider}, model: ${configuredModel}). ` +
+      `This may indicate an invalid or misspelled model ID in .pi/settings.json. ` +
+      `Check the workflow logs above for details.`
+    );
   }
 
   // ── Extract final assistant text ─────────────────────────────────────────────
