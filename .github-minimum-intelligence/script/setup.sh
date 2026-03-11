@@ -10,14 +10,14 @@
 # Usage (from the root of any git repo):
 #
 #   # Fresh install
-#   curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
 #
 #   # Upgrade an existing installation
-#   curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
 #
 # Or download and run manually:
 #
-#   wget https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh
+#   wget https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh
 #   bash setup.sh
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail

@@ -69,7 +69,7 @@ Get an AI agent running in any GitHub repo in under 5 minutes:
 
 ```bash
 # From the root of any git repository
-curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
 ```
 
 Then:
@@ -182,7 +182,7 @@ There are three ways to add Minimum Intelligence to a repository. Pick whichever
 Run a single command from the **root of any git repository**:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
 ```
 
 This downloads the `.github-minimum-intelligence/` folder, copies the workflow and issue templates into `.github/`, and installs dependencies. If already installed, it upgrades to the latest version while preserving your customisations (see [Upgrading](#upgrading)).
@@ -263,7 +263,7 @@ Running minimum-intelligence as a **GitHub App** gives it its own bot identity, 
 <details>
 <summary><strong>How the GitHub App manifest flow works</strong></summary>
 
-The included [`app-manifest.json`](./app-manifest.json) is a declarative description of the App's name, permissions, and events. GitHub's **manifest flow** lets you register an App by submitting this JSON instead of filling out every form field by hand. After registration GitHub gives you credentials (App ID + private key) that your workflow uses to authenticate.
+The included [`app-manifest.json`](./.github-minimum-intelligence/install/app-manifest.json) is a declarative description of the App's name, permissions, and events. GitHub's **manifest flow** lets you register an App by submitting this JSON instead of filling out every form field by hand. After registration GitHub gives you credentials (App ID + private key) that your workflow uses to authenticate.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -290,7 +290,7 @@ The included [`app-manifest.json`](./app-manifest.json) is a declarative descrip
 
 #### 1. Register the GitHub App
 
-Use the included [`app-manifest.json`](./app-manifest.json) to register the app automatically via GitHub's manifest flow:
+Use the included [`app-manifest.json`](./.github-minimum-intelligence/install/app-manifest.json) to register the app automatically via GitHub's manifest flow:
 
 1. Go to **GitHub → Settings → Developer settings → GitHub Apps → New GitHub App**.
 2. Scroll to the bottom and click **"Register a GitHub App from a manifest"**.
@@ -302,7 +302,7 @@ Or use the [GitHub Apps API](https://docs.github.com/en/apps/creating-github-app
 # POST the manifest to register the app (opens a browser for confirmation)
 curl -X POST https://github.com/settings/apps/new \
   -H "Accept: application/json" \
-  -d @app-manifest.json
+  -d @.github-minimum-intelligence/install/app-manifest.json
 ```
 
 After registration you will receive:
@@ -361,7 +361,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
 To upgrade an existing installation to the latest version, run the same setup command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
 ```
 
 The script automatically detects an existing installation and upgrades it. Framework files (workflows, templates, lifecycle code) are updated while your customisations are preserved:
@@ -407,7 +407,7 @@ The installed version is tracked in `.github-minimum-intelligence/VERSION`. If y
   package.json                      # Runtime dependencies
 ```
 
-Additionally, [`setup.sh`](./setup.sh) at the repo root provides a one-command installer and upgrader for adding minimum-intelligence to any repository (see [Quick Setup Script](#method-1-quick-setup-script)).
+Additionally, [`setup.sh`](./.github-minimum-intelligence/script/setup.sh) provides a one-command installer and upgrader for adding minimum-intelligence to any repository (see [Quick Setup Script](#method-1-quick-setup-script)).
 
 ---
 

@@ -47,7 +47,7 @@ jobs:
           From the root of this repository, run:
 
           ```bash
-          curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+          curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
           ```
 
           Or manually copy the `.github-minimum-intelligence/` folder from

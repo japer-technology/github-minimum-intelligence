@@ -61,7 +61,7 @@ That design choice answers “where is trust enforced?” with impressive restra
 
 ## Where does installation land? As a folder, not an onboarding process
 
-The installer script (`MINIMUM-INTELLIGENCE-INSTALLER.ts`) shows the project’s ergonomics: copy workflow template, copy hatch template, initialize `AGENTS.md`, install dependencies. The root `setup.sh` mirrors that one-command posture.
+The installer script (`MINIMUM-INTELLIGENCE-INSTALLER.ts`) shows the project’s ergonomics: copy workflow template, copy hatch template, initialize `AGENTS.md`, install dependencies. The `setup.sh` script inside `.github-minimum-intelligence/script/` mirrors that one-command posture.
 
 This is subtle but essential. By making installation file-centric, the project ensures the answer to “where is the product?” remains simple: in `.github-minimum-intelligence/` plus generated `.github/` workflow/template files. The “platform” is a commit.
 
