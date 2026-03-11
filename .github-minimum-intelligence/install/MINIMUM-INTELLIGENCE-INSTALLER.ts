@@ -75,12 +75,13 @@ function ensureDir(dir: string): void {
 function copyTemplate(src: string, dest: string, overwrite = false): void {
   const relSrc = src.replace(repoRoot + "/", "");
   const relDest = dest.replace(repoRoot + "/", "");
-  if (existsSync(dest) && !overwrite) {
+  const alreadyExists = existsSync(dest);
+  if (alreadyExists && !overwrite) {
     console.log(`  skip    ${relDest} (already exists)`);
     return;
   }
   copyFileSync(src, dest);
-  const verb = overwrite && existsSync(dest) ? "update" : "copy";
+  const verb = alreadyExists ? "update" : "copy";
   console.log(`  ${verb.padEnd(8)} ${relSrc} → ${relDest}`);
 }
 
