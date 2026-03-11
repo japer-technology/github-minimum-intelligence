@@ -84,9 +84,9 @@ jobs:
               ".github/workflows/github-minimum-intelligence-update.yml"
           fi
 
-          if [ -f "$EXTRACTED/.github/workflows/github-minimum-intelligence-gitpage.yml" ]; then
-            cp "$EXTRACTED/.github/workflows/github-minimum-intelligence-gitpage.yml" \
-              ".github/workflows/github-minimum-intelligence-gitpage.yml"
+          if [ -f ".github/workflows/github-minimum-intelligence-gitpage.yml" ]; then
+            rm ".github/workflows/github-minimum-intelligence-gitpage.yml"
+            echo "🧹 Removed deprecated github-minimum-intelligence-gitpage.yml (now merged into agent workflow)"
           fi
 
           # Issue templates

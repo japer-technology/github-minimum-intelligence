@@ -5,12 +5,16 @@ on:
     types: [opened]
   issue_comment:
     types: [created]
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
   contents: write
   issues: write
   actions: write
+  pages: write
+  id-token: write
 
 jobs:
   install:
@@ -160,3 +164,27 @@ jobs:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun .github-minimum-intelligence/lifecycle/agent.ts
+
+  deploy-pages:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.github-minimum-intelligence/public-fabric'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

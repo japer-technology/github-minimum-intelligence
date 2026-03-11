@@ -371,32 +371,18 @@ This workflow triggers on `pull_request` events. Its purpose is to detect when t
 
 If the badge is still present, the workflow does nothing (the repo is still inert).
 
-### 8.2 GitHub Pages Deployment (`github-minimum-intelligence-gitpage.yml`)
+### 8.2 Agent Workflow (`github-minimum-intelligence-agent.yml`)
 
-Deploys static content from `.github-minimum-intelligence/public-fabric/` to GitHub Pages.
-
-| Setting | Value |
-|---|---|
-| Triggers | Push to `main`, manual dispatch |
-| Permissions | `contents: read`, `pages: write`, `id-token: write` |
-| Actions used | `actions/checkout@v4`, `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4` |
-
-`actions/configure-pages@v5` is called with `enablement: true`, which auto-enables Pages when the repo is created from a template.
-
-No additional setup is required beyond having GitHub Pages available on the repository (free for public repos, requires GitHub Pro/Team/Enterprise for private repos).
-
-### 8.3 Agent Workflow (`github-minimum-intelligence-agent.yml`)
-
-This is the core workflow that powers the AI agent. It is installed by the installer (Section 3) and runs automatically.
+This is the core workflow that powers the AI agent and deploys GitHub Pages. It is installed by the installer (Section 3) and runs automatically.
 
 | Setting | Value |
 |---|---|
-| Triggers | `issues: [opened]`, `issue_comment: [created]` |
-| Permissions | `contents: write`, `issues: write`, `actions: write` |
-| Concurrency | Grouped by repository + issue number; does not cancel in-progress runs |
+| Triggers | `issues: [opened]`, `issue_comment: [created]`, `push` to `main`, `workflow_dispatch` |
+| Permissions | `contents: write`, `issues: write`, `actions: write`, `pages: write`, `id-token: write` |
+| Concurrency | Agent: grouped by repository + issue number; Pages: grouped by `pages`; neither cancels in-progress runs |
 | Runtime | Ubuntu latest, Bun 1.2, cached `node_modules` |
 
-**Execution sequence:**
+**Agent execution sequence (on issue/comment events):**
 
 1. **Authorise** — Verifies the actor has `admin`, `maintain`, or `write` permission via `gh api`. Adds a 🚀 reaction to indicate the agent is starting. Rejects unauthorised users with a 👎 reaction.
 2. **Checkout** — Clones the repository with full history (`fetch-depth: 0`).
@@ -404,6 +390,10 @@ This is the core workflow that powers the AI agent. It is installed by the insta
 4. **Cache** — Restores `.github-minimum-intelligence/node_modules/` from cache (keyed on `bun.lock` hash).
 5. **Install** — Runs `bun install --frozen-lockfile`.
 6. **Run** — Executes `bun .github-minimum-intelligence/lifecycle/agent.ts` with all provider API keys available as environment variables.
+
+**GitHub Pages deployment (on push to `main`):**
+
+Deploys static content from `.github-minimum-intelligence/public-fabric/` to GitHub Pages. `actions/configure-pages@v5` is called with `enablement: true`, which auto-enables Pages when the repo is created from a template. No additional setup is required beyond having GitHub Pages available on the repository (free for public repos, requires GitHub Pro/Team/Enterprise for private repos).
 
 **Environment variables passed to the agent:**
 
@@ -423,9 +413,8 @@ A complete map of what is installed and where it lives.
 repository-root/
 ├── .github/
 │   ├── workflows/
-│   │   ├── github-minimum-intelligence-agent.yml    ← Installed by installer
-│   │   ├── github-minimum-intelligence-readme.yml   ← Copied from source (activation)
-│   │   └── github-minimum-intelligence-gitpage.yml  ← Copied from source (Pages)
+│   │   ├── github-minimum-intelligence-agent.yml    ← Installed by installer (agent + Pages)
+│   │   └── github-minimum-intelligence-readme.yml   ← Copied from source (activation)
 │   └── ISSUE_TEMPLATE/
 │       ├── github-minimum-intelligence-hatch.md     ← Installed by installer
 │       └── github-minimum-intelligence-chat.md      ← Installed by installer
