@@ -51,6 +51,7 @@ const issueTemplateDir = resolve(repoRoot, ".github", "ISSUE_TEMPLATE");
 
 // Source templates inside install/
 const workflowSrc = resolve(installDir, "github-minimum-intelligence-agent.yml");
+const updateWorkflowSrc = resolve(installDir, "github-minimum-intelligence-update.yml");
 const hatchSrc = resolve(installDir, "github-minimum-intelligence-hatch.md");
 const chatSrc = resolve(installDir, "github-minimum-intelligence-chat.md");
 const agentsSrc = resolve(installDir, "MINIMUM-INTELLIGENCE-AGENTS.md");
@@ -58,6 +59,7 @@ const settingsSrc = resolve(installDir, "settings.json");
 
 // Destination paths
 const workflowDest = resolve(workflowsDir, "github-minimum-intelligence-agent.yml");
+const updateWorkflowDest = resolve(workflowsDir, "github-minimum-intelligence-update.yml");
 const hatchDest = resolve(issueTemplateDir, "github-minimum-intelligence-hatch.md");
 const chatDest = resolve(issueTemplateDir, "github-minimum-intelligence-chat.md");
 const agentsDest = resolve(minimumIntelligenceDir, "AGENTS.md");
@@ -101,8 +103,9 @@ if (isUpgrade) {
 ensureDir(workflowsDir);
 ensureDir(issueTemplateDir);
 
-// 2. Copy workflow template (always overwrite on upgrade to pick up fixes)
+// 2. Copy workflow templates (always overwrite on upgrade to pick up fixes)
 copyTemplate(workflowSrc, workflowDest, isUpgrade);
+copyTemplate(updateWorkflowSrc, updateWorkflowDest, isUpgrade);
 
 // 3. Copy issue templates (always overwrite on upgrade)
 copyTemplate(hatchSrc, hatchDest, isUpgrade);
