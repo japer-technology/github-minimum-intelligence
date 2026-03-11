@@ -29,10 +29,7 @@ Open a [GitHub Issue](../../issues) describing:
 
 1. Fork the repository and create a branch from `main`.
 2. Make your changes in small, reviewable increments.
-3. Test locally with `bun install` and verify the installer runs cleanly:
-   ```bash
-   bun .github-minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
-   ```
+3. Test locally with `cd .github-minimum-intelligence && bun install` and verify dependencies install cleanly.
 4. Open a pull request with a clear description of what changed and why.
 
 ---
@@ -42,7 +39,7 @@ Open a [GitHub Issue](../../issues) describing:
 ```
 .github-minimum-intelligence/       # Core agent framework
   .pi/                              # Agent personality, skills, and LLM config
-  install/                          # Setup scripts and workflow templates
+  install/                          # Default templates for agent identity and settings
   lifecycle/                        # Agent orchestrator and runtime hooks
   state/                            # Git-tracked session history and issue mappings
 
