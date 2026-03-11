@@ -214,7 +214,7 @@
               "rows": [
                 [
                   "<a href=\"https://github.com/badlogic/pi-mono\" target=\"_blank\" rel=\"noopener\">@mariozechner/pi-coding-agent</a>",
-                  "^0.52.5",
+                  "0.57.1",
                   "Core AI agent \u2014 processes prompts, manages sessions"
                 ]
               ]
@@ -269,8 +269,10 @@
               "lines": [
                 { "path": ".github-minimum-intelligence/", "comment": "Core agent framework" },
                 { "path": "  .pi/", "comment": "Agent personality, skills &amp; LLM config" },
+                { "path": "  docs/", "comment": "Analysis, guides &amp; design documentation" },
                 { "path": "  install/", "comment": "Setup scripts &amp; workflow templates" },
                 { "path": "  lifecycle/", "comment": "Agent orchestrator &amp; runtime hooks" },
+                { "path": "  script/", "comment": "One-command installer / upgrader" },
                 { "path": "  state/", "comment": "Git-tracked session history &amp; issue mappings" },
                 { "path": "  public-fabric/", "comment": "This page \u2014 public repo showcase" },
                 { "path": "", "comment": "" },
