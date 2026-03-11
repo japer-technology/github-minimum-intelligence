@@ -185,7 +185,7 @@ Run a single command from the **root of any git repository**:
 curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
 ```
 
-This downloads the `.github-minimum-intelligence/` folder, copies the workflow and issue templates into `.github/`, and installs dependencies.
+This downloads the `.github-minimum-intelligence/` folder, copies the workflow and issue templates into `.github/`, and installs dependencies. If already installed, it upgrades to the latest version while preserving your customisations (see [Upgrading](#upgrading)).
 
 After it finishes:
 
@@ -356,6 +356,34 @@ This is optional. The agent works without hatching, but it's more fun with a per
 
 ---
 
+## Upgrading
+
+To upgrade an existing installation to the latest version, run the same setup command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/setup.sh | bash
+```
+
+The script automatically detects an existing installation and upgrades it. Framework files (workflows, templates, lifecycle code) are updated while your customisations are preserved:
+
+| Preserved on upgrade | Updated on upgrade |
+|---|---|
+| `AGENTS.md` (agent identity) | `lifecycle/` (agent orchestrator) |
+| `.pi/settings.json` (model config) | `install/` (installer & templates) |
+| `.pi/` (skills, system prompt) | `docs/` (documentation) |
+| `state/` (session history) | `package.json` (dependencies) |
+| | `.github/workflows/` (agent workflow) |
+| | `.github/ISSUE_TEMPLATE/` (issue templates) |
+
+After upgrading:
+
+1. Review the changes: `git diff`
+2. Commit and push: `git add -A && git commit -m "Upgrade minimum-intelligence" && git push`
+
+The installed version is tracked in `.github-minimum-intelligence/VERSION`. If you are already on the latest version, the upgrade exits early with no changes.
+
+---
+
 ## Project Structure
 
 ```
@@ -375,10 +403,11 @@ This is optional. The agent works without hatching, but it's more fun with a per
     agent.ts                # Core agent orchestrator
   state/                            # Session history and issue mappings (git-tracked)
   AGENTS.md                         # Agent identity file
+  VERSION                           # Installed version (used for upgrade detection)
   package.json                      # Runtime dependencies
 ```
 
-Additionally, [`setup.sh`](./setup.sh) at the repo root provides a one-command installer for adding minimum-intelligence to any repository (see [Quick Setup Script](#method-1-quick-setup-script)).
+Additionally, [`setup.sh`](./setup.sh) at the repo root provides a one-command installer and upgrader for adding minimum-intelligence to any repository (see [Quick Setup Script](#method-1-quick-setup-script)).
 
 ---
 
