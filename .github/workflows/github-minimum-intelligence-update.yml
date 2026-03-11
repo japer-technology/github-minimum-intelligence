@@ -5,20 +5,15 @@ on:
 
 permissions:
   contents: write
-  workflows: write
+  actions: write
 
 jobs:
   update:
     runs-on: ubuntu-latest
-    # ── Safety guard ──────────────────────────────────────────────────────────
-    # This workflow must NEVER run in the original template repository.
-    # It is only intended for repositories created from the template.
     if: github.repository != 'japer-technology/github-minimum-intelligence'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.repository.default_branch }}
 
       - name: Download latest template
         run: |
@@ -33,14 +28,12 @@ jobs:
           EXTRACTED=$(ls -d /tmp/template/github-minimum-intelligence-*)
           TARGET=".github-minimum-intelligence"
 
-          # ── Detect fresh install ──────────────────────────────────────────
           FRESH_INSTALL="false"
           if [ ! -d "$TARGET" ]; then
             FRESH_INSTALL="true"
             echo "Fresh install detected — no existing $TARGET directory."
           fi
 
-          # ── Version check ─────────────────────────────────────────────────
           INSTALLED_VERSION="unknown"
           [ -f "$TARGET/VERSION" ] && INSTALLED_VERSION=$(tr -d '[:space:]' < "$TARGET/VERSION")
 
@@ -51,66 +44,55 @@ jobs:
           echo "Incoming version:  $INCOMING_VERSION"
 
           if [ "$FRESH_INSTALL" = "false" ] && [ "$INSTALLED_VERSION" = "$INCOMING_VERSION" ]; then
-            echo "✅ Already up to date (version $INSTALLED_VERSION)."
+            echo "Already up to date (version $INSTALLED_VERSION)."
             echo "UP_TO_DATE=true" >> "$GITHUB_ENV"
             exit 0
           fi
 
           echo "UP_TO_DATE=false" >> "$GITHUB_ENV"
 
-          # ── Preserve user-customised files ────────────────────────────────
           BACKUP="/tmp/backup"
           mkdir -p "$BACKUP"
 
           [ -f "$TARGET/AGENTS.md" ] && cp "$TARGET/AGENTS.md" "$BACKUP/AGENTS.md"
-          [ -d "$TARGET/state" ]     && cp -R "$TARGET/state" "$BACKUP/state"
-          [ -d "$TARGET/.pi" ]       && cp -R "$TARGET/.pi" "$BACKUP/.pi"
+          [ -d "$TARGET/state" ] && cp -R "$TARGET/state" "$BACKUP/state"
+          [ -d "$TARGET/.pi" ] && cp -R "$TARGET/.pi" "$BACKUP/.pi"
 
-          # ── Replace .github-minimum-intelligence/ ─────────────────────────
           rm -rf "$TARGET"
           cp -R "$EXTRACTED/$TARGET" "$TARGET"
 
-          # Remove the source repo's state — must not be carried over
           rm -rf "$TARGET/state"
 
-          # ── Restore user files / initialise defaults ───────────────────────
           if [ "$FRESH_INSTALL" = "true" ]; then
-            # Reset to default templates so fresh installations do not
-            # inherit the source repo's agent identity or model config.
             cp "$TARGET/install/MINIMUM-INTELLIGENCE-AGENTS.md" "$TARGET/AGENTS.md"
             mkdir -p "$TARGET/.pi"
             cp "$TARGET/install/settings.json" "$TARGET/.pi/settings.json"
           else
             [ -f "$BACKUP/AGENTS.md" ] && cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"
-            [ -d "$BACKUP/state" ]     && cp -R "$BACKUP/state" "$TARGET/state"
+            [ -d "$BACKUP/state" ] && cp -R "$BACKUP/state" "$TARGET/state"
 
             if [ -d "$BACKUP/.pi" ]; then
+              mkdir -p "$TARGET/.pi"
               cp -R "$BACKUP/.pi/." "$TARGET/.pi/"
             fi
           fi
 
-          # ── Update .github/ files from the template ───────────────────────
+          mkdir -p ".github/workflows"
 
-          # Workflows
           cp "$EXTRACTED/$TARGET/install/github-minimum-intelligence-agent.yml" \
             ".github/workflows/github-minimum-intelligence-agent.yml"
-
-          # NOTE: We intentionally do NOT copy github-minimum-intelligence-update.yml
-          # from the template, to ensure this workflow remains manual-only
-          # (workflow_dispatch) and cannot be overridden by upstream changes.
 
           if [ -f "$EXTRACTED/.github/workflows/github-minimum-intelligence-gitpage.yml" ]; then
             cp "$EXTRACTED/.github/workflows/github-minimum-intelligence-gitpage.yml" \
               ".github/workflows/github-minimum-intelligence-gitpage.yml"
           fi
 
-          # Issue templates
           mkdir -p ".github/ISSUE_TEMPLATE"
           for tmpl in "$EXTRACTED/$TARGET/install/"github-minimum-intelligence-*.md; do
             [ -f "$tmpl" ] && cp "$tmpl" ".github/ISSUE_TEMPLATE/$(basename "$tmpl")"
           done
 
-          echo "✅ Updated from $INSTALLED_VERSION → $INCOMING_VERSION"
+          echo "Updated from $INSTALLED_VERSION to $INCOMING_VERSION"
 
       - name: Commit and push
         if: env.UP_TO_DATE != 'true'
@@ -118,7 +100,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Only stage files inside the two allowed directories
           git add .github/ .github-minimum-intelligence/
 
           if git diff --cached --quiet; then
