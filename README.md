@@ -2,6 +2,12 @@
 
 A repository-local AI framework that plugs into a developer’s existing workflow. Instead of external chat tools, it uses GitHub Issues for conversation, Git for persistent versioned memory, and GitHub Actions for execution. Installed by adding one folder to a repo, it delivers low-infrastructure, auditable, user-owned automation by committing every prompt/response and code change to the codebase.
 
+## Create and run a workflow to install GMI
+
+1. Copy [`.github/workflows/github-minimum-intelligence-agent.yml`](.github/workflows/github-minimum-intelligence-agent.yml) into your repo's `.github/workflows/` directory.
+2. Add your LLM API key (e.g. `OPENAI_API_KEY`) as a **repository secret** under **Settings → Secrets and variables → Actions**.
+3. Go to **Actions → github-minimum-intelligence-agent → Run workflow** to install the agent files automatically.
+4. Open an issue — the agent will reply.
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
