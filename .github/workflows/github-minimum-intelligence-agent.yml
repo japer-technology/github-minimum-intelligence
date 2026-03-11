@@ -177,14 +177,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Enable Pages
+        id: enable-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" --silent 2>/dev/null; then
+            echo "pages_active=true" >> "$GITHUB_OUTPUT"
+            echo "✅ GitHub Pages is already enabled."
+          elif gh api "repos/${{ github.repository }}/pages" \
+            -X POST -f build_type=workflow --silent 2>/dev/null; then
+            echo "pages_active=true" >> "$GITHUB_OUTPUT"
+            echo "✅ GitHub Pages has been enabled."
+          else
+            echo "pages_active=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Could not enable GitHub Pages automatically. Please enable it manually in repository Settings → Pages → Source → GitHub Actions."
+          fi
       - name: Setup Pages
+        if: steps.enable-pages.outputs.pages_active == 'true'
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - name: Upload artifact
+        if: steps.enable-pages.outputs.pages_active == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.github-minimum-intelligence/public-fabric'
       - name: Deploy to GitHub Pages
+        if: steps.enable-pages.outputs.pages_active == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
