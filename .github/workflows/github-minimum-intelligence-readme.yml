@@ -29,6 +29,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add ACTIVATED.md
-          git rm .github/workflows/github-minimum-intelligence-readme-activation.yml
+          git rm .github/workflows/github-minimum-intelligence-readme.yml
           git commit -m "chore: activate repository and remove activation workflow"
           git push
