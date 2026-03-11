@@ -47,6 +47,9 @@ jobs:
 
           cp -R "$EXTRACTED/$TARGET" "$TARGET"
 
+          # Remove vendored dependencies — installed at runtime via bun install
+          rm -rf "$TARGET/node_modules"
+
           # Remove the source repo's state — must not be carried over
           rm -rf "$TARGET/state"
 
