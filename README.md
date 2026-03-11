@@ -6,9 +6,6 @@ The repository remains in a safe inactive state until the lock badge is removed 
 
 ---
 
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![AI](https://img.shields.io/badge/Assisted-Development-2b2bff?logo=openai&logoColor=white) 
-
 A repository-local AI framework that plugs into a developer’s existing workflow. Instead of external chat tools, it uses GitHub Issues for conversation, Git for persistent versioned memory, and GitHub Actions for execution. Installed by adding one folder to a repo, it delivers low-infrastructure, auditable, user-owned automation by committing every prompt/response and code change to the codebase.
 
 <p align="right">
@@ -24,6 +21,8 @@ A repository-local AI framework that plugs into a developer’s existing workflo
 > This proves that a folder, a workflow, and an LLM API key can create an interactive AI collaborator as natural as talking to a teammate.
 
 ## IMPORTANT
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![AI](https://img.shields.io/badge/Assisted-Development-2b2bff?logo=openai&logoColor=white) 
 
 ### Please read [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) for important usage information.
 
