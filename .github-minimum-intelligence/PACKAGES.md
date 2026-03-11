@@ -29,12 +29,12 @@ These are referenced in `.github/workflows/`:
 
 | Action | Workflow | Description |
 |--------|----------|-------------|
-| [actions/checkout@v4](https://github.com/actions/checkout) | agent, pages | Checks out the repository so the agent can read and write files. |
+| [actions/checkout@v4](https://github.com/actions/checkout) | agent | Checks out the repository so the agent can read and write files. |
 | [oven-sh/setup-bun@v2](https://github.com/oven-sh/setup-bun) | agent | Installs the Bun runtime in the GitHub Actions environment. |
 | [actions/cache@v4](https://github.com/actions/cache) | agent | Caches `node_modules` keyed on the `bun.lock` hash to speed up dependency installation. |
-| [actions/configure-pages@v5](https://github.com/actions/configure-pages) | pages | Configures GitHub Pages deployment (auto-enables Pages when the repo is used as a template). |
-| [actions/upload-pages-artifact@v3](https://github.com/actions/upload-pages-artifact) | pages | Uploads the static site artifact from `.github-minimum-intelligence/public-fabric/`. |
-| [actions/deploy-pages@v4](https://github.com/actions/deploy-pages) | pages | Deploys the uploaded artifact to GitHub Pages. |
+| [actions/configure-pages@v5](https://github.com/actions/configure-pages) | agent | Configures GitHub Pages deployment (auto-enables Pages when the repo is used as a template). |
+| [actions/upload-pages-artifact@v3](https://github.com/actions/upload-pages-artifact) | agent | Uploads the static site artifact from `.github-minimum-intelligence/public-fabric/`. |
+| [actions/deploy-pages@v4](https://github.com/actions/deploy-pages) | agent | Deploys the uploaded artifact to GitHub Pages. |
 
 ## LLM Provider Dependencies (one required)
 
