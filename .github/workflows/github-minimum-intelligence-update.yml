@@ -33,6 +33,13 @@ jobs:
           EXTRACTED=$(ls -d /tmp/template/github-minimum-intelligence-*)
           TARGET=".github-minimum-intelligence"
 
+          # ── Detect fresh install ──────────────────────────────────────────
+          FRESH_INSTALL="false"
+          if [ ! -d "$TARGET" ]; then
+            FRESH_INSTALL="true"
+            echo "Fresh install detected — no existing $TARGET directory."
+          fi
+
           # ── Version check ─────────────────────────────────────────────────
           INSTALLED_VERSION="unknown"
           [ -f "$TARGET/VERSION" ] && INSTALLED_VERSION=$(tr -d '[:space:]' < "$TARGET/VERSION")
@@ -43,7 +50,7 @@ jobs:
           echo "Installed version: $INSTALLED_VERSION"
           echo "Incoming version:  $INCOMING_VERSION"
 
-          if [ "$INSTALLED_VERSION" = "$INCOMING_VERSION" ]; then
+          if [ "$FRESH_INSTALL" = "false" ] && [ "$INSTALLED_VERSION" = "$INCOMING_VERSION" ]; then
             echo "✅ Already up to date (version $INSTALLED_VERSION)."
             echo "UP_TO_DATE=true" >> "$GITHUB_ENV"
             exit 0
@@ -66,12 +73,20 @@ jobs:
           # Remove the source repo's state — must not be carried over
           rm -rf "$TARGET/state"
 
-          # ── Restore user files ────────────────────────────────────────────
-          [ -f "$BACKUP/AGENTS.md" ] && cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"
-          [ -d "$BACKUP/state" ]     && cp -R "$BACKUP/state" "$TARGET/state"
+          # ── Restore user files / initialise defaults ───────────────────────
+          if [ "$FRESH_INSTALL" = "true" ]; then
+            # Reset to default templates so fresh installations do not
+            # inherit the source repo's agent identity or model config.
+            cp "$TARGET/install/MINIMUM-INTELLIGENCE-AGENTS.md" "$TARGET/AGENTS.md"
+            mkdir -p "$TARGET/.pi"
+            cp "$TARGET/install/settings.json" "$TARGET/.pi/settings.json"
+          else
+            [ -f "$BACKUP/AGENTS.md" ] && cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"
+            [ -d "$BACKUP/state" ]     && cp -R "$BACKUP/state" "$TARGET/state"
 
-          if [ -d "$BACKUP/.pi" ]; then
-            cp -R "$BACKUP/.pi/." "$TARGET/.pi/"
+            if [ -d "$BACKUP/.pi" ]; then
+              cp -R "$BACKUP/.pi/." "$TARGET/.pi/"
+            fi
           fi
 
           # ── Update .github/ files from the template ───────────────────────
@@ -80,10 +95,9 @@ jobs:
           cp "$EXTRACTED/$TARGET/install/github-minimum-intelligence-agent.yml" \
             ".github/workflows/github-minimum-intelligence-agent.yml"
 
-          if [ -f "$EXTRACTED/.github/workflows/github-minimum-intelligence-update.yml" ]; then
-            cp "$EXTRACTED/.github/workflows/github-minimum-intelligence-update.yml" \
-              ".github/workflows/github-minimum-intelligence-update.yml"
-          fi
+          # NOTE: We intentionally do NOT copy github-minimum-intelligence-update.yml
+          # from the template, to ensure this workflow remains manual-only
+          # (workflow_dispatch) and cannot be overridden by upstream changes.
 
           if [ -f "$EXTRACTED/.github/workflows/github-minimum-intelligence-gitpage.yml" ]; then
             cp "$EXTRACTED/.github/workflows/github-minimum-intelligence-gitpage.yml" \
@@ -92,7 +106,7 @@ jobs:
 
           # Issue templates
           mkdir -p ".github/ISSUE_TEMPLATE"
-          for tmpl in "$EXTRACTED/$TARGET/install/ISSUE_TEMPLATE/"*; do
+          for tmpl in "$EXTRACTED/$TARGET/install/"github-minimum-intelligence-*.md; do
             [ -f "$tmpl" ] && cp "$tmpl" ".github/ISSUE_TEMPLATE/$(basename "$tmpl")"
           done
 
