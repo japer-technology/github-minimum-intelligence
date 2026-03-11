@@ -1,11 +1,5 @@
 # GitHub Minimum Intelligence
 
-![REMOVE BEFORE FLIGHT](https://img.shields.io/badge/REMOVE_BEFORE_FLIGHT-THIS_REPO_IS_INERT-red?style=for-the-badge&logo=github&logoColor=white)
-
-This repository remains in a safe inactive state until the lock badge (above) is removed or tampered with and an OPENAI_API_KEY secret is made available for the quickstart default OpenAI GPT-5.4 configuration.
-
----
-
 A repository-local AI framework that plugs into a developer’s existing workflow. Instead of external chat tools, it uses GitHub Issues for conversation, Git for persistent versioned memory, and GitHub Actions for execution. Installed by adding one folder to a repo, it delivers low-infrastructure, auditable, user-owned automation by committing every prompt/response and code change to the codebase.
 
 <p align="center">
@@ -629,3 +623,5 @@ The repo is overwhelmingly dominated by node_modules (~99%). The actual project 
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
+
+> This file can be deleted, the master is here: .github-minimum-intelligence/README.md
