@@ -2,7 +2,7 @@
 
 ![REMOVE BEFORE FLIGHT](https://img.shields.io/badge/REMOVE_BEFORE_FLIGHT-THIS_REPO_IS_INERT-red?style=for-the-badge&logo=github&logoColor=white)
 
-The repository remains in a safe inactive state until the lock badge is removed and an OPENAI_API_KEY secret is made available for default GPT-5.4 use.
+This repository remains in a safe inactive state until the lock badge (above) is removed or tampered with and an OPENAI_API_KEY secret is made available for the quickstart default OpenAI GPT-5.4 configuration.
 
 ---
 
