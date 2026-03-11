@@ -61,16 +61,10 @@ Your repository _is_ the AI workspace. The questions, the results, the code, the
 
 Get an AI agent running in any GitHub repo in under 5 minutes:
 
-```bash
-# From the root of any git repository
-curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
-```
-
-Then:
-
-1. Add your LLM API key as a repository secret ([details below](#add-your-api-key)).
-2. `git add -A && git commit -m "Add minimum-intelligence" && git push`
-3. Open an issue - the agent replies automatically.
+1. Copy [`.github/workflows/github-minimum-intelligence-agent.yml`](.github/workflows/github-minimum-intelligence-agent.yml) into your repo's `.github/workflows/` directory.
+2. Add your LLM API key (e.g. `OPENAI_API_KEY`) as a **repository secret** under **Settings → Secrets and variables → Actions** ([details below](#add-your-api-key)).
+3. Go to **Actions → github-minimum-intelligence-agent → Run workflow** to install the agent files automatically.
+4. Open an issue — the agent will reply.
 
 ---
 
@@ -78,7 +72,7 @@ Then:
 
 | Capability | Why it matters |
 |---|---|
-| **Single folder, any repo** | Copy `.github-minimum-intelligence/` in and run the install script. Nothing to host or maintain. |
+| **Single workflow, any repo** | Add one workflow file, run it once, and the agent installs itself. Nothing to host or maintain. |
 | **Zero infrastructure** | Runs on GitHub Actions with your repo as the only backend. |
 | **Persistent memory** | Conversations are committed to git - the agent remembers everything across sessions. |
 | **Full auditability** | Every interaction is versioned; review or roll back any change the agent made. |
@@ -154,73 +148,11 @@ Each issue number is a stable conversation key - `issue #N` → `state/issues/N.
 ## Prerequisites
 
 - A GitHub repository (new or existing)
-- [Bun](https://bun.sh) installed locally (for manual setup methods)
 - An API key from your chosen LLM provider (see [Supported providers](#supported-providers) below)
 
 ---
 
-## Installation Methods
-
-There are three ways to add Minimum Intelligence to a repository. Pick whichever fits your workflow.
-
-| Method | Best for | GitHub App identity? |
-|--------|----------|---------------------|
-| [**Quick setup script**](#method-1-quick-setup-script) | Fastest - one command from your terminal | No (uses `GITHUB_TOKEN`) |
-| [**Manual copy**](#method-2-manual-copy) | Full control, offline-friendly | No (uses `GITHUB_TOKEN`) |
-| [**GitHub App**](#method-3-github-app) | Multi-repo, bot identity, centralised permissions | Yes |
-
----
-
-### Method 1: Quick Setup Script
-
-Run a single command from the **root of any git repository**:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
-```
-
-This downloads the `.github-minimum-intelligence/` folder, copies the workflow and issue templates into `.github/`, and installs dependencies. If already installed, it upgrades to the latest version while preserving your customisations (see [Upgrading](#upgrading)).
-
-After it finishes:
-
-1. Add your LLM API key as a repository secret (see [step 3 below](#add-your-api-key)).
-2. `git add -A && git commit -m "Add minimum-intelligence" && git push`
-3. Open an issue - the agent replies automatically.
-
-<details>
-<summary>Prefer to download manually?</summary>
-
-Download the [latest zip](https://github.com/japer-technology/github-minimum-intelligence/archive/refs/heads/main.zip), extract it, copy the `.github-minimum-intelligence/` folder into your repo root, then run:
-
-```bash
-bun .github-minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
-```
-
-</details>
-
----
-
-### Method 2: Manual Copy
-
-If you want full control over every file:
-
-**1. Add minimum-intelligence to your repo**
-
-Copy the `.github-minimum-intelligence` folder into your repository root, then run the install script:
-
-```bash
-bun .github-minimum-intelligence/install/MINIMUM-INTELLIGENCE-INSTALLER.ts
-```
-
-This sets up the GitHub Actions workflow and issue templates.
-
-**2. Install dependencies**
-
-```bash
-cd .github-minimum-intelligence && bun install
-```
-
-**3. Add your API key** {#add-your-api-key}
+## Add Your API Key
 
 In your GitHub repo, go to **Settings → Secrets and variables → Actions** and create a secret for your chosen provider:
 
@@ -233,98 +165,6 @@ In your GitHub repo, go to **Settings → Secrets and variables → Actions** an
 | DeepSeek (via OpenRouter) | `OPENROUTER_API_KEY` | [openrouter.ai](https://openrouter.ai/) |
 | Mistral | `MISTRAL_API_KEY` | [console.mistral.ai](https://console.mistral.ai/) |
 | Groq | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com/) |
-
-**4. Commit and push**
-
-```bash
-git add -A
-git commit -m "Add minimum-intelligence"
-git push
-```
-
-**5. Open an issue**
-
-Go to your repo's **Issues** tab and create a new issue. Write anything - ask a question, request a file, start a conversation. The agent picks it up automatically.
-
-That's it. The agent replies as a comment on the issue.
-
----
-
-### Method 3: GitHub App
-
-Running minimum-intelligence as a **GitHub App** gives it its own bot identity, consistent permissions across repositories, and a path toward multi-repo installation without copy-pasting files.
-
-<details>
-<summary><strong>How the GitHub App manifest flow works</strong></summary>
-
-The included [`app-manifest.json`](./.github-minimum-intelligence/install/app-manifest.json) is a declarative description of the App's name, permissions, and events. GitHub's **manifest flow** lets you register an App by submitting this JSON instead of filling out every form field by hand. After registration GitHub gives you credentials (App ID + private key) that your workflow uses to authenticate.
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│ 1. You submit app-manifest.json to GitHub                   │
-│    (via the UI or API)                                      │
-│                                                             │
-│ 2. GitHub creates the App and returns:                      │
-│    • App ID (numeric)                                       │
-│    • Private key (.pem file)                                │
-│    • Webhook secret                                         │
-│                                                             │
-│ 3. You store APP_ID + APP_PRIVATE_KEY as repo secrets       │
-│                                                             │
-│ 4. You install the App on target repos                      │
-│    (Settings → Developer settings → GitHub Apps → Install)  │
-│                                                             │
-│ 5. When an issue is opened, the workflow uses the App       │
-│    credentials to generate a short-lived token and run      │
-│    the agent under the App's bot identity                   │
-└─────────────────────────────────────────────────────────────┘
-```
-
-</details>
-
-#### 1. Register the GitHub App
-
-Use the included [`app-manifest.json`](./.github-minimum-intelligence/install/app-manifest.json) to register the app automatically via GitHub's manifest flow:
-
-1. Go to **GitHub → Settings → Developer settings → GitHub Apps → New GitHub App**.
-2. Scroll to the bottom and click **"Register a GitHub App from a manifest"**.
-3. Paste the contents of `app-manifest.json` and submit.
-
-Or use the [GitHub Apps API](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app-from-a-manifest) to register programmatically:
-
-```bash
-# POST the manifest to register the app (opens a browser for confirmation)
-curl -X POST https://github.com/settings/apps/new \
-  -H "Accept: application/json" \
-  -d @.github-minimum-intelligence/install/app-manifest.json
-```
-
-After registration you will receive:
-- An **App ID** (numeric)
-- A **private key** (`.pem` file to download)
-
-#### 2. Store the App credentials as secrets
-
-In the repository where the agent workflow lives, go to **Settings → Secrets and variables → Actions** and add:
-
-| Secret name | Value |
-|-------------|-------|
-| `APP_ID` | The numeric App ID shown on the app's settings page |
-| `APP_PRIVATE_KEY` | The full contents of the downloaded `.pem` private key file |
-
-#### 3. Install the App on target repositories
-
-Go to the app's **Install** page (linked from its settings) and install it on the repositories where you want the agent to respond to issues. The app needs **read/write** access to **Issues**, **Contents**, and **Actions**.
-
-When the App is installed on a new repository, the `github-minimum-intelligence-installation` workflow automatically creates a welcome issue with setup instructions.
-
-#### 4. Add your LLM API key
-
-In each target repo, go to **Settings → Secrets and variables → Actions** and add the key for your chosen LLM provider (see the table in the [manual copy section](#add-your-api-key) above).
-
-#### Quick start after installing the GitHub App
-
-After installing the App on a repo that already has the `.github-minimum-intelligence/` folder, just open an issue - the agent is ready. If the repo does not have the folder yet, run the [quick setup script](#method-1-quick-setup-script) first.
 
 ---
 
@@ -350,34 +190,6 @@ This is optional. The agent works without hatching, but it's more fun with a per
 
 ---
 
-## Upgrading
-
-To upgrade an existing installation to the latest version, run the same setup command:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash
-```
-
-The script automatically detects an existing installation and upgrades it. Framework files (workflows, templates, lifecycle code) are updated while your customisations are preserved:
-
-| Preserved on upgrade | Updated on upgrade |
-|---|---|
-| `AGENTS.md` (agent identity) | `lifecycle/` (agent orchestrator) |
-| `.pi/settings.json` (model config) | `install/` (installer & templates) |
-| `.pi/` (skills, system prompt) | `docs/` (documentation) |
-| `state/` (session history) | `package.json` (dependencies) |
-| | `.github/workflows/` (agent workflow) |
-| | `.github/ISSUE_TEMPLATE/` (issue templates) |
-
-After upgrading:
-
-1. Review the changes: `git diff`
-2. Commit and push: `git add -A && git commit -m "Upgrade minimum-intelligence" && git push`
-
-The installed version is tracked in `.github-minimum-intelligence/VERSION`. If you are already on the latest version, the upgrade exits early with no changes.
-
----
-
 ## Project Structure
 
 ```
@@ -388,20 +200,15 @@ The installed version is tracked in `.github-minimum-intelligence/VERSION`. If y
     BOOTSTRAP.md                    # First-run identity prompt
     skills/                         # Modular skill packages
   install/
-    MINIMUM-INTELLIGENCE-INSTALLER.ts            # Setup script - installs workflows & templates
-    github-minimum-intelligence-agent.yml         # GitHub Actions workflow template
-    github-minimum-intelligence-hatch.md          # Issue template for personality hatching
     MINIMUM-INTELLIGENCE-AGENTS.md               # Default agent identity template (copied to AGENTS.md on install)
-    package.json                    # Installer dependencies
+    settings.json                                # Default LLM settings template (copied to .pi/settings.json on install)
   lifecycle/
     agent.ts                # Core agent orchestrator
   state/                            # Session history and issue mappings (git-tracked)
   AGENTS.md                         # Agent identity file
-  VERSION                           # Installed version (used for upgrade detection)
+  VERSION                           # Installed version
   package.json                      # Runtime dependencies
 ```
-
-Additionally, [`setup.sh`](./.github-minimum-intelligence/script/setup.sh) provides a one-command installer and upgrader for adding minimum-intelligence to any repository (see [Quick Setup Script](#method-1-quick-setup-script)).
 
 ---
 
