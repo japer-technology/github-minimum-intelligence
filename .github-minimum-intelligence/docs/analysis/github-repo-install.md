@@ -37,15 +37,30 @@ No local installation of Bun, Node.js, or any other runtime is needed. The workf
 
 Create the file `.github/workflows/github-minimum-intelligence-agent.yml` in your repository.
 
-**Option A — From the GitHub UI:**
+The source file is maintained in the template repository:
+[**View workflow source →**](https://github.com/japer-technology/github-minimum-intelligence/blob/main/.github/workflows/github-minimum-intelligence-agent.yml)
+
+**Option A — Direct link (fastest):**
+
+Open the following URL in your browser, replacing `OWNER` and `REPO` with your repository's owner and name:
+
+```
+https://github.com/OWNER/REPO/new/main?filename=.github/workflows/github-minimum-intelligence-agent.yml
+```
+
+This opens the GitHub **Create new file** editor with the correct path and filename already filled in. Copy the [workflow source](https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github/workflows/github-minimum-intelligence-agent.yml), paste it into the editor, and commit directly to your default branch.
+
+> **Tip:** You do not need to type or remember the file path — the `filename` URL parameter sets it automatically.
+
+**Option B — From the GitHub UI (manual):**
 
 1. Navigate to your repository on GitHub.
 2. Click **Add file → Create new file**.
 3. Enter the path: `.github/workflows/github-minimum-intelligence-agent.yml`
-4. Paste the workflow content below.
+4. Paste the [workflow source](https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github/workflows/github-minimum-intelligence-agent.yml) into the editor.
 5. Commit directly to your default branch.
 
-**Option B — From the command line:**
+**Option C — From the command line:**
 
 ```bash
 mkdir -p .github/workflows
