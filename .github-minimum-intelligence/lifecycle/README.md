@@ -1,4 +1,4 @@
-# .github-minimum-intelligence 🦞 Life Cycle
+# .github-minimum-intelligence
 
 ### The magic lives here...
 
