@@ -89,12 +89,12 @@ The `install` job runs automatically when the workflow is dispatched manually. I
 | Step | What happens |
 |---|---|
 | **Checkout** | Clones the repository at the default branch |
-| **Check for existing install** | Looks for the `.github-minimum-intelligence/` directory. If absent, proceeds with a fresh install. If present, compares the local `VERSION` against the template `VERSION` — upgrades when the local version is lower, skips when already up to date |
+| **Check for existing install** | Looks for the `.github-minimum-intelligence/` directory. If it already exists, the job exits — nothing is overwritten |
 | **Download template** | Fetches the latest ZIP archive from `github.com/japer-technology/github-minimum-intelligence/archive/refs/heads/main.zip` |
-| **Extract and copy** | Extracts `.github-minimum-intelligence/` from the archive into the repository root. On upgrade, user files (`AGENTS.md`, `.pi/`, `state/`) are backed up, the framework is replaced, and the backups are restored |
+| **Extract and copy** | Extracts `.github-minimum-intelligence/` from the archive into the repository root |
 | **Clean source state** | Removes `node_modules/` (reinstalled at runtime) and `state/` (prevents inheriting the template repo's session history) |
-| **Initialise defaults** | On fresh install only: copies `AGENTS.md` and `.pi/settings.json` from the install templates |
-| **Commit and push** | Commits the new or upgraded `.github-minimum-intelligence/` folder and pushes to the default branch |
+| **Initialise defaults** | Copies `AGENTS.md` and `.pi/settings.json` from the install templates |
+| **Commit and push** | Commits the new `.github-minimum-intelligence/` folder and pushes to the default branch |
 
 After this job completes, your repository contains the full `.github-minimum-intelligence/` directory and the agent is ready to respond to issues.
 
@@ -114,7 +114,7 @@ Once installed, the same workflow file serves three purposes — it never needs 
 
 | Trigger | Job | What it does |
 |---|---|---|
-| `workflow_dispatch` (manual) | `install` | Installs `.github-minimum-intelligence/` if not present, or upgrades it if the local VERSION is lower than the template |
+| `workflow_dispatch` (manual) | `install` | Downloads and installs `.github-minimum-intelligence/` if not already present |
 | `issues: [opened]` | `run-agent` | Launches the AI agent when a new issue is created |
 | `issue_comment: [created]` | `run-agent` | Launches the AI agent when a comment is added to an issue (bot comments are ignored) |
 | `push` to `main` | `deploy-pages` | Deploys static content from `.github-minimum-intelligence/public-fabric/` to GitHub Pages |
@@ -168,9 +168,7 @@ Only one key is required. The agent reads `.pi/settings.json` to determine which
 
 ## 6. Updating
 
-To update to the latest version, run the workflow manually from the Actions tab (the same `workflow_dispatch` trigger used for initial installation). The `install` job compares the local `VERSION` against the template `VERSION` and upgrades automatically when the local version is lower. User customisations (`AGENTS.md`, `.pi/`, `state/`) are preserved during the upgrade.
-
-Alternatively, use the setup script from the repository root:
+To update to the latest version, the `install` job only runs when `.github-minimum-intelligence/` does not exist. For updates, use the setup script from the repository root:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/script/setup.sh | bash

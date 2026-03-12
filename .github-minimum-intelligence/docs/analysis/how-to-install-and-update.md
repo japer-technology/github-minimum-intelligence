@@ -283,12 +283,6 @@ Custom skills can be added by creating a new directory under `.pi/skills/` with 
 
 ### 6.1 Upgrade Procedure
 
-**Option A — Via the workflow (simplest):**
-
-Run the workflow manually from the Actions tab (the same `workflow_dispatch` used for initial installation). The `install` job compares the local `VERSION` against the template `VERSION` and upgrades automatically when a newer version is available. User files (`AGENTS.md`, `.pi/`, `state/`) are preserved.
-
-**Option B — Via the setup script (local):**
-
 Run the same setup command used for installation:
 
 ```bash

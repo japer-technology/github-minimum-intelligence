@@ -94,7 +94,11 @@ jobs:
   install:
     runs-on: ubuntu-latest
     # Only run when triggered manually via the Actions UI.
-    if: github.event_name == 'workflow_dispatch'
+    # Skip when running inside the template repository itself — the install job
+    # downloads FROM that repo, so running it there would be self-referential.
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      && github.repository != 'japer-technology/github-minimum-intelligence'
     steps:
 
       # 1. Check out the repository so we can inspect and modify its contents.
