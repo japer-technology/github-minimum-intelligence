@@ -238,6 +238,17 @@ jobs:
             grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
           done
 
+      # 4b. Ensure required Git attributes are present in .gitattributes so
+      #     that the append-only memory log merges correctly across parallel
+      #     agent runs (union merge driver).
+      - name: Ensure .gitattributes entries
+        if: steps.check-folder.outputs.action != 'skip'
+        run: |
+          touch .gitattributes
+          for entry in "memory.log merge=union"; do
+            grep -qxF "$entry" .gitattributes || echo "$entry" >> .gitattributes
+          done
+
       # 5. Commit and push. Uses the appropriate message for install vs upgrade.
       #    If nothing changed (edge case), the step is a harmless no-op.
       - name: Commit and push
@@ -246,7 +257,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add .github-minimum-intelligence/ .gitignore
+          git add .github-minimum-intelligence/ .gitignore .gitattributes
 
           ACTION="${{ steps.check-folder.outputs.action }}"
           if [ "$ACTION" = "upgrade" ]; then
