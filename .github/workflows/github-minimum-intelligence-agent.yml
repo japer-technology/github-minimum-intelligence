@@ -1,40 +1,40 @@
 # ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  GitHub Minimum Intelligence — Agent Workflow                              ║
-# ║                                                                            ║
-# ║  An AI agent that lives inside your GitHub repository. It uses Issues as   ║
-# ║  a conversational UI, Git for persistent memory, and Actions as its only   ║
-# ║  compute layer. No external servers or infrastructure required.            ║
-# ║                                                                            ║
-# ║  QUICK START — copy this file into your repo and you're 4 steps away:     ║
-# ║                                                                            ║
-# ║    1. Copy this file → .github/workflows/ in your repository.             ║
-# ║    2. Add an LLM API key as a repository secret                           ║
-# ║       (Settings → Secrets and variables → Actions).                       ║
-# ║       At minimum, add ONE of:                                             ║
-# ║         • OPENAI_API_KEY          (OpenAI — default provider)             ║
-# ║         • ANTHROPIC_API_KEY       (Anthropic Claude)                      ║
-# ║         • GEMINI_API_KEY          (Google Gemini)                         ║
-# ║         • XAI_API_KEY             (xAI Grok)                              ║
-# ║         • OPENROUTER_API_KEY      (OpenRouter / DeepSeek)                 ║
-# ║         • MISTRAL_API_KEY         (Mistral)                               ║
-# ║         • GROQ_API_KEY            (Groq)                                  ║
-# ║    3. Run the workflow manually:                                          ║
-# ║       Actions → github-minimum-intelligence-agent → Run workflow.         ║
-# ║       This one-time step installs the agent folder into your repo.        ║
-# ║    4. Open an issue — the agent reads your message and replies!           ║
-# ║                                                                            ║
-# ║  HOW IT WORKS:                                                            ║
-# ║    • Every issue is a conversation thread. Comment again to continue.     ║
-# ║    • The agent commits every response to git — full history, full recall. ║
-# ║    • Only repo collaborators with write access (or higher) can trigger    ║
-# ║      the agent. Unauthorized users are silently rejected.                  ║
-# ║                                                                            ║
-# ║  WHAT THIS WORKFLOW CONTAINS (three jobs):                                ║
-# ║    install       — One-time self-installer (workflow_dispatch only).      ║
-# ║    run-agent     — AI agent that responds to issues and comments.         ║
-# ║    deploy-pages  — Publishes the agent's public-fabric to GitHub Pages.   ║
-# ║                                                                            ║
-# ║  Docs: https://github.com/japer-technology/github-minimum-intelligence    ║
+# ║  GitHub Minimum Intelligence — Agent Workflow                                ║
+# ║                                                                              ║
+# ║  An AI agent that lives inside your GitHub repository. It uses Issues as     ║
+# ║  a conversational UI, Git for persistent memory, and Actions as its only     ║
+# ║  compute layer. No external servers or infrastructure required.              ║
+# ║                                                                              ║
+# ║  QUICK START — copy this file into your repo and you're 4 steps away:        ║
+# ║                                                                              ║
+# ║    1. Copy this file → .github/workflows/ in your repository.                ║
+# ║    2. Add an LLM API key as a repository secret                              ║
+# ║       (Settings → Secrets and variables → Actions).                          ║
+# ║       At minimum, add ONE of:                                                ║
+# ║         • OPENAI_API_KEY          (OpenAI — default provider)                ║
+# ║         • ANTHROPIC_API_KEY       (Anthropic Claude)                         ║
+# ║         • GEMINI_API_KEY          (Google Gemini)                            ║
+# ║         • XAI_API_KEY             (xAI Grok)                                 ║
+# ║         • OPENROUTER_API_KEY      (OpenRouter / DeepSeek)                    ║
+# ║         • MISTRAL_API_KEY         (Mistral)                                  ║
+# ║         • GROQ_API_KEY            (Groq)                                     ║
+# ║    3. Run the workflow manually:                                             ║
+# ║       Actions → github-minimum-intelligence-agent → Run workflow.            ║
+# ║       This one-time step installs the agent folder into your repo.           ║
+# ║    4. Open an issue — the agent reads your message and replies!              ║
+# ║                                                                              ║
+# ║  HOW IT WORKS:                                                               ║
+# ║    • Every issue is a conversation thread. Comment again to continue.        ║
+# ║    • The agent commits every response to git — full history, full recall.    ║
+# ║    • Only repo collaborators with write access (or higher) can trigger       ║
+# ║      the agent. Unauthorized users are silently rejected.                    ║
+# ║                                                                              ║
+# ║  WHAT THIS WORKFLOW CONTAINS (three jobs):                                   ║
+# ║    install       — One-time self-installer (workflow_dispatch only).         ║
+# ║    run-agent     — AI agent that responds to issues and comments.            ║
+# ║    deploy-pages  — Publishes the agent's public-fabric to GitHub Pages.      ║
+# ║                                                                              ║
+# ║  Docs: https://github.com/japer-technology/github-minimum-intelligence       ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
 
 name: github-minimum-intelligence-agent
