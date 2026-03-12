@@ -4,7 +4,7 @@ A repository-local AI framework that plugs into a developer’s existing workflo
 
 ## IMPORTANT: [Please read this before you install](.github-minimum-intelligence/docs/final-warning.md)
 
-## INSTALL: Create and run our egent workflow
+## INSTALL: Create a workflow and run to install
 
 1. Copy [`.github/workflows/github-minimum-intelligence-agent.yml`](.github/workflows/github-minimum-intelligence-agent.yml) into your repo's `.github/workflows/` directory.
 2. Add your LLM API key (e.g. `OPENAI_API_KEY`) as a **repository secret** under **Settings → Secrets and variables → Actions**.
