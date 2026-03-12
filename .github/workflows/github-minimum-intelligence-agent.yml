@@ -20,7 +20,7 @@
 # ║         • GROQ_API_KEY            (Groq)                                     ║
 # ║    3. Run the workflow manually:                                             ║
 # ║       Actions → github-minimum-intelligence-agent → Run workflow.            ║
-# ║       This one-time step installs the agent folder into your repo.           ║
+# ║       This installs the agent folder into your repo (or upgrades it).        ║
 # ║    4. Open an issue — the agent reads your message and replies!              ║
 # ║                                                                              ║
 # ║  HOW IT WORKS:                                                               ║
@@ -30,7 +30,7 @@
 # ║      the agent. Unauthorized users are silently rejected.                    ║
 # ║                                                                              ║
 # ║  WHAT THIS WORKFLOW CONTAINS (three jobs):                                   ║
-# ║    install       — One-time self-installer (workflow_dispatch only).         ║
+# ║    install       — Self-installer and upgrader (workflow_dispatch only).     ║
 # ║    run-agent     — AI agent that responds to issues and comments.            ║
 # ║    deploy-pages  — Publishes the agent's public-fabric to GitHub Pages.      ║
 # ║                                                                              ║
@@ -59,8 +59,9 @@ on:
   push:
     branches: ["main"]
 
-  # 4. Manual "Run workflow" button → used ONCE to install the agent folder
-  #    into your repository. Safe to re-run; it is idempotent.
+  # 4. Manual "Run workflow" button → installs the agent folder into your
+  #    repository, or upgrades it when a newer version is available.
+  #    Safe to re-run; it installs, upgrades, or skips as appropriate.
   workflow_dispatch:
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -84,10 +85,11 @@ jobs:
   # ────────────────────────────────────────────────────────────────────────────
   # JOB 1 — install
   #
-  # Purpose : One-time self-installer. Downloads the latest agent folder from
-  #           the template repository and commits it into YOUR repo.
+  # Purpose : Self-installer and upgrader. Downloads the latest agent folder
+  #           from the template repository and commits it into YOUR repo.
+  #           If the agent is already installed at the latest version, it skips.
   # Trigger : workflow_dispatch (manual "Run workflow" button only).
-  # Idempotent: If .github-minimum-intelligence/ already exists, it skips.
+  # Safe    : Re-running is always safe — it installs, upgrades, or skips.
   # ────────────────────────────────────────────────────────────────────────────
   install:
     runs-on: ubuntu-latest
@@ -102,27 +104,64 @@ jobs:
           # Always operate on the default branch (usually "main").
           ref: ${{ github.event.repository.default_branch }}
 
-      # 2. Idempotency guard — skip the entire install if the agent folder
-      #    already exists. This makes it safe to click "Run workflow" again.
+      # 2. Determine whether to install, upgrade, or skip.
+      #    • No folder       → action=install
+      #    • Folder present, local VERSION < template VERSION → action=upgrade
+      #    • Folder present, local VERSION >= template VERSION → action=skip
       - name: Check for .github-minimum-intelligence
         id: check-folder
         run: |
-          if [ -d ".github-minimum-intelligence" ]; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "✅ .github-minimum-intelligence already exists — nothing to do."
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
+          if [ ! -d ".github-minimum-intelligence" ]; then
+            echo "action=install" >> "$GITHUB_OUTPUT"
             echo "📦 .github-minimum-intelligence not found — will install."
+          else
+            LOCAL_VERSION="0.0.0"
+            if [ -f ".github-minimum-intelligence/VERSION" ]; then
+              LOCAL_VERSION=$(tr -d '[:space:]' < .github-minimum-intelligence/VERSION)
+            fi
+
+            # Fetch only the VERSION file from the template repository.
+            REMOTE_VERSION=$(curl -fsSL "https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/VERSION" | tr -d '[:space:]')
+
+            echo "Local VERSION:  $LOCAL_VERSION"
+            echo "Remote VERSION: $REMOTE_VERSION"
+
+            # Compare semver components (major.minor.patch).
+            IFS='.' read -r L_MAJOR L_MINOR L_PATCH <<< "$LOCAL_VERSION"
+            IFS='.' read -r R_MAJOR R_MINOR R_PATCH <<< "$REMOTE_VERSION"
+            L_MAJOR=${L_MAJOR:-0}; L_MINOR=${L_MINOR:-0}; L_PATCH=${L_PATCH:-0}
+            R_MAJOR=${R_MAJOR:-0}; R_MINOR=${R_MINOR:-0}; R_PATCH=${R_PATCH:-0}
+
+            NEEDS_UPGRADE=false
+            if [ "$R_MAJOR" -gt "$L_MAJOR" ] 2>/dev/null; then
+              NEEDS_UPGRADE=true
+            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -gt "$L_MINOR" ] 2>/dev/null; then
+              NEEDS_UPGRADE=true
+            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -eq "$L_MINOR" ] && [ "$R_PATCH" -gt "$L_PATCH" ] 2>/dev/null; then
+              NEEDS_UPGRADE=true
+            fi
+
+            if [ "$NEEDS_UPGRADE" = true ]; then
+              echo "action=upgrade" >> "$GITHUB_OUTPUT"
+              echo "⬆️  Upgrade available: $LOCAL_VERSION → $REMOTE_VERSION"
+            else
+              echo "action=skip" >> "$GITHUB_OUTPUT"
+              echo "✅ .github-minimum-intelligence is up to date ($LOCAL_VERSION) — nothing to do."
+            fi
           fi
 
-      # 3. Download the template repository as a zip, extract it, and copy
-      #    the agent folder into the current repo. Strips out items that
-      #    belong only to the source template (node_modules, analysis docs,
-      #    and existing session state).
+      # 3. Download the template repository as a zip, extract it, and either
+      #    install fresh or upgrade the existing agent folder.
+      #    On fresh install: copies the agent folder and initialises defaults.
+      #    On upgrade: preserves user files (AGENTS.md, .pi/, state/), replaces
+      #    framework files, and restores the backups.
       - name: Download and install from template
-        if: steps.check-folder.outputs.exists == 'false'
+        if: steps.check-folder.outputs.action != 'skip'
         run: |
           set -euo pipefail
+
+          ACTION="${{ steps.check-folder.outputs.action }}"
+          TARGET=".github-minimum-intelligence"
 
           # Download the latest template from the main branch.
           curl -fsSL "https://github.com/japer-technology/github-minimum-intelligence/archive/refs/heads/main.zip" \
@@ -130,49 +169,76 @@ jobs:
           unzip -q /tmp/template.zip -d /tmp/template
 
           EXTRACTED=$(ls -d /tmp/template/github-minimum-intelligence-*)
-          TARGET=".github-minimum-intelligence"
 
           # Remove items from the extracted template that must not be copied
           # into the user's repo (heavy dependencies and internal analysis).
           rm -rf "$EXTRACTED/$TARGET/node_modules"
           rm -rf "$EXTRACTED/$TARGET/docs/analysis"
 
-          cp -R "$EXTRACTED/$TARGET" "$TARGET"
+          if [ "$ACTION" = "upgrade" ]; then
+            # Back up user-customised files before replacing framework files.
+            BACKUP="/tmp/mi-backup"
+            mkdir -p "$BACKUP"
+            [ -f "$TARGET/AGENTS.md" ] && cp "$TARGET/AGENTS.md" "$BACKUP/AGENTS.md"
+            [ -d "$TARGET/.pi" ]       && cp -R "$TARGET/.pi" "$BACKUP/.pi"
+            [ -d "$TARGET/state" ]     && cp -R "$TARGET/state" "$BACKUP/state"
 
-          # Remove the source repo's session state — each repo starts fresh.
-          rm -rf "$TARGET/state"
+            rm -rf "$TARGET"
+            cp -R "$EXTRACTED/$TARGET" "$TARGET"
 
-          # Initialise defaults for a fresh install:
-          #   • AGENTS.md — the agent's identity file (editable by the user).
-          #   • settings.json — default LLM provider and model configuration.
-          cp "$TARGET/install/MINIMUM-INTELLIGENCE-AGENTS.md" "$TARGET/AGENTS.md"
-          mkdir -p "$TARGET/.pi"
-          cp "$TARGET/install/settings.json" "$TARGET/.pi/settings.json"
+            # Remove the source repo's session state.
+            rm -rf "$TARGET/state"
+
+            # Restore user-customised files from backup.
+            [ -f "$BACKUP/AGENTS.md" ] && cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"
+            [ -d "$BACKUP/.pi" ]       && cp -R "$BACKUP/.pi" "$TARGET/.pi"
+            [ -d "$BACKUP/state" ]     && cp -R "$BACKUP/state" "$TARGET/state"
+          else
+            # Fresh install.
+            cp -R "$EXTRACTED/$TARGET" "$TARGET"
+
+            # Remove the source repo's session state — each repo starts fresh.
+            rm -rf "$TARGET/state"
+
+            # Initialise defaults for a fresh install:
+            #   • AGENTS.md — the agent's identity file (editable by the user).
+            #   • settings.json — default LLM provider and model configuration.
+            cp "$TARGET/install/MINIMUM-INTELLIGENCE-AGENTS.md" "$TARGET/AGENTS.md"
+            mkdir -p "$TARGET/.pi"
+            cp "$TARGET/install/settings.json" "$TARGET/.pi/settings.json"
+          fi
 
       # 4. Ensure common ignore patterns are present in .gitignore so that
       #    node_modules and OS junk files never get committed.
       - name: Ensure .gitignore entries
-        if: steps.check-folder.outputs.exists == 'false'
+        if: steps.check-folder.outputs.action != 'skip'
         run: |
           touch .gitignore
           for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store"; do
             grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
           done
 
-      # 5. Commit and push the newly installed agent folder. If nothing
-      #    changed (edge case), the step is a harmless no-op.
+      # 5. Commit and push. Uses the appropriate message for install vs upgrade.
+      #    If nothing changed (edge case), the step is a harmless no-op.
       - name: Commit and push
-        if: steps.check-folder.outputs.exists == 'false'
+        if: steps.check-folder.outputs.action != 'skip'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add .github-minimum-intelligence/ .gitignore
 
+          ACTION="${{ steps.check-folder.outputs.action }}"
+          if [ "$ACTION" = "upgrade" ]; then
+            COMMIT_MSG="chore: upgrade .github-minimum-intelligence from template"
+          else
+            COMMIT_MSG="chore: install .github-minimum-intelligence from template"
+          fi
+
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: install .github-minimum-intelligence from template"
+            git commit -m "$COMMIT_MSG"
             git push
           fi
 
