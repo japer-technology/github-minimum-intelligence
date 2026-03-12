@@ -402,5 +402,3 @@ The repo is overwhelmingly dominated by node_modules (~99%). The actual project 
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
-
-> This file can be deleted, the master is here: .github-minimum-intelligence/README.md
