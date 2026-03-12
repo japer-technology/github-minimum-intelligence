@@ -49,10 +49,11 @@ jobs:
           EXTRACTED=$(ls -d /tmp/template/github-minimum-intelligence-*)
           TARGET=".github-minimum-intelligence"
 
-          cp -R "$EXTRACTED/$TARGET" "$TARGET"
+          # Remove items from the extracted template that must not be copied
+          rm -rf "$EXTRACTED/$TARGET/node_modules"
+          rm -rf "$EXTRACTED/$TARGET/docs/analysis"
 
-          # Remove vendored dependencies — installed at runtime via bun install
-          rm -rf "$TARGET/node_modules"
+          cp -R "$EXTRACTED/$TARGET" "$TARGET"
 
           # Remove the source repo's state — must not be carried over
           rm -rf "$TARGET/state"
@@ -62,13 +63,21 @@ jobs:
           mkdir -p "$TARGET/.pi"
           cp "$TARGET/install/settings.json" "$TARGET/.pi/settings.json"
 
+      - name: Ensure .gitignore entries
+        if: steps.check-folder.outputs.exists == 'false'
+        run: |
+          touch .gitignore
+          for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store"; do
+            grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
+          done
+
       - name: Commit and push
         if: steps.check-folder.outputs.exists == 'false'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add .github-minimum-intelligence/
+          git add .github-minimum-intelligence/ .gitignore
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
