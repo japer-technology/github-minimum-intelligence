@@ -121,23 +121,35 @@ jobs:
             fi
 
             # Fetch only the VERSION file from the template repository.
-            REMOTE_VERSION=$(curl -fsSL "https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/VERSION" | tr -d '[:space:]')
+            REMOTE_VERSION=$(curl -fsSL "https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/VERSION" | tr -d '[:space:]' || true)
+
+            if [ -z "$REMOTE_VERSION" ]; then
+              echo "::warning::Could not fetch remote VERSION — skipping upgrade check."
+              echo "action=skip" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
 
             echo "Local VERSION:  $LOCAL_VERSION"
             echo "Remote VERSION: $REMOTE_VERSION"
 
+            # Validate that both versions look like semver (digits and dots).
+            SEMVER_RE='^[0-9]+\.[0-9]+\.[0-9]+$'
+            if ! [[ "$LOCAL_VERSION" =~ $SEMVER_RE ]] || ! [[ "$REMOTE_VERSION" =~ $SEMVER_RE ]]; then
+              echo "::warning::VERSION format is not valid semver — skipping upgrade check."
+              echo "action=skip" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
             # Compare semver components (major.minor.patch).
             IFS='.' read -r L_MAJOR L_MINOR L_PATCH <<< "$LOCAL_VERSION"
             IFS='.' read -r R_MAJOR R_MINOR R_PATCH <<< "$REMOTE_VERSION"
-            L_MAJOR=${L_MAJOR:-0}; L_MINOR=${L_MINOR:-0}; L_PATCH=${L_PATCH:-0}
-            R_MAJOR=${R_MAJOR:-0}; R_MINOR=${R_MINOR:-0}; R_PATCH=${R_PATCH:-0}
 
             NEEDS_UPGRADE=false
-            if [ "$R_MAJOR" -gt "$L_MAJOR" ] 2>/dev/null; then
+            if [ "$R_MAJOR" -gt "$L_MAJOR" ]; then
               NEEDS_UPGRADE=true
-            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -gt "$L_MINOR" ] 2>/dev/null; then
+            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -gt "$L_MINOR" ]; then
               NEEDS_UPGRADE=true
-            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -eq "$L_MINOR" ] && [ "$R_PATCH" -gt "$L_PATCH" ] 2>/dev/null; then
+            elif [ "$R_MAJOR" -eq "$L_MAJOR" ] && [ "$R_MINOR" -eq "$L_MINOR" ] && [ "$R_PATCH" -gt "$L_PATCH" ]; then
               NEEDS_UPGRADE=true
             fi
 
@@ -146,7 +158,7 @@ jobs:
               echo "⬆️  Upgrade available: $LOCAL_VERSION → $REMOTE_VERSION"
             else
               echo "action=skip" >> "$GITHUB_OUTPUT"
-              echo "✅ .github-minimum-intelligence is up to date ($LOCAL_VERSION) — nothing to do."
+              echo "✅ Local version ($LOCAL_VERSION) >= remote version ($REMOTE_VERSION) — nothing to do."
             fi
           fi
 
