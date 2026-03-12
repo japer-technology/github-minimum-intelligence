@@ -1,1 +1,2 @@
+# Keep all entries when merging the append-only memory log from parallel agent runs
 memory.log merge=union
