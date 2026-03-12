@@ -16,8 +16,6 @@ A repository-local AI framework that plugs into a developer’s existing workflo
   </picture>
 </p>
 
-> **Quick-start**: An `OPENAI_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
-
 ## An AI agent that lives in your GitHub Repo
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![AI](https://img.shields.io/badge/Assisted-Development-2b2bff?logo=openai&logoColor=white) [![github-minimum-intelligence-agent](https://github.com/japer-technology/github-minimum-intelligence/actions/workflows/github-minimum-intelligence-agent.yml/badge.svg)](https://github.com/japer-technology/github-minimum-intelligence/actions/workflows/github-minimum-intelligence-agent.yml)
