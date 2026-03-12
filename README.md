@@ -2,19 +2,21 @@
 
 A repository-local AI framework that plugs into a developer’s existing workflow. Instead of external chat tools, it uses GitHub Issues for conversation, Git for persistent versioned memory, and GitHub Actions for execution. Installed by adding one folder to a repo, it delivers low-infrastructure, auditable, user-owned automation by committing every prompt/response and code change to the codebase.
 
-## Please read [this](.github-minimum-intelligence/docs/final-warning.md) before you install
+### Please read [this](.github-minimum-intelligence/docs/final-warning.md) before you install this AI Agent.
 
 ## Installation Instructions
 
 1. Copy [`.github/workflows/github-minimum-intelligence-agent.yml`](.github/workflows/github-minimum-intelligence-agent.yml) into your repo's `.github/workflows/` directory.
-2. Add your LLM API key (e.g. `OPENAI_API_KEY`) as a **repository secret** under **Settings → Secrets and variables → Actions**.
-3. Go to **Actions → github-minimum-intelligence-agent → Run workflow** to install the agent files automatically, subsequent runs does an upgrade.
+2. Add the LLM API key `OPENAI_API_KEY` as a **repository secret** under **[Settings → Secrets and variables → Actions]**. Any [supported LLM provider](#supported-providers) can work but to quick start OpenAI GPT 5.4 is pre-configured.
+3. Go to **[Actions → github-minimum-intelligence-agent → Run workflow]** to install the agent files automatically, subsequent runs perform upgrades.
 4. Open an issue — the agent will reply.
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
   </picture>
 </p>
+
+> **Quick-start**: An `OPENAI_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
 
 ## An AI agent that lives in your GitHub Repo
 
@@ -23,8 +25,6 @@ A repository-local AI framework that plugs into a developer’s existing workflo
 Powered by [pi-mono](https://github.com/badlogic/pi-mono), conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
 Drop a single `.github-minimum-intelligence` folder into any repo and you have a fully functional AI agent. Every GitHub issue becomes a conversation thread. The agent reads your message, thinks, responds, and commits its work - all inside your repository.
-
-> **Quick-start**: An `OPENAI_API_KEY` secret is all you need - but any [supported LLM provider](#supported-providers) works.
 
 ---
 
