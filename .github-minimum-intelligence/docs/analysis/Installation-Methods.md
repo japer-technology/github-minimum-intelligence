@@ -1,6 +1,6 @@
 # Analysis: Auto-Copy Workflow File to Consuming Repos
 
-**Question:** What mechanisms could be implemented in [`japer-technology/github-minimum-intelligence`](https://github.com/japer-technology/github-minimum-intelligence) to facilitate automatically copying `.github/workflows/github-minimum-intelligence-agent.yml` into consuming repositories like this one (`japer-technology/gmi`)?
+**Question:** What mechanisms could be implemented in [`japer-technology/github-minimum-intelligence`](https://github.com/japer-technology/github-minimum-intelligence) to facilitate automatically copying `.github/workflows/github-minimum-intelligence-agent.yml` into consuming repositories?
 
 **Target file:** `https://github.com/japer-technology/github-minimum-intelligence/.github/workflows/github-minimum-intelligence-agent.yml`
 **Destination:** `.github/workflows/github-minimum-intelligence-agent.yml` in the consuming repo
