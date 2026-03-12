@@ -210,7 +210,10 @@ This is optional. The agent works without hatching, but it's more fun with a per
     settings.json                                # Default LLM settings template (copied to .pi/settings.json on install)
   lifecycle/
     agent.ts                # Core agent orchestrator
+  docs/                             # Documentation and analysis
+  public-fabric/                    # GitHub Pages static site
   state/                            # Session history and issue mappings (git-tracked)
+  logo.png                          # Agent logo
   AGENTS.md                         # Agent identity file
   VERSION                           # Installed version
   package.json                      # Runtime dependencies
@@ -223,17 +226,17 @@ This is optional. The agent works without hatching, but it's more fun with a per
 **Change the model** - edit `.github-minimum-intelligence/.pi/settings.json`:
 
 <details>
-<summary><strong>OpenAI - GPT-5.3 Codex (default)</strong></summary>
+<summary><strong>OpenAI - GPT-5.4 (default)</strong></summary>
 
 ```json
 {
   "defaultProvider": "openai",
-  "defaultModel": "gpt-5.3-codex",
+  "defaultModel": "gpt-5.4",
   "defaultThinkingLevel": "high"
 }
 ```
 
-Requires `OPENAI_API_KEY`. Full-featured coding model with 400k context window.
+Requires `OPENAI_API_KEY`.
 </details>
 
 <details>
@@ -404,7 +407,7 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 | Provider | `defaultProvider` | Example model | API key env var |
 |----------|-------------------|---------------|-----------------|
-| OpenAI | `openai` | `gpt-5.3-codex` (default), `gpt-5.3-codex-spark` | `OPENAI_API_KEY` |
+| OpenAI | `openai` | `gpt-5.4` (default), `gpt-5.3-codex`, `gpt-5.3-codex-spark` | `OPENAI_API_KEY` |
 | Anthropic | `anthropic` | `claude-sonnet-4-20250514` | `ANTHROPIC_API_KEY` |
 | Google Gemini | `google` | `gemini-2.5-pro`, `gemini-2.5-flash` | `GEMINI_API_KEY` |
 | xAI (Grok) | `xai` | `grok-3`, `grok-3-mini` | `XAI_API_KEY` |
