@@ -27,7 +27,7 @@
 # ║    • Every issue is a conversation thread. Comment again to continue.     ║
 # ║    • The agent commits every response to git — full history, full recall. ║
 # ║    • Only repo collaborators with write access (or higher) can trigger    ║
-# ║      the agent. Unauthorised users are silently rejected.                 ║
+# ║      the agent. Unauthorized users are silently rejected.                  ║
 # ║                                                                            ║
 # ║  WHAT THIS WORKFLOW CONTAINS (three jobs):                                ║
 # ║    install       — One-time self-installer (workflow_dispatch only).      ║
