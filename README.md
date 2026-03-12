@@ -16,19 +16,17 @@ A repository-local AI framework that plugs into a developer’s existing workflo
 
 > A folder, a workflow, and an LLM API key can create an interactive AI collaborator as natural as talking to a teammate.
 
+---
+
 ## IMPORTANT
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![AI](https://img.shields.io/badge/Assisted-Development-2b2bff?logo=openai&logoColor=white) 
-
-### Please read [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) for important usage information.
-
-See the [Index](.github-minimum-intelligence/docs/index.md) for all documentation.
+### Please read this [Before You Begin](.github-minimum-intelligence/docs/final-warning.md) for important usage information and the [Index](.github-minimum-intelligence/docs/index.md) for all documentation
 
 ---
 
 ## An AI agent that lives in your GitHub Repo
 
-[![github-minimum-intelligence-agent](https://github.com/japer-technology/github-minimum-intelligence/actions/workflows/github-minimum-intelligence-agent.yml/badge.svg)](https://github.com/japer-technology/github-minimum-intelligence/actions/workflows/github-minimum-intelligence-agent.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![AI](https://img.shields.io/badge/Assisted-Development-2b2bff?logo=openai&logoColor=white) [![github-minimum-intelligence-agent](https://github.com/japer-technology/github-minimum-intelligence/actions/workflows/github-minimum-intelligence-agent.yml/badge.svg)](https://github.com/japer-technology/github-minimum-intelligence/actions/workflows/github-minimum-intelligence-agent.yml)
 
 Powered by [pi](https://github.com/badlogic/pi-mono) conversation history is committed to git, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and all changes are versioned.
 
