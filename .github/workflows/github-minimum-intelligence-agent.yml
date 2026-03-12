@@ -30,9 +30,9 @@
 # ║      the agent. Unauthorized users are silently rejected.                    ║
 # ║                                                                              ║
 # ║  WHAT THIS WORKFLOW CONTAINS (three jobs):                                   ║
-# ║    install       — Self-installer and upgrader (workflow_dispatch only).     ║
+# ║    run-install   — Self-installer and upgrader (workflow_dispatch only).     ║
 # ║    run-agent     — AI agent that responds to issues and comments.            ║
-# ║    deploy-pages  — Publishes the agent's public-fabric to GitHub Pages.      ║
+# ║    run-gitpages  — Publishes the agent's public-fabric to GitHub Pages.      ║
 # ║                                                                              ║
 # ║  Docs: https://github.com/japer-technology/github-minimum-intelligence       ║
 # ╚══════════════════════════════════════════════════════════════════════════════╝
@@ -77,7 +77,7 @@ on:
 permissions:
   contents: write   # Commit agent responses, session state, and installed files to the repo.
   issues: write     # Post AI replies as issue comments and add reaction indicators (🚀 / 👍).
-  actions: write    # Allow the install job to push commits that subsequently trigger workflows.
+  actions: write    # Allow the run-install job to push commits that subsequently trigger workflows.
   pages: write      # Upload and deploy the agent's public-fabric site to GitHub Pages.
   id-token: write   # Required by actions/deploy-pages for secure OIDC-based Pages deployment.
 
@@ -87,7 +87,7 @@ permissions:
 jobs:
 
   # ────────────────────────────────────────────────────────────────────────────
-  # JOB 1 — install
+  # JOB 1 — run-install
   #
   # Purpose : Self-installer and upgrader. Downloads the latest agent folder
   #           from the template repository and commits it into YOUR repo.
@@ -95,10 +95,10 @@ jobs:
   # Trigger : workflow_dispatch (manual "Run workflow" button only).
   # Safe    : Re-running is always safe — it installs, upgrades, or skips.
   # ────────────────────────────────────────────────────────────────────────────
-  install:
+  run-install:
     runs-on: ubuntu-latest
     # Only run when triggered manually via the Actions UI.
-    # Skip when running inside the template repository itself — the install job
+    # Skip when running inside the template repository itself — the run-install job
     # downloads FROM that repo, so running it there would be self-referential.
     if: >-
       github.event_name == 'workflow_dispatch'
@@ -346,7 +346,7 @@ jobs:
           fetch-depth: 0   # Full history needed — the agent reads and commits session state.
 
       # 4. SAFETY CHECK — ensure the agent folder exists. If the user hasn't
-      #    run the install job yet, skip gracefully instead of crashing.
+      #    run the run-install job yet, skip gracefully instead of crashing.
       - name: Check for .github-minimum-intelligence
         id: check-folder
         run: |
@@ -403,7 +403,7 @@ jobs:
         run: bun .github-minimum-intelligence/lifecycle/agent.ts
 
   # ────────────────────────────────────────────────────────────────────────────
-  # JOB 3 — deploy-pages
+  # JOB 3 — run-gitpages
   #
   # Purpose : Publish the agent's public-fabric directory as a GitHub Pages
   #           site. This gives you a live web page powered by the agent's
@@ -412,7 +412,7 @@ jobs:
   # Note    : Pages is automatically enabled on first run. If auto-enable
   #           fails, a warning guides the user to enable it manually.
   # ────────────────────────────────────────────────────────────────────────────
-  deploy-pages:
+  run-gitpages:
     # Only run on pushes to main — not on issues or manual dispatch.
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
