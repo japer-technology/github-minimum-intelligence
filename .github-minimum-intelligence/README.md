@@ -208,8 +208,8 @@ Requires `OPENAI_API_KEY`.
 ```json
 {
   "defaultProvider": "anthropic",
-  "defaultModel": "claude-sonnet-4-20250514",
-  "defaultThinkingLevel": "low"
+  "defaultModel": "claude-opus-4-6",
+  "defaultThinkingLevel": "high"
 }
 ```
 
