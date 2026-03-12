@@ -107,7 +107,7 @@ jobs:
 
       # 1. Check out the repository so we can inspect and modify its contents.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Always operate on the default branch (usually "main").
           ref: ${{ github.event.repository.default_branch }}
@@ -351,7 +351,7 @@ jobs:
       # 3. CHECKOUT — clone the full repository (fetch-depth: 0) so the agent
       #    can read prior session history, project files, and commit new state.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.repository.default_branch }}
           fetch-depth: 0   # Full history needed — the agent reads and commits session state.
@@ -381,7 +381,7 @@ jobs:
       #    changed. Shaves ~5-10 seconds off the typical cold-start install.
       - name: Cache dependencies
         if: steps.check-folder.outputs.exists == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .github-minimum-intelligence/node_modules
           key: mi-deps-${{ hashFiles('.github-minimum-intelligence/bun.lock') }}
@@ -442,7 +442,7 @@ jobs:
     steps:
       # 1. Check out the repo so we can read the public-fabric directory.
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # 2. Verify the public-fabric directory exists. If the agent has not
       #    been installed yet (e.g. on a fresh template repo) there is nothing
@@ -491,7 +491,7 @@ jobs:
       # 5. Upload the public-fabric directory as a Pages artifact.
       - name: Upload artifact
         if: steps.check-folder.outputs.folder_exists == 'true' && steps.enable-pages.outputs.pages_active == 'true'
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: '.github-minimum-intelligence/public-fabric'
 
