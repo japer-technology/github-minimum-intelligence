@@ -194,6 +194,7 @@ jobs:
           # into the user's repo (heavy dependencies and internal analysis).
           rm -rf "$EXTRACTED/$TARGET/node_modules"
           rm -rf "$EXTRACTED/$TARGET/docs/analysis"
+          rm -rf "$EXTRACTED/$TARGET/public-fabric"
 
           if [ "$ACTION" = "upgrade" ]; then
             # Back up user-customised files before replacing framework files.
