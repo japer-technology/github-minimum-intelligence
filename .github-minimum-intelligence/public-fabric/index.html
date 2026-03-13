@@ -292,7 +292,8 @@
     }
 
     function renderSection(section) {
-      var html = '<section class="reveal" aria-label="' + esc(section.title) + '"><div class="section-title">' + section.title + "</div>";
+      var idAttr = section.id ? ' id="' + esc(section.id) + '"' : "";
+      var html = '<section class="reveal"' + idAttr + ' aria-label="' + esc(section.title) + '"><div class="section-title">' + section.title + "</div>";
       if (section.grid) {
         html += '<div class="grid ' + esc(section.grid) + '">';
         section.cards.forEach(function (c) { html += renderCard(c); });
