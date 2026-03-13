@@ -27,9 +27,9 @@ Before `agent.ts` executes, the workflow runs five sequential steps that prepare
 |---|---|---|
 | **Authorize** | Inline shell using `gh api` | Checks that the actor has `admin`, `maintain`, or `write` permission on the repository. Adds a 🚀 reaction to the triggering issue or comment as a visual indicator. Writes reaction metadata to `/tmp/reaction-state.json` for the agent's `finally` block. |
 | **Reject** | Conditional inline shell | Runs only if Authorize fails. Adds a 👎 reaction to signal rejection. |
-| **Checkout** | `actions/checkout@v4` | Clones the repository with `fetch-depth: 0` (full history) at the default branch. Full history is required because the agent performs `git push` with a `git pull --rebase` conflict-resolution loop. |
+| **Checkout** | `actions/checkout@v6` | Clones the repository with `fetch-depth: 0` (full history) at the default branch. Full history is required because the agent performs `git push` with a `git pull --rebase` conflict-resolution loop. |
 | **Setup Bun** | `oven-sh/setup-bun@v2` | Installs the Bun runtime, pinned to version `1.2`. |
-| **Cache + Install** | `actions/cache@v4` then `bun install --frozen-lockfile` | Restores `.github-minimum-intelligence/node_modules` from cache (keyed on the `bun.lock` hash) and runs `bun install` inside the `.github-minimum-intelligence/` directory to ensure all dependencies — including the `pi` binary — are present. |
+| **Cache + Install** | `actions/cache@v5` then `bun install --frozen-lockfile` | Restores `.github-minimum-intelligence/node_modules` from cache (keyed on the `bun.lock` hash) and runs `bun install` inside the `.github-minimum-intelligence/` directory to ensure all dependencies — including the `pi` binary — are present. |
 
 After these steps complete, the workflow invokes:
 

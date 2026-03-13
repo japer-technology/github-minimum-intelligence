@@ -13,9 +13,9 @@ When a user opens an issue or posts a comment, the workflow executes these steps
 | 0 | **Queue** | GitHub receives the webhook, schedules the job, provisions a runner | 3–15s (uncontrollable) |
 | 1 | **Authorize** | Single `gh api` permission check + 🚀 reaction + write `/tmp/reaction-state.json` | 1–3s |
 | 2 | **Reject** | Conditional — only runs on auth failure, skipped on success | 0s (skip) |
-| 3 | **Checkout** | `actions/checkout@v4` with `fetch-depth: 0` (full history) | 5–60s (depends on repo size) |
+| 3 | **Checkout** | `actions/checkout@v6` with `fetch-depth: 0` (full history) | 5–60s (depends on repo size) |
 | 4 | **Setup Bun** | `oven-sh/setup-bun@v2` with pinned `bun-version: "1.2"` | 3–10s |
-| 5 | **Cache** | `actions/cache@v4` restores `node_modules` keyed on `bun.lock` hash | 1–5s |
+| 5 | **Cache** | `actions/cache@v5` restores `node_modules` keyed on `bun.lock` hash | 1–5s |
 | 6 | **Install** | `bun install --frozen-lockfile` in `.github-minimum-intelligence/` | 0–5s (cache hit) / 10–30s (cache miss) |
 | 7 | **Run** | `bun agent.ts` — event payload parsing, session resolution, prompt building, `pi` invocation | 2–5s before first LLM call |
 
@@ -71,7 +71,7 @@ The user receives visual feedback (🚀 reaction) at the very first step — wit
 
 **Duration:** 5–60 seconds, scaling with repository size and history depth.
 
-**What's happening:** `actions/checkout@v4` with `fetch-depth: 0` clones the entire repository history. This is needed because `agent.ts` performs `git commit` and `git push` with a retry-on-conflict loop that calls `git pull --rebase -X theirs`, which requires sufficient history depth to resolve references.
+**What's happening:** `actions/checkout@v6` with `fetch-depth: 0` clones the entire repository history. This is needed because `agent.ts` performs `git commit` and `git push` with a retry-on-conflict loop that calls `git pull --rebase -X theirs`, which requires sufficient history depth to resolve references.
 
 **Can this be optimized?**
 
@@ -112,10 +112,10 @@ The treeless clone (`filter: blob:none`) downloads the commit graph and tree obj
 **Duration:** 1–5s (cache restore) + 0–5s (install on cache hit) = **1–10s total on cache hit.** On cache miss: 1–5s (cache restore miss) + 10–30s (full install) = **11–35s total.**
 
 **What's happening:**
-1. `actions/cache@v4` attempts to restore `.github-minimum-intelligence/node_modules` using a cache key derived from the hash of `bun.lock`. On a cache hit, the entire `node_modules` directory is restored from GitHub's cache storage.
+1. `actions/cache@v5` attempts to restore `.github-minimum-intelligence/node_modules` using a cache key derived from the hash of `bun.lock`. On a cache hit, the entire `node_modules` directory is restored from GitHub's cache storage.
 2. `bun install --frozen-lockfile` then runs. On a cache hit where the restored `node_modules` matches the lockfile, Bun's install becomes a near-instant validation pass. On a cache miss, Bun performs a full dependency resolution and download.
 
-**Current state:** Dependency caching via `actions/cache@v4` keyed on `bun.lock` hash is already in place. This is the single highest-impact optimization in the pipeline — it reduces the typical install step from 10–30 seconds to 0–5 seconds.
+**Current state:** Dependency caching via `actions/cache@v5` keyed on `bun.lock` hash is already in place. This is the single highest-impact optimization in the pipeline — it reduces the typical install step from 10–30 seconds to 0–5 seconds.
 
 **Can this be further optimized?**
 
@@ -243,7 +243,7 @@ A two-phase approach could optimize this:
 
 ```yaml
 - name: Checkout
-  uses: actions/checkout@v4
+  uses: actions/checkout@v6
   with:
     ref: ${{ github.event.repository.default_branch }}
     fetch-depth: 1
@@ -277,7 +277,7 @@ The `filter: blob:none` option provides a compromise:
 
 ```yaml
 - name: Checkout
-  uses: actions/checkout@v4
+  uses: actions/checkout@v6
   with:
     ref: ${{ github.event.repository.default_branch }}
     fetch-depth: 0
@@ -321,7 +321,7 @@ The following optimizations from the initial analysis have been implemented. The
 
 | Optimization | When Applied | Savings Realized |
 |---|---|---|
-| **Dependency caching** (`actions/cache@v4` keyed on `bun.lock` hash) | Implemented | 8–25s on cache-hit runs |
+| **Dependency caching** (`actions/cache@v5` keyed on `bun.lock` hash) | Implemented | 8–25s on cache-hit runs |
 | **Bun version pinning** (`bun-version: "1.2"`) | Implemented | 1–3s (improved tool-cache hit rate) |
 | **Indicator merged into Authorize step** (inline shell `gh api` call) | Implemented | 2–4s (eliminated step boundary + Bun cold start); reaction fires ~10s earlier |
 | **Event payload for issue content** (with API fallback at 65 536 chars) | Implemented | 2–4s (eliminated two `gh issue view` API calls) |

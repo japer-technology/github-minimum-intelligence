@@ -126,7 +126,7 @@ When an issue or comment event fires, the `run-agent` job:
 1. **Authorises** the actor — verifies `admin`, `maintain`, or `write` permission. Adds a 🚀 reaction as a launch indicator.
 2. **Checks out** the repository with full history.
 3. **Sets up Bun** (version 1.2 via `oven-sh/setup-bun@v2`).
-4. **Restores cached dependencies** from `actions/cache@v4`, keyed on `bun.lock`.
+4. **Restores cached dependencies** from `actions/cache@v5`, keyed on `bun.lock`.
 5. **Installs dependencies** via `bun install --frozen-lockfile`.
 6. **Runs the agent** — executes `bun .github-minimum-intelligence/lifecycle/agent.ts` with all configured API keys.
 
