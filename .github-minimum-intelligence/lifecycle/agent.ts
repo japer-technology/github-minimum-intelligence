@@ -383,15 +383,11 @@ try {
       await new Promise(r => setTimeout(r, pushBackoffs[i - 1]));
     }
   }
-  if (!pushSucceeded) {
-    throw new Error(
-      "All 10 push attempts failed. Auto-reconciliation could not be completed. " +
-      "Session state was not persisted to remote. Check the workflow logs for details."
-    );
-  }
-
   // ── Post reply as issue comment ──────────────────────────────────────────────
-  // Guard against empty/null responses — post an error message instead of silence.
+  // Always post the comment first so the user receives the agent's response even
+  // if the push later fails.  The push failure throw (below) must come AFTER the
+  // comment is posted — otherwise the throw would skip the comment entirely and
+  // the user would get no reply.
   const trimmedText = agentText.trim();
   let commentBody = trimmedText.length > 0
     ? trimmedText.slice(0, MAX_COMMENT_LENGTH)
@@ -400,6 +396,16 @@ try {
     commentBody += `\n\n---\n⚠️ **Warning:** The agent's session state could not be pushed to the repository. Conversation context may not be preserved for follow-up comments. See the [workflow run logs](https://github.com/${repo}/actions) for details.`;
   }
   await gh("issue", "comment", String(issueNumber), "--body", commentBody);
+
+  // Throw push failure AFTER the comment has been posted so the user always
+  // receives the agent's response.  The throw still causes the workflow step to
+  // fail and adds a 👎 reaction via the `finally` block.
+  if (!pushSucceeded) {
+    throw new Error(
+      "All 10 push attempts failed. Auto-reconciliation could not be completed. " +
+      "Session state was not persisted to remote. Check the workflow logs for details."
+    );
+  }
 
   // Mark the run as successful so the `finally` block adds 👍 instead of 👎.
   succeeded = true;
