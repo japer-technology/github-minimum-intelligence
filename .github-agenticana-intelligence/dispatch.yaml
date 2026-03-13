@@ -1,0 +1,78 @@
+default_agent: orchestrator
+auto_route: true
+
+routes:
+  - label: security
+    agent: security-auditor
+    model_tier: pro
+    skills: [core, vulnerability-scanner, red-team-tactics]
+
+  - label: frontend
+    agent: frontend-specialist
+    model_tier: flash
+    skills: [core, nextjs-react-expert]
+
+  - label: backend
+    agent: backend-specialist
+    model_tier: flash
+    skills: [core, backend]
+
+  - label: architecture
+    mode: simulacrum
+    agents: [orchestrator, backend-specialist, security-auditor]
+    model_tier: pro
+
+  - label: review
+    mode: swarm
+    agents: [security-auditor, test-engineer]
+    model_tier: flash
+
+  - label: database
+    agent: database-architect
+    model_tier: flash
+    skills: [core, database]
+
+  - label: testing
+    agent: test-engineer
+    model_tier: flash
+    skills: [core, tdd]
+
+  - label: performance
+    agent: performance-optimizer
+    model_tier: flash
+    skills: [core, performance]
+
+  - label: devops
+    agent: devops-engineer
+    model_tier: flash
+    skills: [core, devops]
+
+  - label: documentation
+    agent: documentation-writer
+    model_tier: lite
+    skills: [core, documentation]
+
+  - label: mobile
+    agent: mobile-developer
+    model_tier: flash
+    skills: [core, mobile]
+
+  - label: game
+    agent: game-developer
+    model_tier: flash
+    skills: [core, game-dev]
+
+  - label: seo
+    agent: seo-specialist
+    model_tier: lite
+    skills: [core, seo]
+
+  - label: debug
+    agent: debugger
+    model_tier: flash
+    skills: [core, systematic-debugging]
+
+  - label: full-stack
+    mode: swarm
+    agents: [frontend-specialist, backend-specialist, database-architect]
+    model_tier: flash
