@@ -95,6 +95,11 @@ const sessionsDirRelative = ".github-minimum-intelligence/state/sessions";
 // characters to leave a comfortable safety margin and avoid API rejections.
 const MAX_COMMENT_LENGTH = 60000;
 
+// Leading characters that indicate a message is intended for a different AI agent.
+// When the first character of an issue title or comment body is in this set, GMI
+// exits silently so that the designated agent can react instead.
+const RESERVED_PREFIXES = new Set(["`", "~", "!", "@", "#", "$", "%", "^", ":", ";", "|", "=", "/", "\\", "&"]);
+
 // Parse the full GitHub Actions event payload (contains issue/comment details).
 const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH!, "utf-8"));
 
@@ -234,6 +239,18 @@ try {
     prompt = event.comment.body;
   } else {
     prompt = `${title}\n\n${body}`;
+  }
+
+  // ── Skip reserved-prefix messages for other AI agents ───────────────────────
+  // Certain leading characters signal that this message is intended for another
+  // AI agent.  If the issue title (for new issues) or comment body (for comments)
+  // starts with any of these characters, exit cleanly without responding so that
+  // the designated agent can react instead.
+  const textToCheck = eventName === "issue_comment" ? event.comment.body : title;
+  if (textToCheck && RESERVED_PREFIXES.has(textToCheck[0])) {
+    console.log(`Skipping: first character "${textToCheck[0]}" is a reserved prefix for another agent.`);
+    succeeded = true;
+    return;
   }
 
   // ── Validate provider API key ────────────────────────────────────────────────
