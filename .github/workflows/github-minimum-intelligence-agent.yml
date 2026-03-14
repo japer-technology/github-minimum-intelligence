@@ -200,9 +200,9 @@ jobs:
             # Back up user-customised files before replacing framework files.
             BACKUP="/tmp/mi-backup"
             mkdir -p "$BACKUP"
-            [ -f "$TARGET/AGENTS.md" ] && cp "$TARGET/AGENTS.md" "$BACKUP/AGENTS.md"
-            [ -d "$TARGET/.pi" ]       && cp -R "$TARGET/.pi" "$BACKUP/.pi"
-            [ -d "$TARGET/state" ]     && cp -R "$TARGET/state" "$BACKUP/state"
+            if [ -f "$TARGET/AGENTS.md" ]; then cp "$TARGET/AGENTS.md" "$BACKUP/AGENTS.md"; fi
+            if [ -d "$TARGET/.pi" ];       then cp -R "$TARGET/.pi" "$BACKUP/.pi"; fi
+            if [ -d "$TARGET/state" ];     then cp -R "$TARGET/state" "$BACKUP/state"; fi
 
             rm -rf "$TARGET"
             cp -R "$EXTRACTED/$TARGET" "$TARGET"
@@ -211,9 +211,9 @@ jobs:
             rm -rf "$TARGET/state"
 
             # Restore user-customised files from backup.
-            [ -f "$BACKUP/AGENTS.md" ] && cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"
-            [ -d "$BACKUP/.pi" ]       && cp -R "$BACKUP/.pi" "$TARGET/.pi"
-            [ -d "$BACKUP/state" ]     && cp -R "$BACKUP/state" "$TARGET/state"
+            if [ -f "$BACKUP/AGENTS.md" ]; then cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"; fi
+            if [ -d "$BACKUP/.pi" ];       then cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
+            if [ -d "$BACKUP/state" ];     then cp -R "$BACKUP/state" "$TARGET/state"; fi
           else
             # Fresh install.
             cp -R "$EXTRACTED/$TARGET" "$TARGET"
