@@ -425,8 +425,12 @@ jobs:
   #           fails, a warning guides the user to enable it manually.
   # ────────────────────────────────────────────────────────────────────────────
   run-gitpages:
-    # Only run on pushes to main — not on issues or manual dispatch.
-    if: github.event_name == 'push'
+    # Run after agent/install jobs finish. On push events those jobs are
+    # skipped so run-gitpages starts immediately.
+    needs: [run-agent, run-install]
+    # always() ensures the job runs even when upstream jobs are skipped;
+    # !cancelled() still respects manual cancellation.
+    if: always() && !cancelled()
     runs-on: ubuntu-latest
 
     # Concurrency: only one Pages deployment at a time across the entire repo.
@@ -442,8 +446,11 @@ jobs:
 
     steps:
       # 1. Check out the repo so we can read the public-fabric directory.
+      #    ref: main ensures we pick up any commits the agent just pushed.
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: main
 
       # 2. Verify the public-fabric directory exists. If the agent has not
       #    been installed yet (e.g. on a fresh template repo) there is nothing
