@@ -187,7 +187,7 @@ async function main() {
     try {
       reactionState = JSON.parse(readFileSync("/tmp/reaction-state.json", "utf-8"));
     } catch {
-      console.error("Warning: could not parse /tmp/reaction-state.json, skipping reaction state");
+      console.warn("Could not parse /tmp/reaction-state.json, skipping reaction state");
     }
   }
 
@@ -230,7 +230,7 @@ async function main() {
           console.log("Mapped session file missing, starting fresh");
         }
       } catch {
-        console.error(`Warning: could not parse ${mappingFile}, starting fresh`);
+        console.warn(`Could not parse ${mappingFile}, starting fresh`);
       }
     } else {
       console.log("No session mapping found, starting fresh");
