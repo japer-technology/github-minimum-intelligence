@@ -98,7 +98,7 @@ const MAX_COMMENT_LENGTH = 60000;
 // Leading characters that indicate a message is intended for a different AI agent.
 // When the first character of an issue title or comment body is in this set, GMI
 // exits silently so that the designated agent can react instead.
-const RESERVED_PREFIXES = new Set(["`", "~", "!", "@", "#", "$", "%", "^", ":", ";", "|", "=", "/", "\\", "&"]);
+const RESERVED_PREFIXES = new Set(["`", "~", "@", "#", "$", "%", "^", ":", ";", "|", "=", "/", "\\", "&"]);
 
 // Parse the full GitHub Actions event payload (contains issue/comment details).
 const event = JSON.parse(readFileSync(process.env.GITHUB_EVENT_PATH!, "utf-8"));
@@ -182,9 +182,14 @@ async function main() {
   // `/tmp/reaction-state.json`.  We read it here so the `finally` block can
   // add the outcome reaction (👍 or 👎) when the agent finishes.
   // If the file is absent (e.g., authorization was skipped), we default to null.
-  const reactionState = existsSync("/tmp/reaction-state.json")
-    ? JSON.parse(readFileSync("/tmp/reaction-state.json", "utf-8"))
-    : null;
+  let reactionState: any = null;
+  if (existsSync("/tmp/reaction-state.json")) {
+    try {
+      reactionState = JSON.parse(readFileSync("/tmp/reaction-state.json", "utf-8"));
+    } catch {
+      console.warn("Could not parse /tmp/reaction-state.json, skipping reaction state");
+    }
+  }
 
   // Track whether the agent completed successfully so the `finally` block can
   // add the correct outcome reaction (👍 on success, 👎 on error).
@@ -213,15 +218,19 @@ async function main() {
     const mappingFile = resolve(issuesDir, `${issueNumber}.json`);
 
     if (existsSync(mappingFile)) {
-      const mapping = JSON.parse(readFileSync(mappingFile, "utf-8"));
-      if (existsSync(mapping.sessionPath)) {
-        // A prior session exists — resume it to preserve conversation context.
-        mode = "resume";
-        sessionPath = mapping.sessionPath;
-        console.log(`Found existing session: ${sessionPath}`);
-      } else {
-        // The mapping points to a session file that no longer exists (e.g., cleaned up).
-        console.log("Mapped session file missing, starting fresh");
+      try {
+        const mapping = JSON.parse(readFileSync(mappingFile, "utf-8"));
+        if (existsSync(mapping.sessionPath)) {
+          // A prior session exists — resume it to preserve conversation context.
+          mode = "resume";
+          sessionPath = mapping.sessionPath;
+          console.log(`Found existing session: ${sessionPath}`);
+        } else {
+          // The mapping points to a session file that no longer exists (e.g., cleaned up).
+          console.log("Mapped session file missing, starting fresh");
+        }
+      } catch {
+        console.warn(`Could not parse ${mappingFile}, starting fresh`);
       }
     } else {
       console.log("No session mapping found, starting fresh");
@@ -238,7 +247,7 @@ async function main() {
     // For `issues` (opened) events, combine the title and body for full context.
     let prompt: string;
     if (eventName === "issue_comment") {
-      prompt = event.comment.body;
+      prompt = event.comment.body ?? "";
     } else {
       prompt = `${title}\n\n${body}`;
     }
