@@ -11,6 +11,23 @@
 |---------|---------|-------------|
 | [@mariozechner/pi-coding-agent](https://github.com/badlogic/pi-mono) | 0.57.1 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
 
+### pi-mono Feature Surface
+
+Beyond the CLI binary, GMI uses the following pi-mono feature categories:
+
+| Feature | Location | Description |
+|---------|----------|-------------|
+| Session management | `--session-dir`, `--session` | Multi-turn conversation continuity across workflow runs |
+| Project settings | `.pi/settings.json` | Provider, model, thinking level, compaction, and retry configuration |
+| System prompt extension | `.pi/APPEND_SYSTEM.md` | Behavioural guidelines appended to the default system prompt |
+| Bootstrap protocol | `.pi/BOOTSTRAP.md` | First-run agent identity setup |
+| Context files | `AGENTS.md` | Project-specific instructions loaded at startup |
+| Skills | `.pi/skills/` | On-demand capability packages (`memory`, `skill-creator`) |
+| Prompt templates | `.pi/prompts/` | Reusable prompts for recurring workflows (`code-review`, `issue-triage`) |
+| Extensions | `.pi/extensions/` | Custom tools registered for LLM use (`github_repo_context`) |
+
+See [docs/analysis/pi-mono-feature-utilization.md](docs/analysis/pi-mono-feature-utilization.md) for a full audit of used vs. available features.
+
 ## Infrastructure Dependencies
 
 These are not package dependencies but are required for the system to function:
