@@ -1,6 +1,6 @@
 # Before You Begin
 
-## Important Information
+## Final Warning: Important Information
 
 **We recommend reading this document before using this software. It covers what the system does, what to be aware of, and how to use it responsibly.**
 
