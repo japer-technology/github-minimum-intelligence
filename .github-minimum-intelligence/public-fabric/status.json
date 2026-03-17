@@ -22,7 +22,7 @@
     "tagline": "A repository-local AI framework that uses GitHub\u00a0Issues for conversation, Git for persistent versioned memory, and GitHub\u00a0Actions for execution \u2014 delivering low-infrastructure, auditable, user-owned automation by committing every prompt and response to the codebase.",
     "badges": [
       {
-        "label": "v1.0.3",
+        "label": "v1.0.7",
         "color": "blue"
       },
       {
@@ -149,11 +149,11 @@
       "grid": "grid-2",
       "cards": [
         {
-          "heading": "Single Folder, Any Repo",
+          "heading": "Single Workflow, Any Repo",
           "content": [
             {
               "type": "paragraph",
-              "html": "Copy <code>.github-minimum-intelligence/</code> in and run the install script. Nothing to host or maintain."
+              "html": "Add one workflow file, run it once, and the agent installs itself. Nothing to host or maintain."
             }
           ]
         },
@@ -445,7 +445,7 @@
                 [
                   "<a href=\"https://platform.openai.com/\" target=\"_blank\" rel=\"noopener\">OpenAI</a>",
                   "<code>openai</code>",
-                  "<code>gpt-5.4</code> (default)",
+                  "<code>gpt-5.4</code> (default), <code>gpt-5.3-codex</code>, <code>gpt-5.3-codex-spark</code>",
                   "<code>OPENAI_API_KEY</code>"
                 ],
                 [
@@ -469,7 +469,7 @@
                 [
                   "<a href=\"https://openrouter.ai/\" target=\"_blank\" rel=\"noopener\">DeepSeek (via OpenRouter)</a>",
                   "<code>openrouter</code>",
-                  "<code>deepseek/deepseek-r1</code>",
+                  "<code>deepseek/deepseek-r1</code>, <code>deepseek/deepseek-chat</code>",
                   "<code>OPENROUTER_API_KEY</code>"
                 ],
                 [
@@ -683,7 +683,7 @@
             },
             {
               "type": "paragraph",
-              "html": "<a class=\"link\" href=\"https://github.com/japer-technology/github-minimum-intelligence/blob/main/LICENSE.md\" target=\"_blank\" rel=\"noopener\">Full license text \u2192</a>",
+              "html": "<a class=\"link\" href=\"https://github.com/japer-technology/github-minimum-intelligence/blob/main/.github-minimum-intelligence/LICENSE.md\" target=\"_blank\" rel=\"noopener\">Full license text \u2192</a>",
               "style": "margin-top:.5rem"
             }
           ]
