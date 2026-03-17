@@ -2,11 +2,11 @@
 
 A repository-local AI framework that plugs into a developer’s existing workflow. Instead of external chat tools, it uses GitHub Issues for conversation, Git for persistent versioned memory, and GitHub Actions for execution. Installed by adding one folder to a repo, it delivers low-infrastructure, auditable, user-owned automation by committing every prompt/response and code change to the codebase.
 
-### Please read [this](.github-minimum-intelligence/docs/final-warning.md) before you install this AI Agent.
+### Please read [this](docs/final-warning.md) before you install this AI Agent.
 
 ## Installation
 
-1. Copy [`.github/workflows/github-minimum-intelligence-agent.yml`](.github/workflows/github-minimum-intelligence-agent.yml) into your repo's `.github/workflows/` directory.
+1. Copy [`.github/workflows/github-minimum-intelligence-agent.yml`](../.github/workflows/github-minimum-intelligence-agent.yml) into your repo's `.github/workflows/` directory.
 2. Add the LLM API key `OPENAI_API_KEY` as a **repository secret** under **[Settings → Secrets and variables → Actions]**. Any [supported LLM provider](#supported-providers) can work but to quick start OpenAI GPT 5.4 is pre-configured.
 3. Go to **[Actions → github-minimum-intelligence-agent → Run workflow]** to install the agent files automatically, subsequent runs perform upgrades.
 4. Open an issue — the agent will reply.
