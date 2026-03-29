@@ -154,7 +154,7 @@ For those reasons, GMI is well suited to publication as a software-systems paper
 
 [13] japer-technology. "the-repo-is-the-mind.md." Conceptual architecture note. https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/docs/the-repo-is-the-mind.md
 
-[14] japer-technology. "Toulmin Model of Argumentation - Applied to GitHub Minimum Intelligence." https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.TOULMIN.md
+[14] japer-technology. "Toulmin Model of Argumentation - Applied to GitHub Minimum Intelligence." https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/docs/analysis/toulmin.md
 
 [15] Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., and Cao, Y. "ReAct: Synergizing Reasoning and Acting in Language Models." arXiv:2210.03629, 2022. https://arxiv.org/abs/2210.03629
 
