@@ -280,7 +280,7 @@ jobs:
   # Purpose : The core AI agent. Reads the issue (or comment), loads the
   #           conversation session from git, sends it to the configured LLM,
   #           and posts the response back as an issue comment.
-  # Trigger : issues.opened OR issue_comment.created (ignoring bot comments).
+  # Trigger : issues.opened OR issue_comment.created (ignoring bot & PR comments).
   # Security: Only collaborators with write/maintain/admin access can trigger.
   # ────────────────────────────────────────────────────────────────────────────
   run-agent:
@@ -297,10 +297,11 @@ jobs:
     # Trigger guard:
     #   • Run on new issues.
     #   • Run on issue comments, BUT skip comments posted by bots (the agent
-    #     itself) to avoid infinite loops.
+    #     itself) to avoid infinite loops, AND skip comments on pull requests
+    #     (issue_comment fires for both issues and PRs).
     if: >-
       (github.event_name == 'issues')
-      || (github.event_name == 'issue_comment' && !endsWith(github.event.comment.user.login, '[bot]'))
+      || (github.event_name == 'issue_comment' && !github.event.issue.pull_request && !endsWith(github.event.comment.user.login, '[bot]'))
     steps:
 
       # 1. AUTHORIZATION — verify the actor has write-level (or higher) access
