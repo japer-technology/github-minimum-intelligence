@@ -2,6 +2,8 @@
 
 This document provides a detailed risk assessment for the web UI integration proposed in [06-web-ui-integration.md](../06-web-ui-integration.md), evaluating risks from both perspectives — the risk of implementing each use case and the risk of *not* implementing it.
 
+**Severity methodology:** Severity is derived from the combination of likelihood and impact, with adjustment for mitigation effectiveness. Where mitigation is available and effective, severity may be reduced one level from the raw likelihood × impact assessment. Where mitigation is absent or ineffective, severity may be elevated one level. For example, a High likelihood + Medium impact risk with no effective mitigation is assessed as High severity rather than Medium-High.
+
 ---
 
 ## 1. Risks of Implementing: Interactive Demo

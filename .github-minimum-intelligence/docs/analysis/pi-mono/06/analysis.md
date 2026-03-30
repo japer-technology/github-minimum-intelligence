@@ -251,6 +251,8 @@ Assigning weights based on GMI's maturity, architectural commitments, and the ac
 **Session viewer weighted score:** 3.95 / 5.00
 **No implementation weighted score:** 2.80 / 5.00
 
+*(Scores calculated by converting stars to a 1–5 scale (★=1, ★★=2, etc.), multiplying each by its weight, and summing. N/A values are treated as ★★★ (3) for neutral impact.)*
+
 When accessibility beyond GitHub is weighted as the primary concern — as it should be, if the project's value proposition must be communicable to non-developers — the session viewer becomes the clear winner. "No implementation" drops significantly because its "zero cost, zero risk" advantage is offset by the cost of remaining invisible to everyone outside programmerville. The interactive demo still scores lowest because the API key requirement defeats its own accessibility purpose.
 
 ---
