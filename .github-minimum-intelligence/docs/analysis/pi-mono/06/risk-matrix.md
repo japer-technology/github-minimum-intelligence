@@ -72,9 +72,9 @@ This document provides a detailed risk assessment for the web UI integration pro
 
 | ID | Risk | Likelihood | Impact | Severity | Mitigation (Without Demo) |
 |---|---|---|---|---|---|
-| NID-01 | Prospective adopters cannot evaluate the agent before installation | Medium | Medium | **Medium** | Provide detailed README with screenshots and example interactions |
-| NID-02 | Project appears less capable than competitors with live demos | Low | Low | **Low** | Focus messaging on architectural advantages rather than demo flashiness |
-| NID-03 | Technical decision-makers lack evidence to justify adoption | Low | Medium | **Medium** | Provide written case studies or recorded sessions in documentation |
+| NID-01 | Prospective adopters cannot evaluate the agent before installation | High | Medium | **High** | Provide detailed README with screenshots and example interactions — but this still requires GitHub literacy |
+| NID-02 | Project appears inaccessible to non-developer stakeholders | High | Medium | **High** | No effective mitigation — the GitHub-only surface IS the barrier |
+| NID-03 | Technical decision-makers lack evidence to justify adoption | Medium | Medium | **Medium** | Provide written case studies or recorded sessions in documentation |
 
 ### 3.2 Risks of No Session Viewer
 
@@ -82,8 +82,8 @@ This document provides a detailed risk assessment for the web UI integration pro
 |---|---|---|---|---|---|
 | NSV-01 | Agent transparency claims are not backed by visible evidence | Medium | Medium | **Medium** | Point to raw session files in the repository for those willing to inspect them |
 | NSV-02 | Governance reviews lack published audit trail | Low | Medium | **Medium** | Provide repository access to auditors; point to `state/sessions/` directory |
-| NSV-03 | No public demonstration of real agent capabilities | Medium | Medium | **Medium** | Use README examples, screenshots, or screen recordings |
-| NSV-04 | Knowledge accumulation is not visible to external observers | Low | Low | **Low** | Not critical at current project scale |
+| NSV-03 | No public demonstration of real agent capabilities outside GitHub | High | High | **High** | No effective mitigation — the project remains invisible to anyone outside programmerville |
+| NSV-04 | The project's value proposition is incommunicable to non-developers | High | High | **High** | README and status page describe capabilities in prose, but cannot *show* them in action |
 
 ---
 
@@ -103,7 +103,7 @@ This document provides a detailed risk assessment for the web UI integration pro
 |---|---|---|
 | Implement interactive demo | ID-02, ID-03, ID-04, ID-06, ID-09, ID-10 | 6 |
 | Implement session viewer | SV-02, SV-04, SV-08, SV-10 | 4 |
-| No implementation | None | 0 |
+| No implementation | NID-01, NID-02, NSV-03, NSV-04 | 4 |
 
 ### 4.3 Aggregate Risk Profile
 
@@ -111,11 +111,11 @@ This document provides a detailed risk assessment for the web UI integration pro
 |---|---|---|---|
 | Total identified risks | 11 | 13 | 7 |
 | Critical severity | 2 | 2 | 0 |
-| High severity | 6 | 4 | 0 |
-| Medium severity | 3 | 5 | 4 |
-| Low severity | 0 | 2 | 3 |
+| High severity | 6 | 4 | 4 |
+| Medium severity | 3 | 5 | 3 |
+| Low severity | 0 | 2 | 0 |
 
-The interactive demo has the most severe risk profile (2 critical + 6 high). The session viewer has more total risks but they are distributed at lower severity. "No implementation" has the lowest risk profile overall, with all risks at medium or below.
+The interactive demo has the most severe risk profile (2 critical + 6 high). The session viewer has more total risks but they are distributed at lower severity. "No implementation" was previously assessed as the lowest-risk option, but when the accessibility cost of remaining invisible to non-developer audiences is properly weighted, it carries 4 high-severity risks — as many as the session viewer. The difference is that the session viewer's high risks are *mitigable* through content curation, while the "no implementation" high risks (NID-01, NID-02, NSV-03, NSV-04) have *no effective mitigation* short of building the session viewer.
 
 ---
 
@@ -145,9 +145,9 @@ Risks SV-08 (outdated sessions) and SV-10 (curation burden) compound over time. 
 
 | Use Case | Recommendation | Rationale |
 |---|---|---|
-| **Interactive demo** | ❌ Do not implement | 2 critical + 6 high risks; experience gap problem is disqualifying; API key barrier eliminates target audience |
-| **Session viewer** | ⚠️ Implement conditionally | 2 critical + 4 high risks, but all are mitigable through curation; value is genuine if prerequisites are met |
-| **No implementation** | ✅ Safest option | 0 critical/high risks; acceptable medium risks mitigable through documentation |
+| **Interactive demo** | ❌ Do not implement | 2 critical + 6 high risks; experience gap problem is disqualifying; API key barrier replaces one accessibility problem with another |
+| **Session viewer** | ✅ Implement when prerequisites met | 2 critical + 4 high risks, all mitigable through curation; the accessibility value of making programmerville disappear outweighs the operational overhead |
+| **No implementation** | ⚠️ Carries its own risks | 0 critical but 4 high risks with no mitigation; the project remains invisible to non-developer audiences, and this inaccessibility is itself a risk |
 
 If the session viewer is implemented, the following risk controls are mandatory:
 
@@ -164,6 +164,8 @@ If the session viewer is implemented, the following risk controls are mandatory:
 
 ## 7. Summary
 
-The risk matrix reveals a clear hierarchy: the interactive demo carries the highest risk (2 critical, 6 high) with the lowest reward (experience gap undermines its value); the session viewer carries moderate risk (2 critical, 4 high) with moderate reward (genuine transparency and adoption value, contingent on content curation); and no implementation carries the lowest risk (0 critical or high) with the lowest reward (no public demonstration). The interactive demo's critical risks — product misrepresentation and API key abuse — are inherent to the concept and cannot be fully mitigated. The session viewer's critical risks — credential leaks and vulnerability disclosure — are operational and mitigable through a robust curation process treated as a security control.
+The risk matrix reveals a more nuanced picture than a simple risk-minimisation analysis would suggest. The interactive demo carries the highest risk (2 critical, 6 high) with the lowest reward — the API key requirement defeats its own accessibility purpose. The session viewer carries moderate risk (2 critical, 4 high) with high reward — genuine accessibility for non-developer audiences, contingent on content curation. "No implementation" carries no critical or high *technical* risks, but when the cost of inaccessibility is properly accounted for, it carries 4 high risks of its own: the project remains invisible to anyone outside GitHub, its value proposition is incommunicable to non-developers, and its transparency claims are unsupported by visible evidence.
 
-*Risk assessment based on GMI's deployment context (GitHub Actions, single-maintainer, early-stage, "GitHub as Infrastructure" philosophy) as of 2026-03-30.*
+The session viewer's critical risks — credential leaks and vulnerability disclosure — are operational and mitigable through a robust curation process treated as a security control. The "no implementation" risks are *structural* — they can only be mitigated by building the session viewer. This makes the session viewer the risk-adjusted best choice once the curation prerequisites are met.
+
+*Risk assessment based on GMI's deployment context (GitHub Actions, single-maintainer, early-stage, "GitHub as Infrastructure" philosophy) as of 2026-03-30. Revised to account for the accessibility cost of remaining invisible to non-developer audiences.*

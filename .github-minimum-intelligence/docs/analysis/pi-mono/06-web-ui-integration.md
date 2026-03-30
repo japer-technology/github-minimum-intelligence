@@ -2,6 +2,8 @@
 
 This document details the implementation plan for evaluating and potentially integrating `@mariozechner/pi-web-ui` into the GMI public-fabric, as identified in the [implementation plan](implementation-plan.md).
 
+A guiding principle: **a UX that makes GitHub's developer-centric complexity disappear is a good thing.** GitHub Issues are the right interface for developers interacting with the agent. But for everyone else — evaluators, stakeholders, managers, prospective adopters — a web surface that presents the agent's work without requiring GitHub literacy is an accessibility imperative, not an architectural concession.
+
 ---
 
 ## 1. Current State
@@ -83,9 +85,9 @@ GitHub Actions
 
 | Use Case | Feasibility | Value | Recommendation |
 |---|---|---|---|
-| Interactive demo | Medium | Medium | Defer — API key requirement limits accessibility |
-| Session viewer | High | Medium | Consider — but only for selected/curated sessions |
-| Chat interface replacement | Low | Low | Not recommended — GitHub Issues is the primary interface |
+| Interactive demo | Medium | Medium | Defer — API key requirement replaces one accessibility barrier with another |
+| Session viewer | High | High | Implement — makes programmerville disappear for non-developer audiences |
+| Chat interface replacement | Low | Low | Not recommended — GitHub Issues is the right interface for developers |
 
 ---
 
@@ -195,6 +197,8 @@ This avoids a new dependency and keeps the public-fabric minimal.
 
 ## 8. Summary
 
-The pi-web-ui package offers rich chat rendering components that could enhance public-fabric with an interactive demo or session viewer. However, the interactive demo requires visitors to provide API keys (limiting accessibility), and the session viewer requires careful content curation to avoid exposing sensitive information. The recommended approach is to start with a lightweight vanilla JS session viewer for curated transcripts and evaluate pi-web-ui for upgrade if richer rendering is needed.
+The pi-web-ui package offers rich chat rendering components that could enhance public-fabric with an interactive demo or session viewer. The interactive demo requires visitors to provide API keys — replacing GitHub's developer-literacy barrier with an API-key barrier — and is not recommended. The session viewer is the clear winner: it makes the agent's work legible to non-developer audiences without requiring a GitHub account, repository access, or API key. It should be implemented when a content curation process is established and representative sessions are available.
 
-*Estimated effort: 4–8 hours (session viewer with vanilla JS), 8–16 hours (with pi-web-ui integration). Risk: Medium. Priority: P3 — defer until core features are stable.*
+The recommended approach is to start with a lightweight vanilla JS session viewer for curated transcripts and evaluate pi-web-ui for upgrade if richer rendering is needed. Making GitHub's "programmerville" disappear for evaluators and stakeholders is an accessibility imperative, and the session viewer is the lowest-cost, highest-value way to achieve it.
+
+*Estimated effort: 4–8 hours (session viewer with vanilla JS), 8–16 hours (with pi-web-ui integration). Risk: Medium (mitigable through content curation). Priority: P2 — implement when curation prerequisites are met.*
