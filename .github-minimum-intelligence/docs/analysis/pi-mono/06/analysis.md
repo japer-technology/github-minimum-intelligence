@@ -2,6 +2,8 @@
 
 This document provides a detailed examination of the proposal to integrate `@mariozechner/pi-web-ui` into GMI's public-fabric, as described in [06-web-ui-integration.md](../06-web-ui-integration.md). The analysis evaluates both sides of the decision — why it is a good idea and why it is a bad idea — grounded in GMI's specific deployment context: a headless GitHub Actions agent whose primary interface is GitHub Issues and whose operational philosophy is "GitHub as Infrastructure."
 
+A key principle informs this analysis: **a UX that makes GitHub's developer-centric complexity disappear is a good thing.** GitHub's native interface — Issues, Pull Requests, Actions logs, YAML workflows — is designed for software developers. This works well for the agent's primary audience (repository contributors), but it presents a formidable barrier to everyone else: prospective adopters, technical managers, non-technical stakeholders, and anyone evaluating the project without a GitHub account. Making "programmerville" disappear for these audiences is not a violation of architectural principles — it is an accessibility imperative.
+
 ---
 
 ## 1. Context
@@ -19,7 +21,20 @@ The question is whether either or both use cases are worth implementing, and whe
 
 ## 2. Arguments For Integration (Good Idea)
 
-### 2.1 Accessibility Beyond GitHub
+### 2.1 Eliminates the GitHub Literacy Barrier
+
+GitHub's interface is programmerville — repositories, branches, YAML workflows, issue templates, pull request reviews. This interface is legible to software developers and opaque to everyone else. Yet the people who need to evaluate, approve, fund, or understand an AI agent's behaviour are often *not* developers:
+
+- A CTO who needs to see what the agent actually does before approving its use
+- A compliance officer reviewing agent behaviour for governance purposes
+- A project manager evaluating whether this tool will help their team
+- A prospective adopter browsing on their phone during a commute
+
+None of these people should need to navigate GitHub's developer UI to understand what GMI is and does. A web UX that presents the agent's capabilities, behaviour, and output in plain, accessible terms — without requiring a GitHub account, repository access, or knowledge of Git — is not an architectural concession. It is the recognition that the agent's value proposition must be communicable to people who will never open a terminal.
+
+**Strength of argument: Very High.** The current GitHub-only surface is a *de facto* filter that limits the project's audience to people who are already comfortable with developer tooling. Removing that filter is essential for adoption beyond the developer community.
+
+### 2.2 Accessibility Beyond GitHub
 
 GMI's current interaction model requires a GitHub account with write access to the repository. This is a hard prerequisite that excludes several audiences:
 
@@ -31,7 +46,7 @@ A public-facing session viewer eliminates these barriers. It shows real agent in
 
 **Strength of argument: High.** Adoption friction is a genuine barrier, and read-only transparency is one of the cheapest ways to reduce it.
 
-### 2.2 Concrete Demonstration of Agent Capabilities
+### 2.3 Concrete Demonstration of Agent Capabilities
 
 The current public-fabric site describes what the agent can do in prose — feature lists, architecture diagrams, and philosophical essays. What it cannot do is *show* what the agent actually does. There is no example of a real conversation, no demonstration of tool use, no visible evidence of the agent's reasoning process.
 
@@ -39,7 +54,7 @@ A session viewer transforms abstract descriptions into concrete evidence. A visi
 
 **Strength of argument: High.** Showing is more persuasive than telling, especially for a project whose core claim is that the repository is a sufficient substrate for AI intelligence.
 
-### 2.3 Transparency as a Governance Artifact
+### 2.4 Transparency as a Governance Artifact
 
 GMI's documentation repeatedly emphasises transparency, auditability, and institutional trust. The project's Toulmin-based analyses, DEFCON levels, and security assessments all serve a governance function — they make the system's reasoning and risk posture visible. A session viewer extends this governance commitment to the agent's actual behaviour.
 
@@ -53,7 +68,7 @@ This aligns with the project's existing commitment to "the repo is the mind" —
 
 **Strength of argument: Medium-High.** Valuable for trust-building, but only if the curated sessions genuinely represent typical agent behaviour (not cherry-picked successes).
 
-### 2.4 Zero Backend Infrastructure
+### 2.5 Zero Backend Infrastructure
 
 Both use cases proposed in the source document operate without a backend:
 
@@ -64,7 +79,7 @@ This preserves GMI's "no hosted backend" principle. The infrastructure cost is z
 
 **Strength of argument: Medium.** True in principle, but the interactive demo does require a new trust boundary (the visitor's API key in the browser) even if it requires no server.
 
-### 2.5 pi-web-ui Component Reuse
+### 2.6 pi-web-ui Component Reuse
 
 If rich session rendering is needed — syntax-highlighted code blocks, tool call visualisation, session tree navigation, artifact display — `pi-web-ui` provides these out of the box. Building equivalent components from scratch would require significant effort.
 
@@ -72,13 +87,13 @@ The package is maintained by the same author as `pi-coding-agent`, so compatibil
 
 **Strength of argument: Medium.** Relevant only if the rendering requirements exceed what a simple vanilla JS approach can provide. The source document's own recommendation is to start without pi-web-ui.
 
-### 2.6 Existing Build Pipeline Integration
+### 2.7 Existing Build Pipeline Integration
 
 The `run-gitpages` job in the GitHub Actions workflow already deploys `public-fabric/` to GitHub Pages. Adding session HTML files to this directory requires no new workflow steps — they are uploaded alongside existing content. The build integration cost is minimal.
 
 **Strength of argument: Low-Medium.** The deployment path is easy, but the *generation* of session HTML still requires a new build step (JSONL-to-HTML conversion).
 
-### 2.7 Completes the "Published Knowledge" Loop
+### 2.8 Completes the "Published Knowledge" Loop
 
 The [GitHub Pages Jekyll analysis](../../github-jekyll-pages.md) argues that Pages "completes a loop" — the agent reasons, commits, and the committed work publishes itself. A session viewer extends this loop from documentation artifacts to conversation artifacts. The agent's dialogue becomes part of the published knowledge base, not just its written output.
 
@@ -88,13 +103,17 @@ The [GitHub Pages Jekyll analysis](../../github-jekyll-pages.md) argues that Pag
 
 ## 3. Arguments Against Integration (Bad Idea)
 
-### 3.1 Violation of the "Issues as UI" Principle
+### 3.1 The "Issues as UI" Principle — Reframed
 
-GMI's architecture thesis is that GitHub Issues are the primary — and deliberately the *only* — conversational surface. Section 2 of [description-github-as-infrastructure.md](../../description-github-as-infrastructure.md) argues this at length: issues are not a "poor substitute for a real UI" but a "domain-appropriate interface." The system "refuses to build a new front end."
+GMI's architecture thesis is that GitHub Issues are the primary conversational surface. Section 2 of [description-github-as-infrastructure.md](../../description-github-as-infrastructure.md) argues this at length: issues are not a "poor substitute for a real UI" but a "domain-appropriate interface."
 
-Adding a web-based chat interface — even as a demo — directly contradicts this principle. It creates a second interaction surface that competes with the canonical one. Visitors may conclude that the browser chat is what GMI *is*, rather than understanding that the GitHub Issues experience is the actual product. The demo risks becoming the representative experience, and it is a fundamentally inferior one (no repository access, no tool calling, no Git persistence).
+This principle is sound for the agent's *operational* audience — developers who interact with the agent to get work done. But it has been over-applied as an argument against *any* UX surface outside GitHub. The principle was designed to prevent rebuilding GitHub inside a custom web app. It was not designed to prevent making the project accessible to people who do not use GitHub.
 
-**Strength of argument: High.** This is the strongest argument against the interactive demo. It undermines the project's own thesis.
+The real question is not "does this violate Issues as UI?" but "who is this surface for?" If the web UI targets the same audience (repository contributors authoring issues), it competes with Issues and the principle applies. If it targets a different audience (evaluators, stakeholders, non-developers), it is *complementary* to Issues — serving people who will never open an issue in the first place.
+
+A web UX that makes GitHub disappear for non-developers does not undermine the "Issues as UI" thesis. It acknowledges that the thesis has an audience boundary: Issues are the right UI *for developers*. For everyone else, something more accessible is needed.
+
+**Strength of argument: Medium (reframed).** The original concern — that a web UI competes with Issues — applies to the interactive demo if it targets developers. It does not apply to a session viewer or any surface aimed at non-developer audiences. The argument's weight depends on *who* the surface serves.
 
 ### 3.2 The Experience Gap Problem
 
@@ -190,16 +209,15 @@ Every hour spent on a demo page is an hour not spent on making the real product 
 
 ### 3.9 Architectural Precedent Risk
 
-Implementing a web UI — even as a "demo" — establishes a precedent. Once the UI exists, pressure will build to:
+Implementing a web UI establishes a precedent. The question is whether this precedent leads somewhere productive or somewhere destructive. Two scenarios:
 
-- Add more features to the web interface
-- Support real-time interaction (requiring a backend)
-- Provide account management and session persistence
-- Replicate the Issues experience in the browser
+**Productive precedent:** The web UI stays focused on accessibility for non-developer audiences — session viewer, configuration tools, governance dashboard. It complements GitHub's native interface rather than replacing it. The boundary is clear: developers use Issues; everyone else uses the web surface.
 
-Each step moves further from "GitHub as Infrastructure" toward a conventional web application. The demo becomes a growth vector for scope creep, pulling the project away from its architectural commitments.
+**Destructive precedent:** The web UI gradually absorbs developer-facing functionality — real-time interaction, code editing, issue management. Each addition moves further from "GitHub as Infrastructure" toward a conventional web application that competes with GitHub's native interface.
 
-**Strength of argument: Medium.** This is a slippery slope argument and should be weighed accordingly, but the pressure pattern is real in software projects.
+The key control is audience discipline: the web surface serves non-developers and evaluators; GitHub serves contributors. As long as this boundary holds, the precedent is productive. If the boundary erodes, scope creep follows.
+
+**Strength of argument: Medium.** The risk is real but manageable through clear audience boundaries. The slippery slope argument should be weighed against the concrete accessibility benefit of making programmerville disappear.
 
 ---
 
@@ -207,53 +225,58 @@ Each step moves further from "GitHub as Infrastructure" toward a conventional we
 
 | Dimension | Interactive Demo | Session Viewer | No Implementation |
 |---|---|---|---|
-| **Accessibility** | Limited (API key required) | High (read-only, public) | Low (GitHub access required) |
+| **Accessibility for non-developers** | Limited (API key required) | High (read-only, public, no GitHub needed) | None (requires GitHub literacy) |
+| **Eliminates "programmerville"** | Partially (still browser-technical) | Yes (presents agent work in plain terms) | No (GitHub is the only surface) |
 | **Accuracy of representation** | Low (no repo access) | High (real sessions) | N/A |
-| **Alignment with "GitHub as Infra"** | Low (new UI surface, IndexedDB state) | Medium (publishes Git-tracked content) | High (no deviation) |
+| **Alignment with "GitHub as Infra"** | Low (new UI surface, IndexedDB state) | Medium-High (publishes Git-tracked content for a new audience) | High (no deviation — but also no accessibility) |
 | **Sensitive data risk** | Low (no repo data) | High (session transcripts) | None |
 | **Maintenance cost** | Medium (pi-web-ui dep + hosting) | Medium (build pipeline + curation) | None |
-| **Adoption impact** | Low-Medium (limited by API key) | Medium-High (shows real capabilities) | Low (no demonstration) |
-| **Philosophical consistency** | Low | Medium | High |
+| **Adoption impact** | Low-Medium (limited by API key) | High (shows real capabilities to new audiences) | Low (no demonstration) |
 
 ---
 
 ## 5. Weighted Assessment
 
-Assigning weights based on GMI's current maturity and architectural commitments:
+Assigning weights based on GMI's maturity, architectural commitments, and the accessibility imperative:
 
 | Factor | Weight | Interactive Demo | Session Viewer | No Implementation |
 |---|---|---|---|---|
-| Architectural alignment | 30% | ★★☆☆☆ | ★★★☆☆ | ★★★★★ |
+| Accessibility beyond programmerville | 30% | ★★☆☆☆ | ★★★★★ | ★☆☆☆☆ |
 | Adoption impact | 25% | ★★☆☆☆ | ★★★★☆ | ★★☆☆☆ |
 | Implementation cost / risk | 20% | ★★☆☆☆ | ★★★☆☆ | ★★★★★ |
 | Representation accuracy | 15% | ★☆☆☆☆ | ★★★★★ | N/A (★★★☆☆) |
 | Ongoing maintenance burden | 10% | ★★☆☆☆ | ★★★☆☆ | ★★★★★ |
 
 **Interactive demo weighted score:** 1.90 / 5.00
-**Session viewer weighted score:** 3.45 / 5.00
-**No implementation weighted score:** 3.90 / 5.00
+**Session viewer weighted score:** 3.95 / 5.00
+**No implementation weighted score:** 2.80 / 5.00
 
-The "no implementation" option scores highest due to zero cost and perfect architectural alignment. The session viewer scores significantly higher than the interactive demo because it shows real agent capabilities without introducing API key barriers or misrepresenting the product. The interactive demo scores lowest across nearly every dimension.
+*(Scores calculated by converting stars to a 1–5 scale (★=1, ★★=2, etc.), multiplying each by its weight, and summing. N/A values are treated as ★★★ (3) for neutral impact.)*
+
+When accessibility beyond GitHub is weighted as the primary concern — as it should be, if the project's value proposition must be communicable to non-developers — the session viewer becomes the clear winner. "No implementation" drops significantly because its "zero cost, zero risk" advantage is offset by the cost of remaining invisible to everyone outside programmerville. The interactive demo still scores lowest because the API key requirement defeats its own accessibility purpose.
 
 ---
 
 ## 6. Use-Case-Specific Verdicts
 
-### 6.1 Interactive Demo: Not Recommended
+### 6.1 Interactive Demo: Not Recommended (Unchanged)
 
-The interactive demo is a **bad idea in its current form**. The API key requirement limits accessibility, the lack of repository tools misrepresents the product, and browser-local state contradicts the "Git as memory" principle. The demo would show visitors something that is *not* the actual product experience — a chat bot without coding capabilities.
+The interactive demo is a **bad idea in its current form**. The API key requirement limits accessibility, the lack of repository tools misrepresents the product, and browser-local state contradicts the "Git as memory" principle. The demo would show visitors something that is *not* the actual product experience — a chat bot without coding capabilities. Ironically, it fails at eliminating programmerville because it introduces a different barrier (API key management) that is equally developer-centric.
 
-If an interactive demo is desired in the future, a better approach would be a **guided replay** — a pre-recorded session that plays back in the browser, showing the agent's tool calls and reasoning in real time, without requiring an API key or live LLM interaction.
+If an interactive demo is desired in the future, a better approach would be a **guided replay** — a pre-recorded session that plays back in the browser, showing the agent's tool calls and reasoning in real time, without requiring an API key or live LLM interaction. This approach eliminates programmerville *and* the experience gap.
 
-### 6.2 Session Viewer: Conditionally Recommended
+### 6.2 Session Viewer: Recommended
 
-The session viewer is a **good idea in principle** but carries operational overhead. It demonstrates real capabilities, requires no API key, and publishes content that is already Git-tracked. However, the sensitive content risk is significant and the curation burden is ongoing.
+The session viewer is a **good idea** — the strongest option for making programmerville disappear. It demonstrates real capabilities, requires no API key, requires no GitHub account, and publishes content that is already Git-tracked. A non-technical stakeholder can visit a web page, read a real conversation between a human and the agent, and understand what the product does — without ever touching GitHub.
 
-**Implement only when:**
+The sensitive content risk is significant and the curation burden is ongoing, but these are *operational* challenges with known mitigations, not architectural objections. The curation process must be treated as a security control (see [risk-matrix.md](risk-matrix.md)), but its existence should not prevent implementation.
+
+**Implement when:**
 
 1. A content curation and redaction process is established
 2. At least 3 representative sessions exist that are safe for public consumption
-3. P1 and P2 features from the [implementation plan](../implementation-plan.md) are complete
+
+The previous prerequisite — "P1 and P2 features from the [implementation plan](../implementation-plan.md) must be complete" — is relaxed. The session viewer's value is independent of the agent's feature completeness: even early-stage sessions demonstrate the agent's reasoning, tool use, and interaction style. Waiting for feature completeness delays accessibility for no gain.
 
 See [decision-framework.md](decision-framework.md) for specific trigger criteria.
 
@@ -261,7 +284,17 @@ See [decision-framework.md](decision-framework.md) for specific trigger criteria
 
 ## 7. The Session Viewer's Unique Value Proposition
 
-If the session viewer is pursued, its strongest contribution is not marketing — it is **architectural proof**. The session viewer makes visible what GMI claims is true:
+The session viewer's strongest contribution is not marketing — it is **making the agent legible to people who will never use GitHub.**
+
+Consider two audiences:
+
+1. **A developer** who opens issue #47 and watches the agent respond, edit code, run tests, and push a commit. This person experiences the full product through GitHub's native interface. They do not need a session viewer.
+
+2. **A technical manager** evaluating whether to adopt GMI for their team. They have no GitHub account on this repository. They will not open a terminal. They need to understand *what this thing does* in 5 minutes, on their phone, over coffee.
+
+The session viewer serves audience #2. It takes the agent's Git-tracked conversations — already committed, already version-controlled — and renders them in a form that is legible to someone who has never seen a GitHub Issue. The viewer eliminates the repository's "developer toll booth": no login, no navigation, no YAML, no Markdown syntax to decode.
+
+This is also architectural proof. The session viewer makes visible what GMI claims is true:
 
 - That agent conversations produce durable, version-controlled artifacts
 - That those artifacts can be published without leaving the repository
@@ -270,19 +303,21 @@ If the session viewer is pursued, its strongest contribution is not marketing �
 
 A curated session viewer page is a concrete demonstration that the agent's output is first-class Git content — reviewable, publishable, and permanent. This aligns with the [GitHub Pages analysis](../../github-jekyll-pages.md): "The committed work publishes itself."
 
-The risk is that the demonstration becomes the obligation. Once sessions are published, there is an implicit commitment to keep them current, representative, and free of sensitive content. That commitment has ongoing cost.
+The risk is that the demonstration becomes the obligation. Once sessions are published, there is an implicit commitment to keep them current, representative, and free of sensitive content. That commitment has ongoing cost — but it is the cost of being accessible, and accessibility is worth paying for.
 
 ---
 
 ## 8. Summary
 
-The web UI integration proposal contains two distinct use cases with very different risk-reward profiles. The **interactive demo** is a bad idea — it misrepresents the product, requires API keys, and violates core architectural principles. The **session viewer** is a conditionally good idea — it provides genuine transparency and adoption value, but requires careful content curation and should not be pursued until higher-priority features are complete.
+The web UI integration proposal contains two distinct use cases with very different risk-reward profiles. The **interactive demo** is a bad idea — it misrepresents the product, requires API keys, and replaces one barrier (GitHub literacy) with another (API key management). The **session viewer** is a good idea — it provides genuine transparency, adoption value, and most importantly, it makes the project's value proposition accessible to people who will never navigate GitHub's developer interface.
+
+The key insight that reframes this analysis: a UX that makes GitHub's "programmerville" disappear is not an architectural violation — it is an accessibility feature. The "Issues as UI" principle correctly identifies that developers should interact with the agent through GitHub's native interface. But that principle has an audience boundary. Non-developers, evaluators, and stakeholders need a different surface, and refusing to provide one is not architectural purity — it is exclusion.
 
 The recommended path is:
 
-1. **Do not implement the interactive demo.** The experience gap problem (§3.2) is disqualifying.
-2. **Defer the session viewer** until P1/P2 features are complete and a content curation process exists.
+1. **Do not implement the interactive demo.** The experience gap problem (§3.2) is disqualifying, and the API key requirement defeats the accessibility purpose.
+2. **Implement the session viewer** when a content curation process exists and representative sessions are available. Do not wait for P1/P2 feature completion — the viewer's value is independent of agent feature maturity.
 3. **When implemented, start with vanilla JS** (as the source document recommends). Migrate to pi-web-ui only if rendering requirements demand it.
-4. **Consider a guided replay** as an alternative to the interactive demo — a pre-recorded session that demonstrates real agent capabilities without requiring live LLM interaction.
+4. **Consider a guided replay** as an alternative to the interactive demo — a pre-recorded session that demonstrates real agent capabilities without requiring live LLM interaction. This approach eliminates programmerville *and* the experience gap.
 
-*Analysis derived from [06-web-ui-integration.md](../06-web-ui-integration.md), [implementation-plan.md](../implementation-plan.md), [description-github-as-infrastructure.md](../../description-github-as-infrastructure.md), and [github-jekyll-pages.md](../../github-jekyll-pages.md). Applies to GMI's public-fabric as of 2026-03-30.*
+*Analysis derived from [06-web-ui-integration.md](../06-web-ui-integration.md), [implementation-plan.md](../implementation-plan.md), [description-github-as-infrastructure.md](../../description-github-as-infrastructure.md), and [github-jekyll-pages.md](../../github-jekyll-pages.md). Revised to incorporate the accessibility imperative: making GitHub's developer-centric complexity disappear for non-developer audiences is a feature, not a violation. Applies to GMI's public-fabric as of 2026-03-30.*

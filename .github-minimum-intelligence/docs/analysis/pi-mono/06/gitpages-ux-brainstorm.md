@@ -6,18 +6,20 @@ The core tension: GMI's "GitHub as Infrastructure" principle means the canonical
 
 ---
 
-## 1. Design Principle: Pages as Extension Surface, Not Replacement Surface
+## 1. Design Principle: Pages as Accessible Front Door
 
-GitHub Pages should extend the GitHub-native experience, not replace it. The key distinction:
+GitHub Pages should make the project accessible to audiences who will never navigate GitHub's developer-centric interface. The key distinction is not "extension vs. replacement" but "who is the audience?"
 
-| Pattern | Example | Alignment |
-|---|---|---|
-| **Pages as read-only view** | Published documentation, session viewer | ✅ High — extends what Git already contains |
-| **Pages as tool distribution** | Downloadable CLI scripts, configuration generators | ✅ High — GitHub serves the file; user runs it locally |
-| **Pages as interactive tool** | Browser-based config editor, issue composer | ⚠️ Medium — adds functionality but creates a parallel surface |
-| **Pages as application** | Full chat interface, dashboard with state | ❌ Low — competes with GitHub's native interface |
+| Pattern | Example | Audience | Alignment |
+|---|---|---|---|
+| **Pages as read-only view** | Published documentation, session viewer | Non-developers, evaluators | ✅ High — makes Git content legible without Git literacy |
+| **Pages as tool distribution** | Downloadable CLI scripts, configuration generators | New adopters | ✅ High — GitHub serves the file; user runs it locally |
+| **Pages as interactive tool** | Browser-based config editor, issue composer | New adopters, maintainers | ✅ Medium-High — adds guided UX that GitHub's native interface lacks |
+| **Pages as application** | Full chat interface, dashboard with state | All audiences | ⚠️ Medium — risk of competing with GitHub's native interface for developer tasks |
 
-The further down this spectrum an idea falls, the more it deviates from the architectural thesis. Ideas in the first two categories are safest.
+The previous framing treated any Pages functionality beyond read-only views as a deviation from "GitHub as Infrastructure." The revised framing recognises that Pages serves a *different audience* from GitHub Issues. Developers use Issues; everyone else — the people who need to understand, evaluate, fund, or approve the agent — uses Pages. These surfaces are complementary, not competing.
+
+The risk to watch for is *audience bleed*: if Pages starts serving developer-facing workflows (code editing, issue management, real-time agent interaction), it competes with GitHub's native interface and the architectural concern applies. As long as Pages serves non-developer audiences and one-time setup tasks, it is an accessibility surface, not a replacement surface.
 
 ---
 
@@ -346,10 +348,10 @@ All other ideas are self-contained tools that use standard HTML, CSS, and JavaSc
 
 ## 10. Summary
 
-GitHub Pages can serve as a UX extension surface for GMI without violating the "GitHub as Infrastructure" principle — provided the ideas follow the right pattern. Read-only views (Category A) and tool distribution (Category B) are highest-alignment and should be prioritised. Interactive tools (Category C) are acceptable when they operate client-side and produce Git-bound artifacts. PWAs (Category D) are lowest priority due to maintenance cost and low alignment.
+GitHub Pages serves as an accessible front door for people who will never navigate GitHub's developer-centric interface. The design principle is audience separation: developers interact through Issues; evaluators, stakeholders, and new adopters interact through Pages. Read-only views (Category A) and tool distribution (Category B) are highest-value because they make programmerville disappear for the widest audience. Interactive tools (Category C) are valuable when they guide one-time setup tasks that are otherwise daunting (configuring settings.json, writing AGENTS.md, validating workflows). PWAs (Category D) are lowest priority due to maintenance cost and narrow audience.
 
-The highest-value ideas form an **adoption funnel**: a one-line installer (P1) → a configuration generator (P2) → an AGENTS.md composer (P2) → an interaction gallery (P2). Together, these reduce the three biggest adoption barriers: installation friction, configuration complexity, and capability uncertainty.
+The highest-value ideas form an **adoption funnel**: a one-line installer (P1) → a configuration generator (P2) → an AGENTS.md composer (P2) → an interaction gallery (P2). Together, these reduce the three biggest adoption barriers: installation friction, configuration complexity, and capability uncertainty — all without requiring the adopter to understand GitHub's developer interface.
 
-The "download and invoke" pattern — where Pages serves a client-side tool that generates a file the user commits to their repository — is the key architectural insight. It extends the user experience beyond GitHub's native interface while keeping the canonical data flow inside Git.
+The "download and invoke" pattern — where Pages serves a client-side tool that generates a file the user commits to their repository — is the key architectural insight. It extends the user experience beyond GitHub's native interface while keeping the canonical data flow inside Git. For non-developers, the pattern goes further: read-only views like the session viewer require no Git interaction at all, making the agent's work legible to anyone with a web browser.
 
-*Brainstorm based on GMI's architecture, public-fabric deployment, and the "GitHub as Infrastructure" design philosophy as of 2026-03-30.*
+*Brainstorm based on GMI's architecture, public-fabric deployment, and the principle that a UX making GitHub's "programmerville" disappear is a good thing. As of 2026-03-30.*

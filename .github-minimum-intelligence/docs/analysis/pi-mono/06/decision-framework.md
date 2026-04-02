@@ -6,9 +6,9 @@ This document provides a structured framework for deciding when (and whether) to
 
 ## 1. Decision Principle
 
-Web UI integration introduces a **new interaction surface** that competes with the canonical GitHub Issues interface. Adding a surface is easy; removing it creates expectations debt. The decision should therefore be conservative: implement only when the value is demonstrable and the prerequisites are satisfied.
+Web UI integration provides an **accessible front door** for audiences who will never navigate GitHub's developer-centric interface. The web surface and GitHub Issues serve different audiences: developers interact through Issues; everyone else — evaluators, stakeholders, managers — accesses the project through the web surface. These surfaces are complementary, not competing.
 
-**Rule:** Do not implement proactively. Implement when concrete adoption or transparency needs arise that cannot be met through the existing GitHub-native interface.
+**Rule:** Implement the session viewer when the curation prerequisites are met. The decision is driven by readiness (safe content to publish), not by demand (waiting for adoption requests). Accessibility should be proactive, not reactive — by the time someone asks "can I see what the agent does?", the answer should already exist.
 
 ---
 
@@ -33,11 +33,11 @@ These are not triggers — they are preconditions. The session viewer should not
 
 | ID | Prerequisite | Verification |
 |---|---|---|
-| P-01 | P1 features from [implementation-plan.md](../implementation-plan.md) are complete | Additional tools and web search are implemented and tested |
-| P-02 | P2 features are complete or in progress | Extension enhancements and settings optimisation are implemented |
-| P-03 | At least 3 representative sessions exist that are safe for public consumption | Sessions reviewed for sensitive content; no API keys, credentials, or PII |
-| P-04 | A content redaction process is documented | Written procedure for reviewing and sanitising session transcripts |
-| P-05 | public-fabric is stable and actively maintained | index.html and status.json are current; GitPages deployment is reliable |
+| P-01 | At least 3 representative sessions exist that are safe for public consumption | Sessions reviewed for sensitive content; no API keys, credentials, or PII |
+| P-02 | A content redaction process is documented | Written procedure for reviewing and sanitising session transcripts |
+| P-03 | public-fabric is stable and actively maintained | index.html and status.json are current; GitPages deployment is reliable |
+
+Note: Feature completeness (P1/P2 from [implementation-plan.md](../implementation-plan.md)) is no longer a prerequisite. The session viewer's value — making the agent legible to non-developer audiences — is independent of which features the agent supports. Early-stage sessions demonstrating basic reasoning and tool use are valuable in their own right.
 
 ### 3.2 Soft Triggers (Evaluate Implementation)
 
@@ -50,17 +50,17 @@ Once all prerequisites are met, the following events should prompt an implementa
 | T-03 | Governance review requires published evidence of agent behaviour | An audit, compliance check, or stakeholder review that needs visible session data |
 | T-04 | The project's public visibility increases to a point where the status page alone is insufficient | GitHub stars, forks, or inbound traffic suggest broader interest |
 
-### 3.3 Non-Triggers (Do Not Implement)
+### 3.3 Non-Triggers (Do Not Implement For These Reasons Alone)
 
 These conditions, on their own, do not justify implementation:
 
 | Condition | Why It Is Not a Trigger |
 |---|---|
-| "The page looks empty without a demo" | Aesthetic concerns do not justify architectural additions |
 | "pi-web-ui has nice components" | Available tooling is not a reason to build features |
-| "Other projects have chat demos" | Competitive comparison does not override architectural principles |
-| "We should show off the agent" | Marketing impulse should be satisfied by documentation and README, not by a new UI surface |
+| "Other projects have chat demos" | Competitive comparison does not override substance |
 | "Sessions are already in Git; why not publish them?" | Availability of data does not mean it should be published without curation |
+
+Note: Some items previously listed as non-triggers have been reclassified. "The page looks empty without a demo" is a legitimate UX concern when the audience includes non-developers who form impressions quickly. "We should show off the agent" is a valid impulse when the alternative is that no one outside programmerville can see what the agent does.
 
 ---
 
@@ -171,16 +171,15 @@ When a decision is made (implement or defer), record it in this format:
 
 As of 2026-03-30:
 
-- **Prerequisites P-01 and P-02** are not fully met. P1 and P2 features from the implementation plan are in progress but not complete.
-- **Prerequisite P-03** is not met. No sessions have been reviewed for public consumption.
-- **Prerequisite P-04** is not met. No content redaction process exists.
-- **No triggers** have been activated. No adoption requests, governance reviews, or external linking needs have been identified.
-- **Recommendation:** Do not implement either use case. Revisit when P1/P2 features are complete and adoption interest creates a concrete need for public demonstration.
+- **Prerequisite P-01** is not met. No sessions have been reviewed for public consumption.
+- **Prerequisite P-02** is not met. No content redaction process exists.
+- **Prerequisite P-03** is met. public-fabric is stable and deployed.
+- **Recommendation:** Establish a content curation and redaction process (P-02), then identify and review 3+ sessions for publication (P-01). Once both are met, implement the session viewer using vanilla JS. Feature completeness is no longer a blocker — the session viewer's accessibility value is independent of the agent's feature maturity.
 
 ---
 
 ## 8. Summary
 
-The web UI integration decision should be driven by concrete adoption or transparency needs, not by the availability of pi-web-ui components or by competitive pressure. The session viewer has a viable path to implementation but requires five prerequisites to be met first — most importantly, a content curation process and the completion of higher-priority features. The interactive demo should not be implemented until the experience gap problem is resolved, with guided replay (R-03) as the recommended alternative. Both decisions are independently reversible, which lowers the stakes but does not eliminate the ongoing maintenance cost once deployed.
+The web UI integration decision should be driven by readiness to publish safe content, not by waiting for feature completeness or external demand. Making GitHub's developer-centric complexity disappear for non-developer audiences is an accessibility imperative, not a nice-to-have. The session viewer has a clear path to implementation with three prerequisites — curated sessions, a documented redaction process, and a stable public-fabric deployment. The interactive demo should not be implemented until the experience gap problem is resolved, with guided replay (R-03) as the recommended alternative. Both decisions are independently reversible, which lowers the stakes but does not eliminate the ongoing curation cost once deployed.
 
-*Framework derived from the analysis in [analysis.md](analysis.md) and [risk-matrix.md](risk-matrix.md). Applies to GMI's public-fabric as of 2026-03-30.*
+*Framework derived from the analysis in [analysis.md](analysis.md) and [risk-matrix.md](risk-matrix.md). Revised to reflect the accessibility imperative: proactive implementation when content prerequisites are met, rather than reactive implementation when demand is demonstrated. Applies to GMI's public-fabric as of 2026-03-30.*
