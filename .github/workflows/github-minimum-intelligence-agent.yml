@@ -211,9 +211,11 @@ jobs:
             rm -rf "$TARGET/state"
 
             # Restore user-customised files from backup.
+            # Remove destination dirs first so cp -R creates them fresh
+            # instead of nesting the source inside an existing directory.
             if [ -f "$BACKUP/AGENTS.md" ]; then cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"; fi
-            if [ -d "$BACKUP/.pi" ];       then cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
-            if [ -d "$BACKUP/state" ];     then cp -R "$BACKUP/state" "$TARGET/state"; fi
+            if [ -d "$BACKUP/.pi" ];       then rm -rf "$TARGET/.pi"; cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
+            if [ -d "$BACKUP/state" ];     then rm -rf "$TARGET/state"; cp -R "$BACKUP/state" "$TARGET/state"; fi
           else
             # Fresh install.
             cp -R "$EXTRACTED/$TARGET" "$TARGET"
