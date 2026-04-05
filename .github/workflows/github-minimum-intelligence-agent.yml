@@ -212,7 +212,7 @@ jobs:
 
             # Restore user-customised files from backup.
             if [ -f "$BACKUP/AGENTS.md" ]; then cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"; fi
-            if [ -d "$BACKUP/.pi" ];       then cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
+            if [ -d "$BACKUP/.pi" ];       then mkdir -p "$TARGET/.pi" && cp -R "$BACKUP/.pi"/. "$TARGET/.pi"/; fi
             if [ -d "$BACKUP/state" ];     then cp -R "$BACKUP/state" "$TARGET/state"; fi
           else
             # Fresh install.
