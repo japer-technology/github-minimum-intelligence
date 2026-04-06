@@ -198,7 +198,11 @@ jobs:
 
           if [ "$ACTION" = "upgrade" ]; then
             # Back up user-customised files before replacing framework files.
+            # Always start with a clean backup directory — a stale backup from a
+            # previous run (on persistent runners) would cause cp -R to nest
+            # directories inside themselves (.pi/.pi/.pi).
             BACKUP="/tmp/mi-backup"
+            rm -rf "$BACKUP"
             mkdir -p "$BACKUP"
             if [ -f "$TARGET/AGENTS.md" ]; then cp "$TARGET/AGENTS.md" "$BACKUP/AGENTS.md"; fi
             if [ -d "$TARGET/.pi" ];       then cp -R "$TARGET/.pi" "$BACKUP/.pi"; fi
@@ -216,6 +220,13 @@ jobs:
             if [ -f "$BACKUP/AGENTS.md" ]; then cp "$BACKUP/AGENTS.md" "$TARGET/AGENTS.md"; fi
             if [ -d "$BACKUP/.pi" ];       then rm -rf "$TARGET/.pi"; cp -R "$BACKUP/.pi" "$TARGET/.pi"; fi
             if [ -d "$BACKUP/state" ];     then rm -rf "$TARGET/state"; cp -R "$BACKUP/state" "$TARGET/state"; fi
+
+            # Defensive cleanup: remove any nested .pi directories that may have
+            # been created by prior runs affected by the cp -R nesting bug.
+            if [ -d "$TARGET/.pi/.pi" ]; then
+              echo "⚠️  Removing nested .pi/.pi directory (artifact of prior nesting bug)."
+              rm -rf "$TARGET/.pi/.pi"
+            fi
           else
             # Fresh install.
             cp -R "$EXTRACTED/$TARGET" "$TARGET"
@@ -232,12 +243,13 @@ jobs:
           fi
 
       # 4. Ensure common ignore patterns are present in .gitignore so that
-      #    node_modules and OS junk files never get committed.
+      #    node_modules, OS junk files, and the pi agent's auto-created .pi/
+      #    directory at the repo root never get committed.
       - name: Ensure .gitignore entries
         if: steps.check-folder.outputs.action != 'skip'
         run: |
           touch .gitignore
-          for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store"; do
+          for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store" "/.pi/"; do
             grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
           done
 
