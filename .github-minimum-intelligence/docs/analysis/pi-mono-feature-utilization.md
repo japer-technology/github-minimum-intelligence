@@ -10,7 +10,7 @@ The monorepo publishes seven packages:
 
 | Package | Description | Used by GMI |
 |---|---|---|
-| `@mariozechner/pi-coding-agent` | Interactive coding agent CLI | **Yes** (v0.57.1) |
+| `@mariozechner/pi-coding-agent` | Interactive coding agent CLI | **Yes** (v0.65.1) |
 | `@mariozechner/pi-ai` | Unified multi-provider LLM API | No (transitive only) |
 | `@mariozechner/pi-agent-core` | Agent runtime with tool calling and state management | No (transitive only) |
 | `@mariozechner/pi-web-ui` | Web components for AI chat interfaces | No |
