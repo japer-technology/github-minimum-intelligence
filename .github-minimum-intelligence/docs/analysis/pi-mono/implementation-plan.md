@@ -1,6 +1,6 @@
 # Implementation Plan: pi-mono Feature Completion
 
-This document outlines the implementation plan for features identified in [pi-mono-feature-utilization.md](../pi-mono-feature-utilization.md) that remain unimplemented, plus additional pi-mono capabilities discovered during a comprehensive audit of the [pi-mono repository](https://github.com/badlogic/pi-mono) (packages/coding-agent v0.57.1+).
+This document outlines the implementation plan for features identified in [pi-mono-feature-utilization.md](../pi-mono-feature-utilization.md) that remain unimplemented, plus additional pi-mono capabilities discovered during a comprehensive audit of the [pi-mono repository](https://github.com/badlogic/pi-mono) (packages/coding-agent v0.65.1+).
 
 ---
 
@@ -179,4 +179,4 @@ The revised priority matrix promotes **additional built-in tools** and **pi-skil
 
 The highest-effort item remains the **SDK migration** (P3), which would replace the subprocess + shell pipeline with native TypeScript integration. This is deferred until the current subprocess approach shows concrete limitations.
 
-*Analysis based on pi-mono repository (github.com/badlogic/pi-mono), pi-coding-agent v0.57.1, and GMI codebase as of 2026-03-30.*
+*Analysis based on pi-mono repository (github.com/badlogic/pi-mono), pi-coding-agent v0.65.1, and GMI codebase as of 2026-04-07.*
