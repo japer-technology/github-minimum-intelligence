@@ -121,7 +121,7 @@ GMI claims that AI infrastructure must be governed by explicit ethical constrain
 
 ### Ideology Critique
 
-The Four Laws of AI, adapted from Asimov, are presented as governance. But critical theory distinguishes between **performative governance** (declaring rules) and **material governance** (enforcing them). The Four Laws are a governance *performance* — they signal ethical seriousness without providing enforcement mechanisms.
+The ethical governance constraints, adapted from Asimov, are presented as governance. But critical theory distinguishes between **performative governance** (declaring rules) and **material governance** (enforcing them). The governance constraints are a governance *performance* — they signal ethical seriousness without providing enforcement mechanisms.
 
 This is not unique to GMI; it mirrors a broader pattern in technology: **ethics washing**. Organizations publish ethical principles to preempt regulation, signal virtue, and deflect criticism — without implementing the operational changes that would make those principles binding. The question is not whether GMI's ethics are sincere (they may well be) but whether the structural form (Markdown file in a repo) is capable of producing the governance it claims.
 
@@ -133,7 +133,7 @@ This is not unique to GMI; it mirrors a broader pattern in technology: **ethics 
 | The LLM        | Receives constraints as prompt text — no mechanical obedience |
 | The model provider | Controls the model's training, safety filters, and system-level constraints — invisible governance layer *underneath* the user's constraints |
 
-The most significant power asymmetry is between the user (who writes the Four Laws file) and the model provider (who trained the model and controls its deepest behavioral dispositions). The user's ethical constraints are applied *on top of* the provider's constraints, which are neither visible nor modifiable. GMI's "textual constitutionalism" is a constitution written by the governed but enforced (or not) by a sovereign they cannot see.
+The most significant power asymmetry is between the user (who writes the governance constraints file) and the model provider (who trained the model and controls its deepest behavioral dispositions). The user's ethical constraints are applied *on top of* the provider's constraints, which are neither visible nor modifiable. GMI's "textual constitutionalism" is a constitution written by the governed but enforced (or not) by a sovereign they cannot see.
 
 ### Contradiction
 
@@ -184,7 +184,7 @@ Each repository has its own agent with its own configuration. There is no centra
 
 ### 7.3 Lowering Barriers to AI Governance
 
-By encoding governance as Markdown, GMI makes AI governance accessible to non-specialists. A developer does not need a PhD in AI ethics to read, modify, and review the Four Laws file. The barrier to participation in governance is lowered, even if the governance itself is imperfect.
+By encoding governance as Markdown, GMI makes AI governance accessible to non-specialists. A developer does not need a PhD in AI ethics to read, modify, and review the governance constraints file. The barrier to participation in governance is lowered, even if the governance itself is imperfect.
 
 ### 7.4 Honest Self-Assessment
 

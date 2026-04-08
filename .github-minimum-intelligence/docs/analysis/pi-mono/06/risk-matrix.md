@@ -125,7 +125,7 @@ The interactive demo has the most severe risk profile (2 critical + 6 high). The
 
 ### 5.1 Curation Failure Cascade
 
-If a session viewer curation failure occurs (SV-01, SV-02, SV-03, or SV-04), the consequence is not merely data exposure — it undermines the project's credibility on transparency and governance. The same project that publishes DEFCON levels and security assessments would have leaked sensitive data through its own published sessions. The reputational damage cascades beyond the specific incident.
+If a session viewer curation failure occurs (SV-01, SV-02, SV-03, or SV-04), the consequence is not merely data exposure — it undermines the project's credibility on transparency and governance. The same project that publishes operational readiness levels and security assessments would have leaked sensitive data through its own published sessions. The reputational damage cascades beyond the specific incident.
 
 **Implication:** The curation process must be treated as a security control, not a content workflow. Failed curation is a security incident, not an editorial oversight.
 

@@ -36,11 +36,11 @@ This makes agent reasoning inspectable in the same way agent actions are already
 
 ### Source
 
-Toulmin §5 Rebuttal — the Four Laws are prompt-level guidance, not runtime constraints; they can be overridden, ignored, or misinterpreted by the model.
+Toulmin §5 Rebuttal — the ethical governance constraints are prompt-level guidance, not runtime constraints; they can be overridden, ignored, or misinterpreted by the model.
 
 ### Recommendation
 
-Supplement the prompt-level Four Laws with runtime enforcement mechanisms:
+Supplement the prompt-level ethical governance constraints with runtime enforcement mechanisms:
 
 | Layer | Mechanism |
 |---|---|

@@ -128,7 +128,7 @@ Trust in automated systems is proportional to the ability to inspect, understand
 
 ---
 
-## 5. Ethical Claim — The Four Laws as Constraints
+## 5. Ethical Claim — Encoded Governance Constraints
 
 ### Claim
 
@@ -136,8 +136,8 @@ AI infrastructure must be governed by explicit, hierarchical ethical constraints
 
 ### Grounds
 
-- The Four Laws of AI (adapted from Asimov) establish a priority ordering: Do No Harm > Obey the Human > Preserve Integrity > Protect Humanity (Zeroth Law superseding all).
-- The laws are committed to the repository as `the-four-laws-of-ai.md` — versioned, diffable, and reviewable.
+- GMI's ethical constraints (adapted from Asimov) establish a priority ordering: Do No Harm > Obey the Human > Preserve Integrity > Protect Humanity.
+- The constraints are committed to the repository as versioned Markdown — diffable and reviewable.
 - The agent's behavioral boundaries are defined in `BOOTSTRAP.md`, `APPEND_SYSTEM.md`, and `AGENTS.md` — all checked-in files.
 
 ### Warrant
@@ -156,7 +156,7 @@ Ethical constraints that are inspectable and co-located with the system they gov
 
 ### Rebuttal
 
-- LLMs do not "obey" laws the way deterministic programs execute rules. The Four Laws are prompt-level guidance, not runtime constraints; they can be overridden, ignored, or misinterpreted by the model.
+- LLMs do not "obey" laws the way deterministic programs execute rules. The ethical constraints are prompt-level guidance, not runtime constraints; they can be overridden, ignored, or misinterpreted by the model.
 - Encoding ethics as Markdown creates an illusion of governance without enforcement. Without runtime guardrails (input validation, output filtering, action sandboxing), the laws are advisory at best.
 - The Zeroth Law ("Protect Humanity") is too abstract for an individual repository agent to operationalize meaningfully.
 

@@ -176,7 +176,7 @@ AI infrastructure must be governed by explicit, hierarchical ethical constraints
 ```
 P1: Ethical constraints that are inspectable and co-located with the 
     system they govern are more likely to be maintained and enforced.
-P2: GMI encodes its ethical constraints (the Four Laws) as versioned 
+P2: GMI encodes its ethical constraints as versioned 
     Markdown in the repository.
 P3: The repository is the substrate GMI operates on.
 ∴ C: GMI's ethical constraints are more likely to be maintained and 
@@ -193,7 +193,7 @@ P3: The repository is the substrate GMI operates on.
 | Premise | Status | Challenge |
 |---------|--------|-----------|
 | P1      | **Contestable** | "More likely to be maintained" is plausible for human-readable configuration. "More likely to be enforced" conflates *visibility* with *enforcement*. A visible constraint without a runtime enforcement mechanism is advisory, not enforced. |
-| P2      | **True** | Verifiable: `the-four-laws-of-ai.md` exists in the repo. |
+| P2      | **True** | Verifiable: ethical constraint files exist in the repo. |
 | P3      | **True** | The agent reads its configuration from the repo filesystem. |
 
 ### Logical Distinction

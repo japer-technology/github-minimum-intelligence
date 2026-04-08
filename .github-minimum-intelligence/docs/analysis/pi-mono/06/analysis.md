@@ -56,7 +56,7 @@ A session viewer transforms abstract descriptions into concrete evidence. A visi
 
 ### 2.4 Transparency as a Governance Artifact
 
-GMI's documentation repeatedly emphasises transparency, auditability, and institutional trust. The project's Toulmin-based analyses, DEFCON levels, and security assessments all serve a governance function — they make the system's reasoning and risk posture visible. A session viewer extends this governance commitment to the agent's actual behaviour.
+GMI's documentation repeatedly emphasises transparency, auditability, and institutional trust. The project's Toulmin-based analyses, operational readiness levels, and security assessments all serve a governance function — they make the system's reasoning and risk posture visible. A session viewer extends this governance commitment to the agent's actual behaviour.
 
 Published session transcripts become a form of operational audit trail:
 

@@ -158,7 +158,7 @@ The Aff establishes a **necessary condition** for trust. The Neg demonstrates it
 
 **Harm:** Ethical constraints in vendor system prompts are invisible to users, unmodifiable, and unaccountable. Users cannot verify what rules govern their AI, cannot adjust them for their context, and cannot audit whether the rules are followed.
 
-**Plan:** Encode ethical constraints (the Four Laws of AI) as Markdown files in the repository. Make them subject to the same version control, review, and modification process as code.
+**Plan:** Encode ethical constraints as Markdown files in the repository. Make them subject to the same version control, review, and modification process as code.
 
 **Solvency:** Version-controlled ethics files are readable, diffable, and governed by CODEOWNERS. Changes require explicit review. The constraints are transparent by construction.
 
@@ -168,7 +168,7 @@ The Aff establishes a **necessary condition** for trust. The Neg demonstrates it
 
 **Kritik (fundamental challenge):** The Aff conflates *visibility* with *governance*. A Markdown file is not a law; it is a suggestion. The LLM does not mechanically obey the file — it receives the text as part of a prompt and may follow, ignore, or misinterpret it. Encoding ethics as text creates an **illusion of governance** without enforcement machinery.
 
-**Disadvantage (False Security):** Publishing ethical constraints that are not enforced at runtime is worse than having no published constraints, because it gives users a false sense of safety. Users who read the Four Laws and believe they are enforced may take risks they would not take with a system that made no ethical claims.
+**Disadvantage (False Security):** Publishing ethical constraints that are not enforced at runtime is worse than having no published constraints, because it gives users a false sense of safety. Users who read the governance constraints and believe they are enforced may take risks they would not take with a system that made no ethical claims.
 
 **Counterplan:** Implement ethical constraints as **runtime enforcement mechanisms** — input validation, output filtering, and action sandboxing — rather than as prompt-level text. Publish the enforcement rules (not just the aspirational text) as the governance artifact.
 

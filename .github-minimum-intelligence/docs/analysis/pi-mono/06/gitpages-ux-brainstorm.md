@@ -53,7 +53,7 @@ These ideas use Pages to present information that already exists in the reposito
 
 ### 2.3 Governance Dashboard
 
-**Concept:** A single page that displays the current DEFCON level, active security advisories, the Four Laws compliance status, and links to governance documents. Updated automatically when governance files change.
+**Concept:** A single page that displays the current operational readiness level, active security advisories, governance compliance status, and links to governance documents. Updated automatically when governance files change.
 
 **How Pages serves it:** A static HTML page that reads from a `governance-status.json` file generated during the build step. The JSON is derived from parsing governance Markdown files for structured metadata.
 

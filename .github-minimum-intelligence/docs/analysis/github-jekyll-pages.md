@@ -94,7 +94,7 @@ Jekyll collections map naturally to the existing documentation structure:
 |---|---|---|
 | `analyses` | `docs/analysis/` | Technical analyses (data limits, this document, future studies) |
 | `questions` | `docs/` | Foundational questions (what, who, when, where, how, how much) |
-| `governance` | `docs/` | Security assessments, incident response, DEFCON levels, Four Laws |
+| `governance` | `docs/` | Security assessments, incident response, operational readiness, governance framework |
 | `sessions` | `state/sessions/` | Agent conversation transcripts |
 
 Each collection gets its own index page, its own feed, and its own rendering rules — all driven by the files that already exist.
@@ -186,7 +186,7 @@ Each document in `docs/analysis/` becomes a permanent, citable page. External te
 
 ### 6.2 Governance Transparency
 
-The security assessment, Four Laws, DEFCON levels, and incident response procedures — currently accessible only to repository viewers — become a published governance framework. This is relevant for organizations evaluating adoption: they can review the safety model before granting repository access.
+The security assessment, governance framework, operational readiness levels, and incident response procedures — currently accessible only to repository viewers — become a published governance resource. This is relevant for organizations evaluating adoption: they can review the safety model before granting repository access.
 
 ### 6.3 Knowledge Accumulation Over Time
 

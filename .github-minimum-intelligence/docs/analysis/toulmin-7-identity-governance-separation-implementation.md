@@ -254,7 +254,6 @@ Replace `<repo-admin-or-team>` with the GitHub username or team slug responsible
 - Additional entries could protect other governance-adjacent files:
 
 ```
-.github-minimum-intelligence/docs/the-four-laws-of-ai.md @<repo-admin>
 .github-minimum-intelligence/docs/security-assessment.md @<repo-admin>
 .github-minimum-intelligence/docs/final-warning.md @<repo-admin>
 ```
