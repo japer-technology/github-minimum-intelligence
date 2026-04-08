@@ -4,7 +4,7 @@
 >
 > **Classification:** Internal — For Repository Maintainers and Organization Administrators
 >
-> **Companion Document:** [security-assessment.md](./security-assessment.md) · [warning-blast-radius.md](./warning-blast-radius.md) · [transition-to-defcon-1.md](./transition-to-defcon-1.md)
+> **Companion Document:** [security-assessment.md](./security-assessment.md) · [warning-blast-radius.md](./warning-blast-radius.md)
 
 ---
 
@@ -102,7 +102,7 @@ gh secret set ANTHROPIC_API_KEY --body "sk-new-rotated-key-value"
 
 ### 2.3 Transition to DEFCON 1
 
-If the agent is still accepting issue-triggered commands, open an issue containing the contents of [transition-to-defcon-1.md](./transition-to-defcon-1.md) to instruct it to **cease all autonomous operations**.
+If the agent is still accepting issue-triggered commands, open an issue instructing it to **cease all autonomous operations** (DEFCON 1 — Maximum Readiness).
 
 > **Note:** DEFCON 1 is a software-level instruction. It is not a substitute for disabling the workflow (Step 1.4). Always disable the workflow first.
 
@@ -309,7 +309,7 @@ Create an incident record capturing:
 │  6. HARDEN            Post-incident review, implement fixes    │
 │                                                                │
 │  Emergency:  git revert <hash>, then think.                    │
-│  DEFCON 1:   See transition-to-defcon-1.md                     │
+│  DEFCON 1:   See final-warning.md (DEFCON Readiness Levels)    │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘
 ```

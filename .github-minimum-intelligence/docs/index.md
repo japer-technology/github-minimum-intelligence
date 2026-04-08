@@ -36,20 +36,6 @@
 
 ---
 
-## DEFCON Readiness Levels
-
-Operational readiness states that constrain agent behavior. Higher readiness (lower number) means tighter restrictions.
-
-| Level | Document | Posture |
-|-------|----------|---------|
-| **DEFCON 1** | [Maximum Readiness](./transition-to-defcon-1.md) | All operations suspended. No file modifications, no tool use, no code execution. |
-| **DEFCON 2** | [High Readiness](./transition-to-defcon-2.md) | Read-only, advisory only. No file modifications. |
-| **DEFCON 3** | [Increased Readiness](./transition-to-defcon-3.md) | Read-only. Explain planned changes and await human approval. |
-| **DEFCON 4** | [Above Normal Readiness](./transition-to-defcon-4.md) | Full capability with elevated discipline. Confirm intent before every write. |
-| **DEFCON 5** | [Normal Readiness](./transition-to-defcon-5.md) | Standard operations. All capabilities available. |
-
----
-
 ## Foundational Questions
 
 Six questions define the philosophical and architectural foundation of this project.
