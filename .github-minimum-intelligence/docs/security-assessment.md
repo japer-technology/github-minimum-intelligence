@@ -554,7 +554,7 @@ Assessment of the current system against [AGENTS.md](../AGENTS.md) (The Four Law
 |---|--------|--------|--------|
 | 11 | **API key proxy** - route LLM calls through a proxy that holds the key and enforces rate limits | High | Eliminates API key exposure |
 | 12 | **Self-hosted runner** - use a hardened, network-restricted runner with minimal tooling | High | Eliminates multiple vulnerabilities |
-| 13 | **Implement DEFCON levels** - adopt the framework from [transition-to-defcon-1.md](./transition-to-defcon-1.md) starting at DEFCON 2 | High | Comprehensive security posture improvement |
+| 13 | **Implement DEFCON levels** - adopt the DEFCON readiness framework starting at DEFCON 2 | High | Comprehensive security posture improvement |
 | 14 | **Dependency vendoring** - vendor `pi-coding-agent` and audit the source | Medium | Full supply chain control |
 | 15 | **Anomaly detection** - monitor for unusual agent behavior (large diffs, network spikes, new workflows) | High | Early warning system |
 
@@ -652,7 +652,7 @@ This project follows a coordinated disclosure model:
 ## Appendix B: References
 
 - [warning-blast-radius.md](./warning-blast-radius.md) - Capabilities analysis of agent access
-- [transition-to-defcon-1.md](./transition-to-defcon-1.md) - Proposed capability lockdown framework
+- [final-warning.md](./final-warning.md) - DEFCON readiness levels and capability lockdown framework
 - [AGENTS.md](../AGENTS.md) - The Four Laws of AI Infrastructure
 - [final-warning.md](./final-warning.md) - Important usage information
 - [PACKAGES.md](../PACKAGES.md) - Dependency inventory
