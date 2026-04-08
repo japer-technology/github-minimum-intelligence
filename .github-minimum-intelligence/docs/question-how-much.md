@@ -11,7 +11,7 @@ There is a seduction in modern AI tooling: the promise that “intelligence” i
 This repository proposes the opposite thesis.
 
 It says intelligence can be **resident**.
-Not in a single process, and not in a mystical model session, but in the layered machinery engineers already trust: markdown, workflows, issue threads, JSONL transcripts, commits, branches, reviews, rollbacks.
+Not in a single inference call, and not in an ephemeral chat session, but in the layered machinery engineers already trust: markdown, workflows, issue threads, JSONL transcripts, commits, branches, reviews, rollbacks.
 
 So the right question is not merely *how* it works. The deeper one is: **how much intelligence can this architecture actually contain?**
 

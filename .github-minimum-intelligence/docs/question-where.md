@@ -12,7 +12,7 @@ Most AI tooling treats your codebase like an export format. You copy snippets ou
 
 ## Where does runtime happen? In your CI, not in someone else’s product
 
-The workflow template (`.github-minimum-intelligence/install/github-minimum-intelligence-agent.yml`) is explicit: issue events and issue comments trigger a job, collaborator permissions are checked, the repository is checked out, Bun is installed, and the agent scripts run locally in the Actions runner.
+The workflow (`.github/workflows/github-minimum-intelligence-agent.yml`) is explicit: issue events and issue comments trigger a job, collaborator permissions are checked, the repository is checked out, Bun is installed, and the agent scripts run locally in the Actions runner.
 
 That matters because it collapses the distance between “assistant” and “environment.” The agent doesn’t infer your project structure from a pasted tree; it executes in a fresh clone of the actual tree. It sees what your developers would see at HEAD.
 
@@ -61,7 +61,7 @@ That design choice answers “where is trust enforced?” with impressive restra
 
 ## Where does installation land? As a folder, not an onboarding process
 
-The installer script (`MINIMUM-INTELLIGENCE-INSTALLER.ts`) shows the project’s ergonomics: copy workflow template, copy hatch template, initialize `AGENTS.md`, install dependencies. The `setup.sh` script inside `.github-minimum-intelligence/script/` mirrors that one-command posture.
+The `run-install` workflow job handles setup automatically: download the latest release, copy templates, initialize `AGENTS.md`, install dependencies. No external installer binary, no shell script to source—just a workflow job that commits the result.
 
 This is subtle but essential. By making installation file-centric, the project ensures the answer to “where is the product?” remains simple: in `.github-minimum-intelligence/` plus generated `.github/` workflow/template files. The “platform” is a commit.
 

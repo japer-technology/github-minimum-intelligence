@@ -10,7 +10,7 @@ At a high level, Minimum Intelligence fuses four existing systems into one loop:
 
 1. **GitHub Issues** as conversational input.
 2. **GitHub Actions** as execution runtime.
-3. **A language model provider** as reasoning substrate.
+3. **An LLM provider** (Anthropic, OpenAI, Google, etc.) as reasoning substrate.
 4. **Git commits** as durable memory.
 
 What matters is not each part in isolation; what matters is their composition. The repo turns routine collaboration infrastructure into an operating system for an agent.
@@ -21,7 +21,7 @@ What matters is not each part in isolation; what matters is their composition. T
 
 The loop begins when a user opens an issue or posts a comment. The workflow `github-minimum-intelligence-agent.yml` subscribes to both events and launches a job that performs identity checks, setup, and agent execution. Before anything else, it verifies the actor has write-level permissions, which means intelligence is not only embedded—it is governed by repository permissions instead of an external ACL surface. The same mechanism that controls who can push code controls who can instruct the agent.
 
-Then comes a subtle but important transition: the workflow checks out the default branch, installs Bun, runs a lifecycle preinstall script, installs dependencies, and executes the agent entrypoint. In other words, a social event (a comment) is transformed into a deterministic build-and-run pipeline. The prompt is treated like source input.
+Then comes a subtle but important transition: the workflow checks out the default branch, installs Bun, restores cached dependencies, and executes the agent entrypoint (`lifecycle/agent.ts`). A social event—a comment—is transformed into a deterministic build-and-run pipeline. The prompt is treated like source input.
 
 This is the first major answer to **how**: by expressing AI interaction as CI/CD. A chatbot session is reinterpreted as a reproducible automation run.
 
@@ -52,9 +52,9 @@ So another answer to **how** is: through *textual constitutionalism*. The agent 
 
 ## How does installation stay minimal while capability stays broad?
 
-The installer script (`MINIMUM-INTELLIGENCE-INSTALLER.ts`) is pragmatic: create missing `.github` directories, copy templates, initialize agent instructions, install dependencies. No control plane, no migration tool, no provisioning dashboard. The workflow for adoption is intentionally close to a developer’s muscle memory: add files, run script, commit, push, open issue.
+Installation is handled by a dedicated workflow job (`run-install`) that downloads the latest release, copies templates into `.github-minimum-intelligence/`, initializes `AGENTS.md` from a default template, and installs npm dependencies—all triggered automatically. No control plane, no migration tool, no provisioning dashboard. The adoption path is close to a developer’s muscle memory: enable the workflow, let it run, commit, open an issue.
 
-This low ceremony is essential. The project’s promise is that intelligence should feel like adding a library, not onboarding to a platform. The setup script in the root reinforces this with a one-liner install path.
+This low ceremony is essential. The project’s promise is that intelligence should feel like adding a library, not onboarding to a platform.
 
 Minimalism here is not absence of power; it is a design constraint that keeps power legible.
 

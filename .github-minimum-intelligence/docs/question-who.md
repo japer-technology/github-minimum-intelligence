@@ -66,11 +66,11 @@ That is a profoundly different answer to "who is this assistant?" It is: **the a
 
 ## 5) Who has power? Permissions, not vibes.
 
-The `app-manifest.json` reveals a core truth often hidden in AI tooling marketing: agency is bounded by permission scopes and event subscriptions. Issues, contents, actions, metadata; issue and installation events—these are not implementation footnotes. They are the constitutional limits of the actor.
+The workflow’s `Authorize` step reveals a core truth often hidden in AI tooling marketing: agency is bounded by repository permission levels. The agent queries the GitHub API for the actor’s collaborator permission and rejects anything below `write` access—these are not implementation footnotes. They are the constitutional limits of the actor.
 
-In other words, identity in this system is inseparable from authority. "Who" is never just personality. "Who" is what token can do.
+In other words, identity in this system is inseparable from authority. "Who" is never just personality. "Who" is what the scoped `GITHUB_TOKEN` can do.
 
-Minimum Intelligence is strongest where it is least romantic: it maps power to explicit config, and config to repository ownership. This is why the model can be swappable, the package can be pinned, and behavior can remain under local control.
+Minimum Intelligence is strongest where it is least romantic: it maps power to repository collaborator permissions, and those permissions to repository ownership. This is why the model can be swappable, the package can be pinned, and behavior can remain under local control.
 
 ---
 
