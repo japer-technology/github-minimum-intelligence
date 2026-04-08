@@ -131,7 +131,7 @@ If this model generalizes, we should expect an ecosystem where:
 - organization policy is encoded into agent behavior files,
 - and model choice becomes a swappable dependency rather than a platform lock-in decision.
 
-In that future, “using AI for software” will feel less like consulting an oracle and more like collaborating with a junior-to-senior teammate whose memory is literally your commit graph.
+In that future, “using AI for software” will feel less like consulting an oracle and more like collaborating with a persistent agent whose memory is literally your commit graph.
 
 ---
 

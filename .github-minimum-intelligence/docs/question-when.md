@@ -16,7 +16,7 @@ That distinction changes everything.
 
 Most AI-assisted development systems behave like brilliant amnesiacs. They can reason, summarize, and generate code—yet each interaction begins with a hidden tax: reconstructing context. You re-explain architecture, repeat old constraints, and restate decisions you already made last week.
 
-The repository-native model rejects this waste. Here, continuity does not depend on model RAM or a vendor-held transcript. It depends on durable artifacts:
+The repository-native model rejects this waste. Here, continuity does not depend on a model’s context window or a vendor-held transcript. It depends on durable artifacts:
 
 - Issue threads for conversational intent
 - Git history for executed decisions
