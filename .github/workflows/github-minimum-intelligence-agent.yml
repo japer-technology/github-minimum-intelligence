@@ -427,6 +427,7 @@ jobs:
           MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PI_CACHE_RETENTION: long
         run: bun .github-minimum-intelligence/lifecycle/agent.ts
 
   # ────────────────────────────────────────────────────────────────────────────
