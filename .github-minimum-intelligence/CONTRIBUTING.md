@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing. This project values transparency, auditability, and human judgment above all else. Every contribution — code, documentation, or discussion — becomes part of the repository's permanent history.
 
-Before contributing, please read [Before You Begin](docs/final-warning.md) and the [Four Laws of AI](docs/the-four-laws-of-ai.md).
+Before contributing, please read [Before You Begin](docs/final-warning.md).
 
 ---
 
