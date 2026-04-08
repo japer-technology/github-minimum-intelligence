@@ -8,15 +8,11 @@ Many AI tools can hover around Git: they can read files, suggest changes, even g
 
 The `pi` coding agent and the Minimum Intelligence framework eliminate that context gap by embedding the AI directly in the repository - not as a service integration, but as a versioned dependency that operates inside your existing Git, Actions, and Issues infrastructure.
 
-#### What Where How Who When Why
-
 ## What - A `devDependency`, Not a Platform
 
 > An npm package you install in your tree - no hosted backend, no OAuth handshake, no new trust boundary beyond what you configure in Actions YAML.
 
-`@mariozechner/pi-coding-agent` is an npm package. Minimum Intelligence is a repo-local configuration layer. There is no hosted backend, no OAuth handshake, no tenant isolation to think about.
-
-You install it. It runs in your tree. That's the entire vendor relationship.
+`@mariozechner/pi-coding-agent` is an npm package. Minimum Intelligence is a repo-local configuration layer. You install it, it runs in your tree, and that's the entire vendor relationship.
 
 This means standard supply-chain practices apply directly: version pinning, lockfile auditing, vendoring, forking. The agent's capabilities are scoped to what your workflow file grants it - the same GITHUB_TOKEN permissions model you already manage. No new trust boundary is introduced beyond what you explicitly configure in your Actions YAML.
 
@@ -28,7 +24,7 @@ If the upstream package disappears tomorrow, your pinned version still works. If
 
 > Inside a GitHub Actions runner with a full checkout of your repository - direct filesystem access, no API abstraction layer, no context-window packing heuristics.
 
-The agent runs inside a GitHub Actions runner with a full checkout of your repository. It has direct filesystem access to your worktree - no API abstraction layer, no context-window packing heuristics on your end.
+Colocation with the worktree means the gap between "assistant" and "environment" collapses. The agent doesn't infer your project structure from pasted snippets or compressed summaries - it operates directly on the checkout.
 
 Concretely:
 - **Runtime**: GitHub Actions (or any CI environment you wire up)
@@ -106,12 +102,18 @@ The practical case is straightforward:
 | **Auditability** | Every agent action is a Git commit with full diff |
 | **Vendor lock-in** | npm dependency - pin, fork, or replace at will |
 | **Access control** | Standard GitHub permissions, branch protection, CODEOWNERS |
-| **Reproducibility** | Agent behavior is deterministic given the same model + config + repo state |
+| **Reproducibility** | Agent behavior is reproducible given the same model + config + repo state |
 | **Offline/air-gapped** | Runs anywhere you can host a runner and reach an LLM endpoint |
 
 But the architectural argument runs deeper than any checklist. Centralizing AI behind a platform means your codebase becomes a second-class citizen in someone else's system. Repository-native AI inverts that: the codebase is the primary system, and the AI is a tool within it - subject to the same governance, the same review process, and the same version control as everything else you ship.
 
 The repository is already where your team coordinates, where decisions are recorded, and where the canonical state of your system lives. Making it the AI's native habitat isn't a philosophical statement - it's an engineering decision that eliminates an entire class of context-synchronization problems and keeps your toolchain under your control.
+
+---
+
+[Index](./index.md) · [Questions Overview](./questions.md) · [README](../../README.md)
+
+---
 
 <p align="center">
   <picture>
