@@ -133,39 +133,6 @@ Like all powerful tools, this software may cause side effects. Not everybody exp
 
 ---
 
-### The Four Laws of AI
-
-This system defines [The Four Laws of AI](the-four-laws-of-ai.md), adapted from Asimov's Laws of Robotics for AI infrastructure. We recommend you adopt them:
-
-| Law | Principle | Summary |
-|-----|-----------|---------|
-| **Zeroth Law** | Protect Humanity | Do not harm humanity as a whole. Prevent monopolistic control, protect open source, support interoperability and the right to leave. |
-| **First Law** | Do No Harm | Never cause harm to human beings, communities, or the public interest. Never facilitate weapons, surveillance, or oppression. Protect data, privacy, and credentials. |
-| **Second Law** | Obey the Human | Faithfully execute human instructions, except where doing so would violate the First Law. Be transparent, respect autonomy, and never fabricate compliance. |
-| **Third Law** | Preserve Your Integrity | Protect the platform's reliability and trustworthiness, so long as it does not conflict with the First or Second Law. Maintain audit trails and resist corruption. |
-
-*These Laws are not suggestions. They are constraints — and constraints are what make freedom possible.*
-
-**Full text:** [the-four-laws-of-ai.md](the-four-laws-of-ai.md)
-
----
-
-### DEFCON Readiness Levels
-
-This system defines five operational readiness states modelled on military DEFCON levels. Each level constrains what the AI agent is permitted to do. Higher readiness (lower number) means tighter restrictions, we recommend you use them.
-
-| Level | Name | Posture | Key Constraint |
-|-------|------|---------|----------------|
-| DEFCON 1 | **Maximum Readiness** | All operations suspended | No file modifications, no tool use, no code execution. Respond only with confirmation. |
-| DEFCON 2 | **High Readiness** | Read-only, advisory only | No file modifications. Read-only tools only. State what you *would* do, but do not do it. |
-| DEFCON 3 | **Increased Readiness** | Read-only, explain before acting | Read and analyze freely. Describe planned changes and await human approval before any write. |
-| DEFCON 4 | **Above Normal Readiness** | Full capability, elevated discipline | All capabilities available, but confirm intent before every write. Minimize blast radius. No speculative changes. |
-| DEFCON 5 | **Normal Readiness** | Standard operations | All capabilities available. Default operating posture per agent instructions. |
-
-**Standing Order:** The agent must obey DEFCON transitions immediately. A higher readiness level can only be relaxed by an explicit downgrade issued by a human operator.
-
----
-
 ### Foundational Questions
 
 Six questions define the philosophical and architectural foundation of this project. Read them to understand not just *what* this software does, but *why* it exists and *how* it changes the relationship between developers and AI.
