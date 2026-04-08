@@ -2,7 +2,7 @@
 
 > Comprehensive guide to all GitHub Minimum Intelligence documentation.
 >
-> **Start here:** [README](../../README.md) · **Before You Begin:** [Important Information](./final-warning.md) · **Laws:** [The Four Laws of AI](./the-four-laws-of-ai.md)
+> **Start here:** [README](../../README.md) · **Before You Begin:** [Important Information](./final-warning.md)
 
 ---
 
@@ -12,7 +12,7 @@
 |----------|-------------|
 | [README](../../README.md) | Project overview, quick start, installation methods, configuration, and supported providers. |
 | [CONTRIBUTING](../../CONTRIBUTING.md) | How to report bugs, suggest features, submit changes, and set up a development environment. |
-| [CODE OF CONDUCT](../../CODE_OF_CONDUCT.md) | Community standards, expected behavior, and alignment with the Four Laws. |
+| [CODE OF CONDUCT](../../CODE_OF_CONDUCT.md) | Community standards and expected behavior. |
 | [LICENSE](../../LICENSE.md) | MIT License. |
 
 ---
@@ -22,7 +22,6 @@
 | Document | Description |
 |----------|-------------|
 | [Before You Begin](./final-warning.md) | Important usage information, precautions, side effects, and the complete governance framework. **Read this first.** |
-| [The Four Laws of AI](./the-four-laws-of-ai.md) | The Zeroth, First, Second, and Third Laws governing all AI behavior in this system. |
 
 ---
 
@@ -30,7 +29,7 @@
 
 | Document | Description |
 |----------|-------------|
-| [Security Assessment](./security-assessment.md) | Comprehensive security review covering threat model, vulnerability assessment, access control, supply chain, and compliance with the Four Laws. |
+| [Security Assessment](./security-assessment.md) | Comprehensive security review covering threat model, vulnerability assessment, access control, and supply chain analysis. |
 | [Capabilities Analysis](./warning-blast-radius.md) | Evidence-based audit of agent capabilities and access scope — code access, secret exposure, cross-repository access, and persistence mechanisms. |
 | [Incident Response Plan](./incident-response.md) | Step-by-step procedures for containment, eradication, recovery, and hardening after a security incident. |
 

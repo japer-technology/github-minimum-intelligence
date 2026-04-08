@@ -31,7 +31,7 @@ Each recommendation traces to the specific frameworks that identify it, and is s
 | **A1** | Context Through Colocation ("The Repository Is the Mind") |
 | **A2** | Infrastructural Superiority ("Zero New Infrastructure") |
 | **A3** | Trust Through Auditability ("Sovereignty Through Legibility") |
-| **A4** | Ethics as Encoded Constraints ("The Four Laws") |
+| **A4** | Ethics as Encoded Constraints |
 | **A5** | Identity Through Dialogue ("Textual Constitutionalism") |
 
 ---
@@ -161,7 +161,7 @@ Rhetoric's audience analysis (§8.2) identifies segments where GMI's arguments a
 | ID | Current Gap | Recommended Fix | Affects | Frameworks |
 |---|---|---|---|---|
 | AF-31 | Enterprise architects find no scale, compliance, or SLA discussion | Add a section addressing enterprise considerations: how GMI's properties (auditability, configuration-as-code) map to compliance requirements, and where they do not | A2, A3 | RH §8.2, DF §3, SM §3 |
-| AF-32 | AI safety researchers find ethical claims stronger than evidence supports | Reframe the Four Laws as a **governance transparency** mechanism rather than an **enforcement** mechanism. Cite the distinction between performative and material governance | A4 | CT §5, RH §6, SM §5, DF §5 |
+| AF-32 | AI safety researchers find ethical claims stronger than evidence supports | Reframe the ethical governance constraints as a **governance transparency** mechanism rather than an **enforcement** mechanism. Cite the distinction between performative and material governance | A4 | CT §5, RH §6, SM §5, DF §5 |
 | AF-33 | Vendor-ecosystem users are counter-positioned as the "other" | Reframe the sovereignty narrative as a **complement** to vendor tools, not a **replacement**. Acknowledge that different deployment models serve different needs | A1, A2 | RH §8.2, CT §7 |
 
 **Rationale:** Expanding the argument's audience does not require weakening it. Honest qualification and explicit scoping convert hostile audiences into potential adopters.
@@ -176,7 +176,7 @@ Critical theory identifies genuine emancipatory elements in GMI that are underem
 |---|---|---|---|---|
 | AF-34 | **Demystification**: Making agent configuration visible as editable text reduces the mystification that concentrates power in AI providers | Emphasize transparency as a power-redistribution mechanism, not just a trust mechanism | A3, A4 | CT §7.1, RH §5 |
 | AF-35 | **Decentralization**: Each repository has its own agent — no central service can unilaterally change behavior across all users | Highlight this as a structural differentiator from platform-hosted AI, where a single model update affects millions | A1, A2 | CT §7.2, DF §2 |
-| AF-36 | **Accessible governance**: Encoding governance as Markdown lowers the barrier to participation — no AI ethics PhD required to review the Four Laws | Reframe the ethical argument around accessibility of governance participation, not enforcement effectiveness | A4 | CT §7.3, RH §6 |
+| AF-36 | **Accessible governance**: Encoding governance as Markdown lowers the barrier to participation — no AI ethics PhD required to review the governance constraints | Reframe the ethical argument around accessibility of governance participation, not enforcement effectiveness | A4 | CT §7.3, RH §6 |
 | AF-37 | **Reflexive self-assessment**: Voluntarily applying critical analysis to one's own work is an emancipatory practice that refuses the posture of neutrality | Continue and expand the self-assessment practice. Reference it explicitly as a trust signal in the trust argument | A3 | CT §7.4, RH §5 |
 
 **Rationale:** These elements survive every framework's critique. They are the residue that remains after formal logic tests soundness, the scientific method tests falsifiability, debate tests adversarial resilience, and critical theory tests power relations.

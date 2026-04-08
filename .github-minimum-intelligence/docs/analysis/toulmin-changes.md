@@ -33,7 +33,7 @@ Changes that make the agent's reasoning process inspectable alongside its action
 
 ## 3. Runtime Ethical Guardrails
 
-Changes that move the Four Laws from prompt-level aspiration to enforceable runtime constraints.
+Changes that move the ethical governance constraints from prompt-level aspiration to enforceable runtime constraints.
 
 | ID | Change | Source | File(s) | Status |
 |---|---|---|---|---|

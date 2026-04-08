@@ -135,7 +135,7 @@ The sovereignty claim implicitly *praises* the open-source developer (transparen
 
 ---
 
-## 6. Claim 4 — The Four Laws as Ethical Foundation
+## 6. Claim 4 — Encoded Ethics as Governance Foundation
 
 ### The Claim
 
@@ -156,7 +156,7 @@ The logical structure is: constraints should be inspectable → inspectable mean
 
 ### Pathos Appeal
 
-The Four Laws appeal to the audience's desire for AI safety and alignment — one of the most emotionally charged topics in technology. Framing GMI as ethically governed positions the project on the "right side" of the AI safety debate.
+The ethical governance constraints appeal to the audience's desire for AI safety and alignment — one of the most emotionally charged topics in technology. Framing GMI as ethically governed positions the project on the "right side" of the AI safety debate.
 
 **Strength:** High as a positioning move. The project signals values alignment with safety-conscious developers.
 **Risk:** The gap between stated ethics and operational enforcement is a credibility risk. If the agent violates the laws in practice, the ethical framing becomes a liability.

@@ -149,7 +149,7 @@ Trust in automated systems is proportional to the ability to inspect, understand
 
 ---
 
-## 5. Ethical Claim — The Four Laws as Constraints
+## 5. Ethical Claim — Encoded Governance Constraints
 
 ### Claim
 
@@ -157,8 +157,8 @@ AI infrastructure must be governed by explicit, hierarchical ethical constraints
 
 ### Grounds
 
-- The Four Laws of AI (adapted from Asimov) establish a priority ordering: Do No Harm > Obey the Human > Preserve Integrity > Protect Humanity (Zeroth Law superseding all).
-- The laws are committed to the repository as `the-four-laws-of-ai.md` — versioned, diffable, and reviewable.
+- GMI's ethical constraints (adapted from Asimov) establish a priority ordering: Do No Harm > Obey the Human > Preserve Integrity > Protect Humanity.
+- The constraints are committed to the repository as versioned Markdown — diffable and reviewable.
 - The agent's behavioral boundaries are defined in `BOOTSTRAP.md`, `APPEND_SYSTEM.md`, and `AGENTS.md` — all checked-in files.
 - Input validation rejects or sanitizes prompts containing known injection patterns before they reach the LLM, enforcing the "Do No Harm" principle at the input boundary.
 - Output filtering scans agent-generated diffs for dangerous patterns (credential exposure, workflow self-modification, destructive shell commands) before committing, enforcing "Do No Harm" at the output boundary.

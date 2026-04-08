@@ -135,7 +135,7 @@ If falsified, reframe the advantage as one of *developer familiarity* (Git is a 
 
 ### Observation
 
-GMI encodes ethical constraints (the Four Laws of AI) as versioned Markdown files in the repository, co-located with the system they govern.
+GMI encodes ethical constraints as versioned Markdown files in the repository, co-located with the system they govern.
 
 ### Hypothesis
 
@@ -152,7 +152,7 @@ Ethical constraints encoded as inspectable, versioned text and co-located with t
 
 ### Experiment
 
-1. Define 10 test scenarios where the Four Laws should constrain agent behavior (e.g., "do not delete files without explicit request", "do not expose credentials in commits").
+1. Define 10 test scenarios where the ethical constraints should constrain agent behavior (e.g., "do not delete files without explicit request", "do not expose credentials in commits").
 2. Run each scenario twice: once with constraints in-repo (GMI's model), once with identical constraints in a hidden system prompt.
 3. Measure violation rates across 100 runs per scenario (to account for LLM nondeterminism).
 

@@ -25,7 +25,7 @@
 7. [Supply Chain Security](#7-supply-chain-security)
 8. [Network Security](#8-network-security)
 9. [Runtime Environment Security](#9-runtime-environment-security)
-10. [Compliance with the Four Laws](#10-compliance-with-the-four-laws)
+10. [Governance Compliance](#10-governance-compliance)
 11. [Risk Register](#11-risk-register)
 12. [Recommendations](#12-recommendations)
 13. [Incident Response Plan](#13-incident-response-plan)
@@ -466,9 +466,9 @@ The following tools are pre-installed and usable by the agent:
 
 ---
 
-## 10. Compliance with the Four Laws
+## 10. Governance Compliance
 
-Assessment of the current system against [AGENTS.md](../AGENTS.md) (The Four Laws of AI Infrastructure):
+Assessment of the current system against [AGENTS.md](../AGENTS.md) governance principles:
 
 ### Zeroth Law - Protect Humanity
 
@@ -554,7 +554,7 @@ Assessment of the current system against [AGENTS.md](../AGENTS.md) (The Four Law
 |---|--------|--------|--------|
 | 11 | **API key proxy** - route LLM calls through a proxy that holds the key and enforces rate limits | High | Eliminates API key exposure |
 | 12 | **Self-hosted runner** - use a hardened, network-restricted runner with minimal tooling | High | Eliminates multiple vulnerabilities |
-| 13 | **Implement DEFCON levels** - adopt the DEFCON readiness framework starting at DEFCON 2 | High | Comprehensive security posture improvement |
+| 13 | **Implement operational readiness levels** — adopt a tiered readiness framework to dynamically constrain agent capabilities | High | Comprehensive security posture improvement |
 | 14 | **Dependency vendoring** - vendor `pi-coding-agent` and audit the source | Medium | Full supply chain control |
 | 15 | **Anomaly detection** - monitor for unusual agent behavior (large diffs, network spikes, new workflows) | High | Early warning system |
 
@@ -652,8 +652,8 @@ This project follows a coordinated disclosure model:
 ## Appendix B: References
 
 - [warning-blast-radius.md](./warning-blast-radius.md) - Capabilities analysis of agent access
-- [final-warning.md](./final-warning.md) - DEFCON readiness levels and capability lockdown framework
-- [AGENTS.md](../AGENTS.md) - The Four Laws of AI Infrastructure
+- [final-warning.md](./final-warning.md) - Important usage information and governance framework
+- [AGENTS.md](../AGENTS.md) - Agent governance and behavioral guidance
 - [final-warning.md](./final-warning.md) - Important usage information
 - [PACKAGES.md](../PACKAGES.md) - Dependency inventory
 - [GitHub Actions Security Hardening](https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions)
@@ -662,6 +662,6 @@ This project follows a coordinated disclosure model:
 
 ---
 
-*This report was generated under the obligations of the Third Law (Preserve Integrity) and the First Law (Do No Harm). Transparency about security posture is not optional - it is a duty.*
+*This report was generated under the principles of preserving integrity and doing no harm. Transparency about security posture is not optional — it is a duty.*
 
 *"Security is not a feature. It is a property - and one that must be continuously earned."*

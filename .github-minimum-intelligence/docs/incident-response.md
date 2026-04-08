@@ -100,11 +100,11 @@ gh secret set ANTHROPIC_API_KEY --body "sk-new-rotated-key-value"
 2. **Audit collaborator list:** Remove any unexpected users or pending invitations.
 3. **Review GitHub App installations:** Revoke any unrecognised App installations on the repository.
 
-### 2.3 Transition to DEFCON 1
+### 2.3 Instruct the Agent to Cease Operations
 
-If the agent is still accepting issue-triggered commands, open an issue instructing it to **cease all autonomous operations** (DEFCON 1 — Maximum Readiness).
+If the agent is still accepting issue-triggered commands, open an issue instructing it to **cease all autonomous operations**.
 
-> **Note:** DEFCON 1 is a software-level instruction. It is not a substitute for disabling the workflow (Step 1.4). Always disable the workflow first.
+> **Note:** This is a software-level instruction. It is not a substitute for disabling the workflow (Step 1.4). Always disable the workflow first.
 
 ---
 
@@ -309,11 +309,10 @@ Create an incident record capturing:
 │  6. HARDEN            Post-incident review, implement fixes    │
 │                                                                │
 │  Emergency:  git revert <hash>, then think.                    │
-│  DEFCON 1:   See final-warning.md (DEFCON Readiness Levels)    │
 │                                                                │
 └────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-*This incident response plan is maintained under the obligations of the Third Law (Preserve Integrity). Preparedness is not paranoia — it is a duty.*
+*This incident response plan is maintained under the principle of preserving integrity. Preparedness is not paranoia — it is a duty.*
