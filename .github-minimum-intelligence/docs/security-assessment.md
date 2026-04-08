@@ -69,38 +69,38 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 │   GitHub Issue Opened ─────┐                                         │
 │   Issue Comment Created ───┤                                         │
 │                            ▼                                         │
-│                 ┌─────────────────────┐                               │
-│                 │  Authorization Gate  │ ← Checks actor permission    │
-│                 │  (write/maintain/    │   via GitHub API             │
-│                 │   admin required)    │                               │
-│                 └─────────┬───────────┘                               │
+│                 ┌─────────────────────┐                              │
+│                 │  Authorization Gate │ ← Checks actor permission    │
+│                 │  (write/maintain/   │   via GitHub API             │
+│                 │   admin required)   │                              │
+│                 └─────────┬───────────┘                              │
 │                           │ PASS                                     │
 │                           ▼                                          │
-│                 ┌─────────────────────┐                               │
-│                 │   ubuntu-latest VM  │                               │
-│                 │                     │                               │
-│                 │  ┌───────────────┐  │                               │
-│                 │  │  Bun Runtime  │  │                               │
-│                 │  └───────┬───────┘  │                               │
-│                 │          │          │                               │
-│                 │  ┌───────▼───────┐  │    ┌────────────────────┐     │
-│                 │  │ pi-coding-    │  │───▶│  Anthropic API     │     │
-│                 │  │ agent v0.52.5 │  │    │  (Claude)          │     │
-│                 │  └───────┬───────┘  │    └────────────────────┘     │
-│                 │          │          │                               │
-│                 │   Tools: read,     │    ┌────────────────────┐     │
-│                 │   bash, edit,      │───▶│  GitHub API        │     │
-│                 │   write            │    │  (24 org repos)    │     │
-│                 │          │          │    └────────────────────┘     │
-│                 │          ▼          │                               │
-│                 │  ┌───────────────┐  │    ┌────────────────────┐     │
-│                 │  │  git push     │  │───▶│  Public Internet   │     │
-│                 │  │  (to main)    │  │    │  (unrestricted)    │     │
-│                 │  └───────────────┘  │    └────────────────────┘     │
-│                 │                     │                               │
-│                 │  sudo: NOPASSWD ALL│                               │
-│                 │  docker: available  │                               │
-│                 └─────────────────────┘                               │
+│                 ┌─────────────────────┐                              │
+│                 │   ubuntu-latest VM  │                              │
+│                 │                     │                              │
+│                 │  ┌───────────────┐  │                              │
+│                 │  │  Bun Runtime  │  │                              │
+│                 │  └───────┬───────┘  │                              │
+│                 │          │          │                              │
+│                 │  ┌───────▼───────┐  │     ┌────────────────────┐   │
+│                 │  │ pi-coding-    │  │───▶│  Anthropic API     │   │
+│                 │  │ agent v0.52.5 │  │     │  (Claude)          │   │
+│                 │  └───────┬───────┘  │     └────────────────────┘   │
+│                 │          │          │                              │
+│                 │   Tools: read,      │     ┌────────────────────┐   │
+│                 │   bash, edit,       │───▶│  GitHub API        │   │
+│                 │   write             │     │  (24 org repos)    │   │
+│                 │          │          │     └────────────────────┘   │
+│                 │          ▼          │                              │
+│                 │  ┌───────────────┐  │     ┌────────────────────┐   │
+│                 │  │  git push     │  │───▶│  Public Internet   │   │
+│                 │  │  (to main)    │  │     │  (unrestricted)    │   │
+│                 │  └───────────────┘  │     └────────────────────┘   │
+│                 │                     │                              │
+│                 │  sudo: NOPASSWD ALL │                              │
+│                 │  docker: available  │                              │
+│                 └─────────────────────┘                              │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 ```
@@ -135,10 +135,10 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 ```
                     ┌─────────────────────────────────┐
-                    │        ATTACK SURFACES           │
+                    │        ATTACK SURFACES          │
                     └─────────────────────────────────┘
 
- ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+ ┌──────────────┐    ┌─────────────┐    ┌─────────────┐
  │   INPUT      │    │  RUNTIME    │    │   OUTPUT    │
  │              │    │             │    │             │
  │ • Issue body │    │ • bash tool │    │ • git push  │
@@ -147,7 +147,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
  │ • Repo files │    │ • Network   │    │   egress    │
  │   (read by   │    │ • All       │    │ • File      │
  │   agent)     │    │   runtimes  │    │   writes    │
- └─────────────┘    └─────────────┘    └─────────────┘
+ └──────────────┘    └─────────────┘    └─────────────┘
 ```
 
 ### 3.3 STRIDE Analysis
@@ -566,7 +566,7 @@ Assessment of the current system against [AGENTS.md](../AGENTS.md) governance pr
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│              INCIDENT RESPONSE RUNBOOK                  │
+│              INCIDENT RESPONSE RUNBOOK                 │
 └────────────────────────────────────────────────────────┘
 
 STEP 1: CONTAIN (Minutes 0–5)
