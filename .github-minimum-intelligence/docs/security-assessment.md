@@ -109,7 +109,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 | Component | Version | Role |
 |-----------|---------|------|
-| `@mariozechner/pi-coding-agent` | 0.57.1 | Core AI agent: prompt processing, LLM interaction, tool execution |
+| `@mariozechner/pi-coding-agent` | 0.65.1 | Core AI agent: prompt processing, LLM interaction, tool execution |
 | GitHub Actions Workflow | N/A | Orchestration: triggers, authorization, environment setup |
 | Lifecycle Scripts (TypeScript) | N/A | Agent initialization and indicator management |
 | Anthropic Claude | N/A | LLM backend for reasoning and code generation |
@@ -365,7 +365,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 ### Dependency Tree
 
 ```
-@mariozechner/pi-coding-agent@0.57.1
+@mariozechner/pi-coding-agent@0.65.1
 ├── @anthropic-ai/sdk          (Anthropic API client)
 ├── @aws-sdk/client-bedrock-runtime  (AWS Bedrock)
 ├── openai                     (OpenAI API client)
@@ -386,7 +386,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 ### Immediate Actions
 
-1. **Pin `@mariozechner/pi-coding-agent`** to exact version (already pinned at `0.57.1`).
+1. **Pin `@mariozechner/pi-coding-agent`** to exact version (already pinned at `0.65.1`).
 2. **Pin GitHub Actions** to commit SHAs:
    ```yaml
    - uses: actions/checkout@<sha>  # v6
