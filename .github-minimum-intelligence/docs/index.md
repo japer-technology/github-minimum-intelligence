@@ -2,7 +2,7 @@
 
 > Comprehensive guide to all GitHub Minimum Intelligence documentation.
 >
-> **Start here:** [README](../../README.md) · **Before You Begin:** [Important Information](./final-warning.md)
+> **Start here:** [README](../README.md) · **Before You Begin:** [Important Information](./final-warning.md)
 
 ---
 
@@ -10,10 +10,10 @@
 
 | Document | Description |
 |----------|-------------|
-| [README](../../README.md) | Project overview, quick start, installation methods, configuration, and supported providers. |
-| [CONTRIBUTING](../../CONTRIBUTING.md) | How to report bugs, suggest features, submit changes, and set up a development environment. |
-| [CODE OF CONDUCT](../../CODE_OF_CONDUCT.md) | Community standards and expected behavior. |
-| [LICENSE](../../LICENSE.md) | MIT License. |
+| [README](../README.md) | Project overview, quick start, installation methods, configuration, and supported providers. |
+| [CONTRIBUTING](../CONTRIBUTING.md) | How to report bugs, suggest features, submit changes, and set up a development environment. |
+| [CODE OF CONDUCT](../CODE_OF_CONDUCT.md) | Community standards and expected behavior. |
+| [LICENSE](../LICENSE.md) | MIT License. |
 
 ---
 
@@ -72,11 +72,11 @@ Six questions define the philosophical and architectural foundation of this proj
 
 ## Related Links
 
-- [Quick Start](../../README.md#quick-start) — Get running in under 5 minutes.
-- [Installation Methods](../../README.md#installation-methods) — Setup script, manual copy, or GitHub App.
-- [Supported Providers](../../README.md#supported-providers) — Anthropic, OpenAI, Google Gemini, xAI, DeepSeek, Mistral, Groq, OpenRouter.
-- [Configuration](../../README.md#configuration) — Change models, adjust thinking level, filter by label.
-- [Project Structure](../../README.md#project-structure) — Complete file layout.
+- [Quick Start](../README.md#quick-start) — Get running in under 5 minutes.
+- [Installation Methods](../README.md#installation-methods) — Setup script, manual copy, or GitHub App.
+- [Supported Providers](../README.md#supported-providers) — Anthropic, OpenAI, Google Gemini, xAI, DeepSeek, Mistral, Groq, OpenRouter.
+- [Configuration](../README.md#configuration) — Change models, adjust thinking level, filter by label.
+- [Project Structure](../README.md#project-structure) — Complete file layout.
 
 ---
 

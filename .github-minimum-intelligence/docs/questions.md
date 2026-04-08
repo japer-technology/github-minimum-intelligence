@@ -1,6 +1,6 @@
 # Questions
 
-> [Index](./index.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md) · [README](../../README.md)
+> [Index](./index.md) · [The Repo Is the Mind](./the-repo-is-the-mind.md) · [README](../README.md)
 
 Six foundational questions define GitHub Minimum Intelligence. Each examines the project from a different angle—together they form a complete picture of what repository-native intelligence means and why it matters.
 
