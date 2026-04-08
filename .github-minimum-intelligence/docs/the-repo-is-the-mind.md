@@ -1,6 +1,6 @@
 # The Repo Is the Mind
 
-> [Index](./index.md) · [Questions Overview](./questions.md) · [README](../../README.md)
+> [Index](./index.md) · [Questions Overview](./questions.md) · [README](../README.md)
 
 > A repository is more than files - it's code, conversation, constraints, and history
 
@@ -111,7 +111,7 @@ The repository is already where your team coordinates, where decisions are recor
 
 ---
 
-[Index](./index.md) · [Questions Overview](./questions.md) · [README](../../README.md)
+[Index](./index.md) · [Questions Overview](./questions.md) · [README](../README.md)
 
 ---
 
