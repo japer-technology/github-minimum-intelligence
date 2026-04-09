@@ -1,0 +1,129 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  GitHub Minimum Intelligence — Public Fabric (GitHub Pages Deployment)      ║
+# ║                                                                              ║
+# ║  Publishes the agent's public-fabric directory as a GitHub Pages site.       ║
+# ║  This gives you a live web page powered by the agent's public output —       ║
+# ║  no separate hosting needed.                                                 ║
+# ║                                                                              ║
+# ║  Trigger : push to main (i.e. after the agent commits, or any manual push). ║
+# ║  Note    : Pages is automatically enabled on first run. If auto-enable       ║
+# ║            fails, a warning guides the user to enable it manually.           ║
+# ║                                                                              ║
+# ║  Docs: https://github.com/japer-technology/github-minimum-intelligence       ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+name: gmi-public-fabric
+
+# ──────────────────────────────────────────────────────────────────────────────
+# TRIGGERS
+# Deploy whenever code is pushed to main so the agent's public-fabric site
+# stays up to date. paths-ignore ensures that editing workflow files alone does
+# NOT trigger a redundant Pages deploy.
+# ──────────────────────────────────────────────────────────────────────────────
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - ".github/workflows/**"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# PERMISSIONS
+# ──────────────────────────────────────────────────────────────────────────────
+permissions:
+  contents: read      # Read repository contents to access the public-fabric directory.
+  pages: write        # Upload and deploy the agent's public-fabric site to GitHub Pages.
+  id-token: write     # Required by actions/deploy-pages for secure OIDC-based Pages deployment.
+
+# ══════════════════════════════════════════════════════════════════════════════
+# JOBS
+# ══════════════════════════════════════════════════════════════════════════════
+jobs:
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # JOB — run-gitpages
+  #
+  # Purpose : Publish the agent's public-fabric directory as a GitHub Pages
+  #           site. This gives you a live web page powered by the agent's
+  #           public output — no separate hosting needed.
+  # Trigger : push to main (i.e. after the agent commits, or any manual push).
+  # Note    : Pages is automatically enabled on first run. If auto-enable
+  #           fails, a warning guides the user to enable it manually.
+  # ────────────────────────────────────────────────────────────────────────────
+  run-gitpages:
+    runs-on: ubuntu-latest
+
+    # Concurrency: only one Pages deployment at a time across the entire repo.
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    # Declare the GitHub Pages deployment environment so the workflow run UI
+    # shows a direct link to the deployed site.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # 1. Check out the repo so we can read the public-fabric directory.
+      #    ref: main ensures we pick up any commits the agent just pushed.
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      # 2. Verify the public-fabric directory exists. If the agent has not
+      #    been installed yet (e.g. on a fresh template repo) there is nothing
+      #    to deploy, so we abort early with a clear warning instead of
+      #    failing in a later step.
+      - name: Check public-fabric exists
+        id: check-folder
+        run: |
+          if [ -d ".github-minimum-intelligence/public-fabric" ]; then
+            echo "folder_exists=true" >> "$GITHUB_OUTPUT"
+            echo "✅ public-fabric directory found."
+          else
+            echo "folder_exists=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Directory .github-minimum-intelligence/public-fabric not found. Skipping Pages deployment. Run the installer first (Actions → Run workflow)."
+          fi
+
+      # 3. AUTO-ENABLE Pages — attempt to enable GitHub Pages via the API.
+      #    This is a convenience so users don't have to visit Settings manually.
+      #    If the API call fails (e.g. insufficient org permissions), a warning
+      #    is surfaced and the remaining deploy steps are skipped gracefully.
+      - name: Enable Pages
+        if: steps.check-folder.outputs.folder_exists == 'true'
+        id: enable-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Check if Pages is already active.
+          if gh api "repos/${{ github.repository }}/pages" --silent 2>/dev/null; then
+            echo "pages_active=true" >> "$GITHUB_OUTPUT"
+            echo "✅ GitHub Pages is already enabled."
+          # If not, try to enable it with the "workflow" build type.
+          elif gh api "repos/${{ github.repository }}/pages" \
+            -X POST -f build_type=workflow --silent 2>/dev/null; then
+            echo "pages_active=true" >> "$GITHUB_OUTPUT"
+            echo "✅ GitHub Pages has been enabled."
+          else
+            echo "pages_active=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Could not enable GitHub Pages automatically. Please enable it manually in repository Settings → Pages → Source → GitHub Actions."
+          fi
+
+      # 4. Configure Pages — sets up the required Pages metadata.
+      - name: Setup Pages
+        if: steps.check-folder.outputs.folder_exists == 'true' && steps.enable-pages.outputs.pages_active == 'true'
+        uses: actions/configure-pages@v5
+
+      # 5. Upload the public-fabric directory as a Pages artifact.
+      - name: Upload artifact
+        if: steps.check-folder.outputs.folder_exists == 'true' && steps.enable-pages.outputs.pages_active == 'true'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.github-minimum-intelligence/public-fabric'
+
+      # 6. Deploy the uploaded artifact to GitHub Pages.
+      - name: Deploy to GitHub Pages
+        if: steps.check-folder.outputs.folder_exists == 'true' && steps.enable-pages.outputs.pages_active == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v4
