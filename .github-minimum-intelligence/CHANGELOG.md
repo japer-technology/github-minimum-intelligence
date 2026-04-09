@@ -34,7 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- `PI_CACHE_RETENTION=long` environment variable and `quietStartup: true` setting for optimised prompt caching.
+- `PI_CACHE_RETENTION=long` environment variable and `quietStartup: true` setting for optimized prompt caching.
 - `ramifications-of-65.1.md` analysis document exploring the pi-mono maximisation path.
 
 ### Fixed
