@@ -19,7 +19,7 @@
     "logoAlt": "Minimum Intelligence logo",
     "title": "GitHub Minimum Intelligence",
     "slug": "japer-technology / github-minimum-intelligence",
-    "tagline": "A repository-local AI framework that uses GitHub\u00a0Issues for conversation, Git for persistent versioned memory, and GitHub\u00a0Actions for execution \u2014 delivering low-infrastructure, auditable, user-owned automation by committing every prompt and response to the codebase.",
+    "tagline": "A repository-local AI framework that uses GitHub\u00a0Issues for conversation, Git for persistent versioned memory, and GitHub\u00a0Actions for execution \u2014 delivering auditable, user-owned automation by committing every prompt and response to the codebase.",
     "badges": [
       {
         "label": "v1.0.7",
@@ -154,15 +154,6 @@
             {
               "type": "paragraph",
               "html": "Add one workflow file, run it once, and the agent installs itself. Nothing to host or maintain."
-            }
-          ]
-        },
-        {
-          "heading": "Zero Infrastructure",
-          "content": [
-            {
-              "type": "paragraph",
-              "html": "Runs on GitHub Actions with your repo as the only backend. No servers, no containers."
             }
           ]
         },
@@ -396,7 +387,7 @@
           ]
         },
         {
-          "heading": "Infrastructure",
+          "heading": "Software R&D Toolkit",
           "content": [
             {
               "type": "table",
