@@ -1,7 +1,5 @@
 # Security Assessment
 
-> [Index](./index.md) · [Capabilities Analysis](./warning-blast-radius.md) · [Incident Response](./incident-response.md)
->
 > **Classification:** Internal - For Repository Maintainers and Organization Administrators
 >
 > **Report Date:** February 24, 2026
