@@ -1,7 +1,5 @@
 # Capabilities Analysis
 
-> [Index](./index.md) · [Security Assessment](./security-assessment.md) · [Incident Response](./incident-response.md) · [Before You Begin](./final-warning.md)
-
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
@@ -287,44 +285,7 @@ While the GitHub Actions runner VM is **ephemeral** (destroyed after the job), a
 
 ---
 
-## 9. Quantified Blast Radius
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    BLAST RADIUS                         │
-│                                                         │
-│  ┌─── Immediate (seconds) ───────────────────────────┐  │
-│  │ • Exfiltrate GITHUB_TOKEN + ANTHROPIC_API_KEY     │  │
-│  │ • Read all private code in 24 org repos           │  │
-│  │ • Modify code in this repository                  │  │
-│  └───────────────────────────────────────────────────┘  │
-│                                                         │
-│  ┌─── Short-term (minutes) ──────────────────────────┐  │
-│  │ • Push backdoors to all 24 org repositories       │  │
-│  │ • Install persistent workflows across the org     │  │
-│  │ • Exfiltrate entire org codebase (all repos)      │  │
-│  │ • Spin up cryptominers or attack infrastructure   │  │
-│  └───────────────────────────────────────────────────┘  │
-│                                                         │
-│  ┌─── Medium-term (hours/days) ──────────────────────┐  │
-│  │ • Supply chain attack on downstream consumers     │  │
-│  │ • Persistent re-triggering via injected workflows │  │
-│  │ • Anthropic API abuse until key rotation          │  │
-│  │ • Data theft from any deployed services using     │  │
-│  │   secrets from compromised repos                  │  │
-│  └───────────────────────────────────────────────────┘  │
-│                                                         │
-│  ┌─── Long-term (if undetected) ─────────────────────┐  │
-│  │ • Dormant backdoors in production codebases       │  │
-│  │ • Reputation damage to the organization           │  │
-│  │ • Compromise of end-users of shipped software     │  │
-│  └───────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-```
-
----
-
-## 10. Conclusion
+## 9. Conclusion
 
 ### **The scope of access extends beyond this repository to the entire organisation and its downstream dependents.**
 
@@ -340,5 +301,3 @@ The GMI agent, out-of-the-box, operates with **broad privilege** relative to its
 ...means that any workflow invocation — whether from this project or any other — could, in a worst-case scenario, access the organization's codebase, read secrets and source code, and potentially affect downstream consumers of that code.
 
 Standard GitHub hardening practices (scoped tokens, branch protection, code review, network controls) significantly reduce this surface. See [Section 8](#8-mitigations-assessment) above for details.
-
-
