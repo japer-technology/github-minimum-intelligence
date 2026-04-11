@@ -43,7 +43,6 @@ Your repository _is_ the AI workspace. The questions, the results, the code, the
 | Capability | Why it matters |
 |---|---|
 | **Single workflow, any repo** | Add one workflow file, run it once, and the agent installs itself. Nothing to host or maintain. |
-| **Zero infrastructure** | Runs on GitHub Actions with your repo as the only backend. |
 | **Persistent memory** | Conversations are committed to git - the agent remembers everything across sessions. |
 | **Full auditability** | Every interaction is versioned; review or roll back any change the agent made. |
 | **Multi-provider LLM support** | Works with Anthropic, OpenAI, Google Gemini, xAI, DeepSeek, Mistral, Groq, and any OpenRouter model. |
