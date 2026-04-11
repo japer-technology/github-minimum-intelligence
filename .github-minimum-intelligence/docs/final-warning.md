@@ -8,7 +8,7 @@
 
 ### What This Software Is
 
-This is an AI-powered coding infrastructure. It is intended for use by qualified developers for the purpose of building, maintaining, and deploying complex software systems.
+This is an AI-powered coding. It is intended for use by qualified developers for the purpose of building, maintaining, and deploying complex software systems.
 
 ---
 
@@ -65,7 +65,7 @@ Before deploying this system, it helps to understand what the agent can access. 
 
 - Are unsure whether your intended use could cause harm.
 - Are handling sensitive personal data or regulated information.
-- Are building safety-critical systems (medical, aviation, automotive, infrastructure).
+- Are building safety-critical systems (medical, aviation, automotive).
 - Are operating in a jurisdiction with specific AI compliance requirements.
 
 ---
