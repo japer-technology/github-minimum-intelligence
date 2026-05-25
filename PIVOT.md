@@ -31,25 +31,39 @@ Monday morning — not just enthusiasm for the direction.
   gh-aw's entire safety model is incompatible with this. Until that split
   happens, every other gh-aw primitive (safe-outputs, network isolation,
   sanitised inputs, `strict: true`) is theatre.
-- The agent's **session memory model is fundamentally incompatible with
-  safe-outputs** as currently specified — gh-aw's write job knows how to
-  `add-comment` / `add-labels` / `create-issue`, but it does not know how to
-  append a JSONL transcript to `state/sessions/*.jsonl`. GMI must either
-  ship a custom safe-output type (a memory-commit MCP service consumed by the
-  apply job) or accept that memory writes live in a non-gh-aw sidecar.
-  FUTURE.md elides this; it is the single hardest design question in the pivot.
+- The agent's **session memory model overlaps but does not align with
+  gh-aw's built-in memory primitives.** gh-aw ships three: `cache-memory`
+  (ephemeral, Actions-cache-backed), `repo-memory` (a dedicated
+  `memory/agent-notes` git branch), and `comment-memory` (state pinned to
+  the triggering issue/PR). None of them is the same shape as GMI's
+  `state/sessions/*.jsonl` + `memory.log` on `main`. The honest question
+  is not "how do we add memory to gh-aw?" — it is "do we adopt
+  `repo-memory` and lose git-on-main as the audit surface, or keep
+  GMI's model and pay the price of a paired apply job?" PIVOT picks the
+  latter in §3.2 and explains why; FUTURE.md does not engage the question.
 - The `pi-mono` runtime (`bun run` of `lifecycle/agent.ts` calling the `pi`
-  CLI) **cannot be one of gh-aw's four supported engines**
+  CLI) **cannot be one of gh-aw's five supported engines**
   (`copilot | claude | codex | gemini | opencode`). Fully utilising gh-aw
   means **giving up `pi`-as-engine** and re-expressing the prompt as a
   natural-language Markdown body. FUTURE.md does not name this trade-off;
   it should be the first slide of any internal pitch.
 - The install story (`workflow_dispatch` → curl zip → cp -R, lines 95–230 of
   the workflow) **collides head-on with `gh aw compile`'s assumption that the
-  repo owner runs the CLI locally**. The right answer is to ship a tiny
-  `gh aw compile` step *inside* the existing `run-install` job — the user
-  still never installs a CLI. FUTURE.md gestures at this in §4.3 but does
-  not nail the mechanism.
+  repo owner runs the CLI locally**. The right answer is *not* a bespoke
+  curl-and-tar dance: gh-aw ships an official setup action
+  (`github/gh-aw/actions/setup-cli@<version>`) and an
+  `agentics-maintenance.yml` operator workflow that exposes `upgrade`,
+  `disable`/`enable`, `safe_outputs` replay, and `create_labels` over
+  `workflow_dispatch`. Wire those in and the user still never installs a
+  CLI. FUTURE.md gestures at this in §4.3 but does not nail the mechanism.
+- gh-aw is not a single product — it is **a CLI, an `agentic-workflows`
+  MCP tool, an `actions/setup-cli` GitHub Action, an operator
+  workflow (`agentics-maintenance.yml`), a shared-workflow library
+  (`githubnext/agentics` consumed via `gh aw add`), an egress firewall
+  (`gh-aw-firewall`), and an MCP gateway (`gh-aw-mcpg`)**. FUTURE.md and
+  the current draft of PIVOT both treat gh-aw as if it were only the
+  compiler. §6 below maps the full interaction surface and picks which
+  pieces GMI should adopt where.
 - Most of GMI's defensible value (`AGENTS.md`, `state/sessions/*.jsonl`, the
   hatch ritual, `memory.log`, the `.pi/skills/` library) is **orthogonal to
   gh-aw**. The pivot does not threaten it; it reframes it. The right
@@ -105,8 +119,9 @@ The file paths below are relative to repo root.
 | Path | Today | Pivot verdict |
 |---|---|---|
 | `.github-minimum-intelligence/install/MINIMUM-INTELLIGENCE-AGENTS.md` + `settings.json` | Templates copied on fresh install. | **Keep, extend.** Add a third default file: a stub `.github/workflows/gmi-issue-agent.md` so a freshly installed repo is gh-aw-ready out of the box. |
-| The 150+ lines of `run-install` bash in the workflow | Curl zip, unzip, cp, gitignore tweaks, commit/push. | **Split.** The download/copy logic stays. A new step — `gh aw compile` — runs inside the same job, producing `.lock.yml` files committed alongside the Markdown sources. The user still never needs a local CLI. |
-| `.github-minimum-intelligence/VERSION` | Semver. | **Add** a parallel `GH_AW_VERSION` pin so compiled lockfiles are reproducible across upgrade cycles. |
+| The 150+ lines of `run-install` bash in the workflow | Curl zip, unzip, cp, gitignore tweaks, commit/push. | **Split and shrink.** The download/copy logic stays. The bespoke `curl … gh-aw_linux_amd64.tar.gz` step is replaced by `uses: github/gh-aw/actions/setup-cli@<GH_AW_VERSION>` followed by `gh aw compile --strict --purge` in the same job. A second new workflow `agentics-maintenance.yml` (installed verbatim from gh-aw) gives operators `workflow_dispatch` buttons for `upgrade`, `disable`/`enable`, `safe_outputs` replay, and `create_labels`. The user still never needs a local CLI. |
+| `.github-minimum-intelligence/VERSION` | Semver. | **Add** a parallel `GH_AW_VERSION` pin so compiled lockfiles are reproducible across upgrade cycles. The `setup-cli` action consumes this pin; `agentics-maintenance.yml`'s `upgrade` button bumps it. The install job must refuse to run when `GH_AW_VERSION` falls in the retired 0.68.4–0.71.3 billing-bug range. |
+| *(new)* `agentics-maintenance.yml` | n/a today | **Add.** Shipped by gh-aw itself; copy on first install. Provides the operator-facing UI that replaces most of today's `workflow_dispatch` install flow and the future "upgrade gh-aw" path. |
 
 ### 1.6 Docs
 
@@ -125,24 +140,25 @@ spine *is*, primitive by primitive, against the gh-aw reference
 | gh-aw primitive | What it gives you | GMI's current equivalent | Cost of adoption |
 |---|---|---|---|
 | **Markdown + YAML frontmatter** as the unit of authoring | A workflow is one human-readable file with `on:`, `permissions:`, `tools:`, `safe-outputs:`, `engine:`, `network:`, `strict:`, `timeout-minutes:` in frontmatter and a natural-language body. | A 450-line hand-authored YAML + a 467-line TS orchestrator. | Low *intellectually*, large *physically*. Most of the value is realised once the first workflow compiles. |
-| **`engine: copilot \| claude \| codex \| gemini \| opencode`** | Pluggable model with credentials wired in by gh-aw. | Eight providers via `pi-mono` selected from `settings.json`. | **High.** GMI loses its 8-provider matrix down to gh-aw's 4 (and loses `pi` itself). This is the single biggest *capability* loss. Mitigation: keep `pi`-mode available behind a `engine: pi` opt-out that *doesn't* compile with `gh aw compile` (degrades to today's workflow). |
-| **`safe-outputs:`** | Schema-validated structured output consumed by a separate write-only job. Built-ins: `add-comment`, `add-labels`, `create-issue`, `create-pull-request`, `create-discussion`, `push-to-pull-request-branch`, `upload-artifact`, `assign-to-agent`, `create-pull-request-review-comment`. | None. The agent posts comments by calling `gh api` itself. | Medium. The mapping for the issue-bot is `safe-outputs: { add-comment: {} }`. The harder case is *memory*: there is no built-in `commit-files` safe-output. See §3.2. |
-| **`network:` allowlist** | Egress firewall via `gh-aw-firewall`. | None — runner has full egress. | Low; just opt in. |
+| **`engine: copilot \| claude \| codex \| gemini \| opencode`** | Pluggable model with credentials wired in by gh-aw. **Five** engines, not four. | Eight providers via `pi-mono` selected from `settings.json`. | **High.** GMI loses its 8-provider matrix down to gh-aw's 5 (and loses `pi` itself). This is the single biggest *capability* loss. Mitigation: keep `pi`-mode available behind a `engine: pi` opt-out that *doesn't* compile with `gh aw compile` (degrades to today's workflow). |
+| **`safe-outputs:`** | Schema-validated structured output consumed by a separate write-only job. Built-ins: `add-comment`, `add-labels`, `add-pr-comment`, `create-issue`, `create-pull-request`, `create-discussion` (with `close-older-discussions:` and `close-older-issues:`), `push-to-pull-request-branch`, `upload-artifact` (incl. `skip-archive: true`), `assign-to-agent`, `create-pull-request-review-comment`, and `noop` for "produced nothing". | None. The agent posts comments by calling `gh api` itself. | Medium. The mapping for the issue-bot is `safe-outputs: { add-comment: {} }`. The harder case is *memory*; see §3.2 for the four-way decision. |
+| **Built-in memory primitives** (`cache-memory`, `repo-memory`, `repo-memory` with `wiki: true`, `comment-memory`) | gh-aw ships three persistence backends: Actions-cache-backed ephemeral state, a dedicated `memory/agent-notes` git branch, and inline issue/PR comment state. | `state/sessions/*.jsonl` + `memory.log` committed to `main`. | **Strategic decision, not a free upgrade.** `repo-memory` overlaps with GMI's value proposition; adopting it forfeits "memory on `main`, diffable in PRs". See §3.2. |
+| **`network:` allowlist** + **Agent Workflow Firewall (AWF)** | Egress firewall via `gh-aw-firewall`. Domain-based allow-listing, activity logging. | None — runner has full egress. | Low; just opt in. |
 | **`tools.bash: [cat, grep, jq, …]`** | Explicit allowlist of shell commands the agent may invoke. | None — the `pi` agent has whatever `pi-mono` gives it. | Medium. Today's skills assume free-form shell. Each skill needs an audit pass to declare its minimum allowlist. |
 | **`tools.github.mode: gh-proxy`** | Pre-authenticated `gh` CLI through a proxy; faster than a local MCP server. | The agent uses `gh` directly with `GITHUB_TOKEN`. | Low. |
-| **MCP server allowlist** | Tools are exposed via MCP servers declared per workflow. | `pi-mono` exposes tools opaquely. | Medium. Worth doing because it is the right place to plug `gmi-mcp` in (§4.1). |
+| **MCP server allowlist** + **MCP Gateway (`gh-aw-mcpg`)** | Tools are exposed via MCP servers declared per workflow. The optional MCP Gateway routes all MCP calls through one HTTP gateway for centralised access management and auditing. | `pi-mono` exposes tools opaquely. | Medium. Worth doing because it is the right place to plug `gmi-mcp` in (§4.1), and the gateway makes per-tool audit free. |
 | **`strict: true`** | Compile-time validator rejects ambiguous frontmatter. | N/A. | Free — turn on after Phase 1. |
 | **Sanitised event content** (`${{ steps.sanitized.outputs.text }}`) | Pre-stripped of `@mentions`, bot triggers, prompt-injection bait. | The agent sees the raw issue body. | **High value, low effort.** This is the cheapest security upgrade in the document. |
+| **`{{#if}}` templating + context expressions** | Conditional Markdown body fragments using GitHub Actions context (`${{ … }}`) and gh-aw's `{{#if}}` / `{{else}}` blocks. | None — branching is done in TS. | Free; collapses several per-trigger workflow variants into one Markdown file. |
 | **Slash-command trigger** (`on: { slash_command: { name: review, … } }`) | Built-in router for `/foo` in issue/PR comments. | None — would need to be coded. | Free; gives GMI `/gmi summarise` for free (FUTURE.md §3.5). |
 | **`schedule:` triggers in natural language** (`daily on weekdays`) | Cron without remembering cron syntax. | None. | Free. |
-| **Compiled `.lock.yml`** | Reviewable artefact that catches drift; a `package-lock.json` for agents. | None — every behavioural change is implicit in `agent.ts`. | Free once `gh aw compile` runs in-workflow. |
-| **`gh aw compile --actionlint --zizmor --poutine`** | Static security scanning bundle. | None — there is no compile step. | Low; add to `run-install`. |
-| **`@include` / `imports:`** | Reusable Markdown fragments shared across workflows. | None — duplication is the norm. | Low; the natural home for `APPEND_SYSTEM.md` and `AGENTS.md` injection. |
-
-The honest count: of the **fourteen** primitives above, GMI today uses
-**one and a half** (the `gh` CLI and a primitive form of permissions). A
-"fully utilising" GMI uses **twelve** (everything except `engine:` for `pi`
-holdouts and the memory-commit case where a custom output type is needed).
+| **`skip-if-match:`** and **`forks: ["*"]`** policies | Per-trigger deduplication (so scheduled workflows don't fan out duplicate issues) and explicit fork access (PRs from forks are blocked by default). | None — fork PRs are currently allowed to run the full agent. | Free; addresses one of the largest unhandled blast-radius classes in today's GMI. |
+| **Compiled `.lock.yml`** | Reviewable artefact that catches drift; a `package-lock.json` for agents. | None — every behavioural change is implicit in `agent.ts`. | Free once `gh aw compile` runs in-workflow (see §4.3). |
+| **`gh aw compile --strict --actionlint --zizmor --poutine`** | Static security scanning bundle baked into the compiler. | None — there is no compile step. | Low; runs inside `setup-cli`-equipped install job. |
+| **`@include` / `imports:` + `gh aw add <url>`** | Reusable Markdown fragments shared across workflows, and a CLI subcommand to pull workflows from external sources (e.g. `githubnext/agentics`) as managed imports. | None — duplication is the norm; nothing pulls from an upstream catalogue. | Low; the natural home for `APPEND_SYSTEM.md` and `AGENTS.md` injection, and a future channel for shipping GMI's own workflows as a consumable library. |
+| **`agentics-maintenance.yml`** | An operator-facing workflow shipped by gh-aw exposing `workflow_dispatch` actions: `disable`/`enable` (kill-switch all agentic workflows), `upgrade` (bump gh-aw, open a PR), `safe_outputs` (replay outputs of a past run), `create_labels` (materialise labels referenced in `safe-outputs`). | None — every operator action is a manual edit + push. | Free; copy verbatim on install. Closest existing analogue of GMI's hatch ritual. |
+| **`gh-aw-actions` (shared GitHub Actions library)** | Composite actions used by compiled `.lock.yml` files, including `actions/setup-cli` that installs the CLI in any GitHub Actions runner. | n/a. | Free; replaces the bespoke `curl … tar -xz` step (§4.3). |
+| **`agentic-workflows` MCP tool** | Lets a Copilot-Cloud or Copilot-Chat agent run `compile`/`status`/`logs`/`audit`/`add`/`update`/`upgrade`/`fix`/`mcp-inspect` against a repo's gh-aw configuration without a local `gh` install. | n/a. | Free; the primary "GMI maintains itself" surface (see §6). |
 
 ---
 
@@ -237,31 +253,68 @@ The apply job's allowlist must restrict `files[].path` to a small set of
 prefixes (`state/`, `memory.log`, `AGENTS.md`, `state/user.md`). This is the
 guard-rail that survives a fully prompt-injected agent.
 
-### 3.2 The memory-commit gap in safe-outputs
+### 3.2 The memory question (revised)
 
-This is the question FUTURE.md sidesteps and the question that determines
-whether gh-aw is *adoptable* or merely *compatible*.
+The previous draft of this document called this "the memory-commit gap in
+safe-outputs" and treated gh-aw as if it had no persistence story. That
+was wrong. gh-aw ships **three native memory primitives** (`memory.md` in
+the gh-aw reference docs). Reframing the decision honestly:
 
-gh-aw's safe-outputs cover **GitHub-API writes**. They do not cover
-**writes to the repo's working tree**. GMI's central value proposition is
-exactly the latter. There are three credible paths:
+| gh-aw primitive | Backend | Survives across runs | Visible in `git log main` | Diffable in PR review | Matches GMI's model? |
+|---|---|---|---|---|---|
+| `cache-memory` | `actions/cache` directory at `/tmp/gh-aw/cache-memory/` populated by `@modelcontextprotocol/server-memory` | Up to 90 days (`retention-days:`) | No | No | No — ephemeral; "first run after expiry" silently re-establishes baseline |
+| `repo-memory` | Dedicated git branch (default `memory/agent-notes`) | Indefinitely | Only on the memory branch | Only via cross-branch diff | **Partially** — survives, but on a side-branch, not on `main` |
+| `repo-memory` with `wiki: true` | Same as above, surfaced as GitHub Wiki pages | Indefinitely | Wiki history, not `main` | Wiki diff, not PR | Partially |
+| `comment-memory` | A pinned comment on the triggering issue/PR | Until the issue is deleted | No | No | No — per-thread, not corpus-wide |
+| **GMI today** | `state/sessions/*.jsonl` + `memory.log` committed to `main` | Indefinitely | **Yes** | **Yes** | — (this is the model) |
 
-1. **Custom safe-output type.** Petition `github/gh-aw` to add a
-   `commit-files:` safe-output with a path allowlist and a max-size cap.
-   Probably the right long-term answer; politically slow. Until then, GMI
-   can't ship a "pure gh-aw" implementation.
-2. **Artifact + paired apply workflow** (the path recommended in §3.1).
+Two things follow:
+
+1. **gh-aw has memory; GMI's memory is differently shaped.** The pivot
+   is not "add memory to gh-aw"; it is "decide whether to swap GMI's
+   memory model for `repo-memory` and gain the entire gh-aw safety
+   posture for free, or keep memory-on-main and pay the price of a
+   paired apply job".
+2. **The defensible product story lives or dies on this choice.** Memory
+   on `main`, diffable in PRs, reachable by `git log` and `git blame`,
+   is the single most distinctive GMI capability. `repo-memory` on a
+   side-branch is *technically* persistent but loses every property that
+   makes GMI feel different from "Copilot in a workflow". Adopting
+   `repo-memory` shrinks the product to "gh-aw plus AGENTS.md".
+
+The recommendation, then, is the same as before (artifact + paired apply
+workflow) — but the *reason* is different. It is not because gh-aw can't
+persist; it is because gh-aw's persistence does not preserve the
+property GMI is built around.
+
+There are four credible paths; pick consciously.
+
+1. **Adopt `repo-memory` and accept the model change.** Lowest engineering
+   cost. Loses memory-on-main. Forfeits the time-travel demo. Reduces
+   GMI's differentiation. Acceptable only if the team has already decided
+   the differentiation isn't worth the maintenance bill.
+2. **Artifact + paired apply workflow** (the path recommended below).
    100% works today, zero changes to gh-aw, costs one extra workflow file
-   per repo and a few seconds of `workflow_run` latency. **Recommended
-   default.**
-3. **`push-to-pull-request-branch` ab-use.** gh-aw already has a
-   `push-to-pull-request-branch` safe-output. One could imagine the
-   memory-delta being pushed to a long-lived `gmi/memory` branch as a PR
-   that auto-merges. This is clever and creepy; auto-merging bot PRs back
-   into `main` recreates the very blast radius the pivot is trying to
-   reduce. **Not recommended.**
+   per repo and a few seconds of `workflow_run` latency. Keeps
+   memory-on-main. **Recommended default.**
+3. **Custom safe-output type.** Petition `github/gh-aw` to add a
+   `commit-files:` safe-output with a path allowlist and a max-size cap.
+   Politically slow; the right long-term resolution if the gh-aw team
+   agrees that "commit to main" is a category of output worth landing
+   upstream. Until then, ship option 2.
+4. **`push-to-pull-request-branch` ab-use.** The existing safe-output
+   could be coerced into pushing memory-deltas to a long-lived
+   `gmi/memory` branch as auto-merging PRs. Clever and creepy;
+   auto-merging bot PRs back into `main` recreates the very blast radius
+   the pivot is trying to reduce. **Not recommended.**
 
-FUTURE.md should pick option 2 explicitly. PIVOT.md does so here.
+FUTURE.md picks none of these explicitly. PIVOT.md picks option 2 and
+treats option 1 as the live alternative — the team should ratify the
+choice before any `.lock.yml` ships.
+
+The **artifact-plus-apply pattern** itself is the one already specified
+in §3.1; the session-delta schema, the path allowlist, and the
+`workflow_run` glue all carry over unchanged.
 
 ---
 
@@ -327,26 +380,36 @@ Two non-obvious properties:
   The broker refuses to compose if the soul-version is missing or has
   decreased. Identity migrations become explicit, reviewable events.
 
-### 4.3 In-workflow compilation
+### 4.3 In-workflow compilation, the right way
 
 FUTURE.md §4.3 promises "compilation inside the workflow (no CLI)". The
-mechanism is one step inside `run-install`:
+mechanism is **not** a hand-rolled `curl … tar -xz` step. gh-aw ships an
+official composite action precisely for this — and a second workflow that
+handles upgrades for you. Use both.
 
 ```yaml
-- name: Compile agentic workflows
-  if: steps.check-folder.outputs.action != 'skip'
-  run: |
-    # Pin gh-aw to GH_AW_VERSION in the repo.
-    VERSION="$(cat .github-minimum-intelligence/GH_AW_VERSION)"
-    curl -fsSL "https://github.com/github/gh-aw/releases/download/${VERSION}/gh-aw_linux_amd64.tar.gz" \
-      | tar -xz -C /tmp
-    /tmp/gh-aw compile --purge --strict
+# inside run-install
+- uses: github/gh-aw/actions/setup-cli@v0.74.2   # pin matches GH_AW_VERSION
+- run: gh aw compile --strict --purge --actionlint --zizmor --poutine
 ```
 
 Then the existing commit step picks up both the `.md` workflows and
 their `.lock.yml` siblings. The user still never installs a CLI. The
-compile step also runs `--actionlint --zizmor --poutine` as a build-time
-security gate.
+compile step also runs the static security gate as a build-time check.
+
+The upgrade story is delegated entirely to `agentics-maintenance.yml`,
+which gh-aw publishes and which the install job should drop in on first
+run. It exposes four `workflow_dispatch` actions:
+
+| Action | Effect |
+|---|---|
+| `upgrade` | Bumps the gh-aw version (and `GH_AW_VERSION` pin), runs codemods via `gh aw fix`, recompiles, opens a PR. |
+| `disable` / `enable` | Kill-switch all agentic workflows in one click. |
+| `safe_outputs` | Replays the safe outputs of a previous run — invaluable when a write job failed and you want to retry without re-running the agent. |
+| `create_labels` | Materialises any labels referenced by `safe-outputs.add-labels` configurations. |
+
+This is the same operator surface GMI was going to have to build by
+hand. Adopting it is one `cp` in the install job.
 
 Two things FUTURE.md misses about this:
 
@@ -354,12 +417,16 @@ Two things FUTURE.md misses about this:
   all.** gh-aw is the compiler; GitHub Actions runs the lockfile. So
   every PR a contributor makes to a `.md` workflow ships with a recompile,
   and reviewers diff the lockfile. This needs CI enforcement
-  (`gh aw compile --check` in PR CI) or the lockfile will silently drift.
+  (`gh aw compile --validate` in PR CI) or the lockfile will silently
+  drift. The same `setup-cli` action makes the CI step a one-liner.
 - **The `GH_AW_VERSION` pin is mandatory.** The gh-aw release notes
   (per the upstream README) warn about a billing-impact bug in
   0.68.4–0.71.3. Floating versions are not safe. The install job must
   refuse to compile if `GH_AW_VERSION` falls in a known-bad range; the
-  list lives next to `VERSION` and gets bumped on upgrade.
+  list lives next to `VERSION` and gets bumped on upgrade. The
+  `upgrade` button in `agentics-maintenance.yml` is the right
+  enforcement point — it should refuse to land a PR whose target
+  version is on the deny-list.
 
 ---
 
@@ -432,7 +499,7 @@ step is fine — the triage agent doesn't need memory.
   for the cheap leg of the work and adds artifact storage. For a
   popular GMI install (dozens of issues/day), this is real money.
   Quantify before promising.
-- **Engine lock-in.** Going from 8 providers (today) to 4
+- **Engine lock-in.** Going from 8 providers (today) to 5
   (gh-aw-supported) is a downgrade users will notice — particularly
   those using Groq for speed or Mistral for cost. The mitigation is the
   `engine: pi` opt-out described in §2, which means GMI must support
@@ -456,7 +523,51 @@ step is fine — the triage agent doesn't need memory.
 
 ---
 
-## 6. A minimum-viable pivot in one page
+## 6. Alternative interaction surfaces with gh-aw
+
+gh-aw is a *compiler*, but the part of gh-aw GMI's operator and
+contributors will spend the most time with is not the compiler — it is
+one of the **six surfaces** below. PIVOT.md and FUTURE.md both elide
+this; the result is a roadmap that treats `gh aw compile` as a verb and
+nothing else. The richer surface map matters because the answer to "how
+do I upgrade GMI?", "how do I trigger the issue-bot off-cycle?", and
+"how do I see why yesterday's run failed?" is different on each one.
+
+| Surface | Where it runs | What it's for | GMI adoption |
+|---|---|---|---|
+| **`gh aw` CLI** | Local terminal with `gh` auth | Authoring loop (`init`, `compile`, `run`, `logs`, `audit`, `fix`, `add`, `update`, `mcp inspect`) for developers working on workflow Markdown locally | **Recommended for contributors.** Document in CONTRIBUTING; never required of end users. |
+| **`agentic-workflows` MCP tool** | GitHub Copilot Cloud, Copilot Chat, Copilot coding agent | Pre-configured MCP server exposing `compile` / `status` / `logs` / `audit` / `audit-diff` / `add` / `update` / `upgrade` / `fix` / `mcp-inspect` so a Copilot session can maintain a repo's gh-aw configuration with no local install | **Adopt as primary self-maintenance surface.** This is the natural answer to "GMI maintains itself" — the issue-bot's own upgrades become a Copilot Chat session that calls `upgrade` and `compile` against this repo. |
+| **`github/gh-aw/actions/setup-cli`** | Inside any GitHub Actions runner | Installs the pinned `gh aw` CLI so workflow steps can run `compile`, `fix`, `audit`, `update`, `deploy` from CI | **Adopt** in `run-install`, in PR-CI for lockfile drift checks (`gh aw compile --validate`), and in the daily `gmi-self-check.md` drift sentry (FUTURE.md §6). |
+| **`agentics-maintenance.yml`** | The repo itself, via `workflow_dispatch` in the GitHub UI | Operator buttons: `upgrade`, `disable` / `enable`, `safe_outputs` replay, `create_labels` | **Adopt verbatim.** Replaces most of today's bespoke `run-install` UI. Importantly: this is the *only* surface a non-technical end user ever needs. |
+| **GitHub MCP `create_workflow_dispatch`** | Any MCP-capable client, including Copilot | The MCP-equivalent of `gh aw run` for environments where the gh-aw CLI is unavailable but the GitHub MCP server is | **Document but don't depend on.** Use it as the documented fallback for "trigger a GMI agent from Copilot Chat without leaving the chat". |
+| **`gh aw add <url>` (shared workflow imports)** | Local CLI *or* the `agentic-workflows` MCP tool's `add` | Pulls a workflow from another repo (e.g. `githubnext/agentics`) as a managed import, with version pinning and `gh aw update` for upgrades | **Adopt in two directions.** Inbound: GMI consumes upstream `githubnext/agentics` workflows as starting points instead of re-authoring (e.g. `ci-doctor`). Outbound: GMI *publishes* its triage/PR-review/standup workflows as importables so other repos can `gh aw add github://japer-technology/github-minimum-intelligence/<workflow>`. This is GMI's most plausible distribution channel post-pivot. |
+
+Two cross-cutting observations.
+
+**The interaction surface is part of the security model.** If end users
+only ever touch `agentics-maintenance.yml`'s buttons, then write
+permissions on the repo collapse to a small, audited set of
+`workflow_dispatch` events — a stronger guarantee than today's
+`workflow_dispatch` install flow, which authorises an entire bash script
+to run with the repo's token. The pivot is not just about read/write
+splits inside the agent; it is also about narrowing what humans can do
+without going through gh-aw's vocabulary. Make that visible in the
+security writeup.
+
+**The interaction surface is part of the brand.** If the canonical way
+to install GMI becomes `gh aw add github://japer-technology/github-minimum-intelligence/issue-agent`,
+then GMI's identity shifts from "the bot whose four-click install you
+copy-paste" to "the agent library you pull from a catalogue". That is a
+different product. The Phase-1 install should keep the original
+four-click path while adding `gh aw add` as the second-class option;
+once the catalogue ecosystem matures (and once `agentics-maintenance.yml`
+is doing the operator work the install flow used to do), the second
+option becomes the first and the original install collapses to a thin
+wrapper. The roadmap should set this transition as Phase 5.
+
+---
+
+## 7. A minimum-viable pivot in one page
 
 If a single contributor took this on and could ship only one PR:
 
@@ -487,26 +598,36 @@ without betting the product on the second.
 
 ---
 
-## 7. Closing argument
+## 8. Closing argument
 
 `FUTURE.md` ends with a claim: *"The future GMI keeps its soul and
 borrows gh-aw's spine."* That is the right tagline. PIVOT.md's
-contribution is to make the spine literal:
+contribution is to make the spine literal — **and to admit that the
+spine has joints FUTURE.md didn't draw**.
 
-- Spine, vertebra by vertebra, is the **fourteen primitives** in §2.
+- Spine, vertebra by vertebra, is the **nineteen primitives** in §2 —
+  not fourteen, and including the three native memory primitives
+  FUTURE.md treated as missing.
 - The soul, organ by organ, is the **three pieces in §4** that gh-aw
-  will not absorb: persistent committed memory, a versioned identity
+  will not absorb: persistent committed memory *on `main`* (the
+  conscious non-adoption of `repo-memory`), a versioned identity
   broker, a four-step zero-CLI install.
 - The single nerve connecting them is the **`session-delta.json`
   contract** in §3.1 — without it, every other promise is hand-wave.
 - The first incision is the **read/write split** in §3.1, executed as
   two phases (1a in-workflow, 1b cross-workflow) rather than the one
   FUTURE.md sketches.
+- The skin — what the human actually touches — is the **six interaction
+  surfaces** in §6. Most of the project's "do I want to keep building
+  GMI?" questions resolve themselves once you decide that the answer
+  is `agentics-maintenance.yml` for end users, `agentic-workflows` MCP
+  for self-maintenance, and `gh aw add` for distribution.
 
 Do those, and a year from now GMI is a polished single-agent product on
-the surface, a multi-agent gh-aw-native system in the middle, and a
-git-committed conversational memory at the core — installable in four
-clicks, auditable in `git diff`, and impossible to confuse with any
-other agent in the ecosystem.
+the surface, a multi-agent gh-aw-native system in the middle, a
+git-committed conversational memory at the core, and an importable
+catalogue entry at the edge — installable in four clicks, auditable in
+`git diff`, upgradeable from a Copilot Chat session, and impossible to
+confuse with any other agent in the ecosystem.
 
 Don't do them, and gh-aw eats the use case.
