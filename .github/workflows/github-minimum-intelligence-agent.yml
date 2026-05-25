@@ -230,13 +230,26 @@ jobs:
           fi
 
       # 4. Ensure common ignore patterns are present in .gitignore so that
-      #    node_modules, OS junk files, and the pi agent's auto-created .pi/
-      #    directory at the repo root never get committed.
+      #    node_modules, OS junk files, the pi agent's auto-created .pi/
+      #    directory at the repo root, and the scratch artefacts produced by
+      #    the local-chat runner (lifecycle/local-chat.ts — invoked via
+      #    `bun run chat`) never get committed. The local-chat patterns cover
+      #    its per-thread state directory, its last-run debug log, and the
+      #    occasional tool scratch files that some pi tools drop at the
+      #    repo root.
       - name: Ensure .gitignore entries
         if: steps.check-folder.outputs.action != 'skip'
         run: |
           touch .gitignore
-          for entry in "node_modules/" ".github-minimum-intelligence/node_modules/" ".DS_Store" "/.pi/"; do
+          for entry in \
+            "node_modules/" \
+            ".github-minimum-intelligence/node_modules/" \
+            ".DS_Store" \
+            "/.pi/" \
+            ".github-minimum-intelligence/state/threads/" \
+            ".github-minimum-intelligence/state/local-last-run.jsonl" \
+            "tmpclaude-*" \
+            "tmp-pi-*"; do
             grep -qxF "$entry" .gitignore || echo "$entry" >> .gitignore
           done
 
