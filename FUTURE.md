@@ -13,6 +13,15 @@ compiled-to-YAML workflow framework published at
 > gh-aw's **declarative surface area** so that one Minimum-Intelligence repo
 > becomes a *garden* of small, auditable, Markdown-defined agents — not just
 > one chat box bolted to Issues.
+>
+> **Working assumption from here down:** every local AI agent **thinks in
+> its own git branch**. A personality is a long-lived branch (`gmi/<name>`)
+> that owns its own `AGENTS.md` overlay, its own `state/sessions/`, and its
+> own commit history. Crossing into "many agents per repo" is then *free* —
+> it is just `git checkout -b gmi/triage`. Concurrency, memory isolation,
+> identity drift, and roll-back all collapse into primitives git already
+> ships. See [`BRANCH-UPGRADE.md`](./BRANCH-UPGRADE.md) for the concrete
+> engineering changes this implies.
 
 ---
 
@@ -198,6 +207,14 @@ Concrete first targets:
   `/gmi summarise`, `/gmi forget last`, `/gmi ship-it` to specific
   sub-agents — exactly the use case gh-aw's `command:` trigger is for.
 
+Because every sub-agent runs **on its own branch** (see §4.4 and
+`BRANCH-UPGRADE.md`), fan-out across these event types stops being a
+concurrency problem: the PR-review agent commits to `gmi/pr-review`, the
+standup agent to `gmi/standup`, and the `/gmi` router dispatches each
+slash command to the branch whose name matches the verb. There is no
+shared mutable state on `main`; the only place branches meet is a
+deliberate, reviewable merge.
+
 ---
 
 ## 4. What gh-aw cannot do that GMI should double down on
@@ -245,6 +262,40 @@ If GMI adopts compilation, it should compile **inside the workflow**
 to install a CLI locally. The `.lock.yml`/`agent-plan.yml` is just a
 git-committed artifact, not a developer dependency.
 
+### 4.4 Branches as identity containers
+
+gh-aw treats the repository as a single namespace: every workflow file
+sits on the default branch and every run mutates the same tree. That is
+fine for stateless CI, but it actively *fights* GMI's "the repo is the
+mind" thesis the moment you want more than one mind in the same repo.
+
+GMI's leverage is that **git already solves multi-personality
+concurrency** — it just has not been used that way for agents yet. The
+upgrade is to treat **each agent personality as a long-lived branch**:
+
+- `gmi/main` is the canonical, shipped personality (the one users meet
+  when they first install GMI).
+- `gmi/triage`, `gmi/standup`, `gmi/pr-review`, `gmi/researcher`, etc.
+  are sibling branches, each with their own `AGENTS.md` overlay, their
+  own `state/sessions/`, their own `memory.log`, their own opinion.
+- A new personality is `git checkout -b gmi/<name> gmi/main` plus a
+  prompt edit — *that is the entire bootstrap*. No new workflow file,
+  no new repo, no new install ritual.
+- Cross-pollination is a PR from one `gmi/*` branch into another (or
+  into `main`). Two agents disagreeing produces a merge conflict, which
+  is the **right** user experience: a human reviews the diff and picks.
+
+This is the cheapest possible "multi-agent per repo" primitive, because
+git did all the hard work in 2005. Concurrency is `git fetch`. Identity
+isolation is the working tree. Roll-back is `git reset`. Memory
+federation is `git cherry-pick`. Audit is `git log`.
+
+See [`BRANCH-UPGRADE.md`](./BRANCH-UPGRADE.md) for the file-level changes
+this requires (workflow checkout target, state paths, branch naming,
+apply-job push target, GC of stale agent branches, and the safe-outputs
+schema additions needed so a personality can open PRs against `main`
+without holding write access to `main` itself).
+
 ---
 
 ## 5. A phased roadmap
@@ -275,14 +326,20 @@ for everything that follows (sub-agents, MCP exposure, gh-aw interop).
 
 ### Phase 3 — *Many agents, one mind*
 
-1. Introduce `.github-minimum-intelligence/agents/*.md` with frontmatter
-   (`on:`, `safe-outputs:`, `inherits:`).
-2. Compile them at install/upgrade time into either:
+1. Adopt **branch-per-personality** (see §4.4 and `BRANCH-UPGRADE.md`):
+   the workflow checks out `gmi/<name>` instead of `main`, the apply
+   job pushes to that same branch, and `state/` paths become branch-
+   local by construction.
+2. Introduce `.github-minimum-intelligence/agents/*.md` with frontmatter
+   (`on:`, `safe-outputs:`, `inherits:`, `branch:`).
+3. Compile them at install/upgrade time into either:
    - additional jobs inside the existing workflow (low-friction), or
    - sibling `.github/workflows/gmi-<name>.yml` files (gh-aw-style).
-3. First three concrete sub-agents: **triage**, **standup**, **PR review**.
-4. All sub-agents share identity via the identity-broker and memory via
-   `gmi-mcp`.
+4. First three concrete sub-agents, each on its own branch:
+   **`gmi/triage`**, **`gmi/standup`**, **`gmi/pr-review`**.
+5. All sub-agents share identity via the identity-broker and memory via
+   `gmi-mcp`; cross-branch reads happen through `git show gmi/<other>:…`
+   so no agent can silently mutate another's mind.
 
 ### Phase 4 — *Interop with gh-aw*
 
@@ -326,6 +383,12 @@ for everything that follows (sub-agents, MCP exposure, gh-aw interop).
 - **Compilation introduces a hidden language.** Keep it inside the
   workflow (no CLI), keep the input Markdown human-first, and always
   commit the compiled artifact so reviewers see what actually runs.
+- **Branch sprawl.** Personality-per-branch is cheap to create and
+  therefore cheap to abuse. Mitigation: a `gmi/*` naming convention, a
+  GC workflow that archives or deletes branches with no commits in N
+  days, and a single `gmi/index` file on `main` that lists the active
+  personalities the way a `CODEOWNERS` file lists humans. See
+  `BRANCH-UPGRADE.md` §6.
 
 ---
 
