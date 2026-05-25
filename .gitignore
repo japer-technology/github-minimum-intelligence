@@ -2,3 +2,6 @@ node_modules/
 .github-minimum-intelligence/node_modules/
 .github-agenticana-intelligence/node_modules/
 .DS_Store
+
+# Local-only chat threads created by lifecycle/local-chat.ts
+.github-minimum-intelligence/state/threads/

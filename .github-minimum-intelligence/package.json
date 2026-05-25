@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "chat": "bun run lifecycle/local-chat.ts"
+  },
   "dependencies": {
     "@mariozechner/pi-coding-agent": "0.65.1"
   }
