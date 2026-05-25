@@ -136,7 +136,33 @@ const PROVIDER_KEY_MAP: Record<string, string> = {
 
 // Providers we consider "local" for the purpose of skipping the cloud API-key
 // check and enabling auto-retry by default.
-const LOCAL_PROVIDERS = new Set(["lmstudio", "ollama"]);
+const LOCAL_PROVIDERS = new Set(["lmstudio", "ollama", "vllm"]);
+
+// Default OpenAI-compatible endpoints for well-known local servers.
+const LOCAL_BRAND_DEFAULTS: Record<string, { label: string; baseUrl: string }> = {
+  lmstudio: { label: "LM Studio", baseUrl: "http://localhost:1234/v1" },
+  ollama:   { label: "Ollama",    baseUrl: "http://localhost:11434/v1" },
+  vllm:     { label: "vLLM",      baseUrl: "http://localhost:8000/v1"  },
+};
+
+// Brand labels that map to a "openai-compatible" pi invocation. The key is
+// what the user types or configures; the value is what pi actually receives
+// (always "openai" today because pi has no first-class lmstudio/ollama/vllm
+// provider — they all speak OpenAI Chat Completions).
+function resolvePiProvider(userProvider: string): string {
+  if (LOCAL_PROVIDERS.has(userProvider)) return "openai";
+  return userProvider;
+}
+
+function localBrandLabel(userProvider: string): string | null {
+  if (LOCAL_PROVIDERS.has(userProvider)) {
+    return LOCAL_BRAND_DEFAULTS[userProvider]?.label ?? userProvider;
+  }
+  if (userProvider === "openai" && (process.env.LOCAL_LLM_BASE_URL || process.env.OPENAI_BASE_URL)) {
+    return "openai-compatible";
+  }
+  return null;
+}
 
 // ─── Output styling ───────────────────────────────────────────────────────────
 // All user-facing messages MUST go through `say.*` (stdout) instead of
@@ -686,7 +712,13 @@ function resolveRuntimeConfig(): { provider: string; model: string; thinking: st
   }
 
   // OpenAI-compatible local server wiring.
-  if (provider === "openai" || provider === "lmstudio") {
+  // For brand providers (lmstudio/ollama/vllm) auto-fill a default base URL
+  // if the user did not set LOCAL_LLM_BASE_URL/OPENAI_BASE_URL explicitly.
+  if (provider === "openai" || LOCAL_PROVIDERS.has(provider)) {
+    const brandDefault = LOCAL_BRAND_DEFAULTS[provider]?.baseUrl;
+    if (brandDefault && !process.env.LOCAL_LLM_BASE_URL && !process.env.OPENAI_BASE_URL) {
+      process.env.LOCAL_LLM_BASE_URL = brandDefault;
+    }
     if (process.env.LOCAL_LLM_BASE_URL && !process.env.OPENAI_BASE_URL) {
       process.env.OPENAI_BASE_URL = process.env.LOCAL_LLM_BASE_URL;
     }
@@ -797,13 +829,23 @@ async function runTurn(
           : `${spinnerLabel}…`)
       : null;
 
+    // Map brand providers (lmstudio/ollama/vllm) to what pi actually
+    // understands today (openai-compatible Chat Completions). pi has no
+    // first-class lmstudio provider, so the brand is purely a label for
+    // the user; the wire-format is always openai-compatible.
+    const piProvider = resolvePiProvider(rt.provider);
+    const localMode = isLocalProvider(rt.provider);
     const args: string[] = [
       "--mode", "json",
       "--tools", "read,bash,edit,write,grep,find,ls",
-      "--provider", rt.provider,
+      "--provider", piProvider,
       "--model", rt.model,
       ...(rt.thinking ? ["--thinking", rt.thinking] : []),
       "--session-dir", sessionsDirRelative,
+      // Local OpenAI-compatible servers (LM Studio, Ollama, vLLM, ...) ignore
+      // the key but the SDK requires one. Passing it explicitly via --api-key
+      // also covers the case where the env var did not propagate to the child.
+      ...(localMode ? ["--api-key", process.env.OPENAI_API_KEY || "local"] : []),
       "-p", prompt,
     ];
     if (t.sessionPath && existsSync(t.sessionPath)) {
@@ -935,6 +977,8 @@ function printReplHelp(): void {
   Model & config:
     /status               — Provider, model, thread, branch, memory, toggles.
     /model <name>         — Switch model for subsequent turns.
+    /model <prov>:<name>  — Switch provider+model (e.g. lmstudio:google/gemma-4-31b).
+    /provider <name>      — Switch provider (lmstudio | ollama | vllm | openai | …).
     /time                 — Toggle elapsed-time display.
     /verbose              — Toggle verbose mode (JSONL event counts).
     /auto-retry [on|off|N]— Toggle / set auto-retry attempts.
@@ -981,10 +1025,14 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
     : "new session";
   console.log("");
   console.log("  " + c.bold("GitHub Minimum Intelligence") + c.dim(" — Local Chat"));
+  const brand = localBrandLabel(rt.provider);
   console.log(
-    `  ${c.dim("Provider:")} ${c.bold(rt.provider)} ${c.dim("|")} ${c.dim("Model:")} ${c.bold(rt.model)}` +
+    `  ${c.dim("Provider:")} ${c.bold(rt.provider)}${brand ? c.dim(` (${brand})`) : ""} ${c.dim("|")} ${c.dim("Model:")} ${c.bold(rt.model)}` +
     `${rt.thinking ? ` ${c.dim("|")} ${c.dim("Thinking:")} ${rt.thinking}` : ""}`
   );
+  if (brand && process.env.OPENAI_BASE_URL) {
+    console.log(`  ${c.dim("Endpoint:")} ${c.bold(process.env.OPENAI_BASE_URL)}`);
+  }
   console.log(`  ${c.dim("Thread:")}   ${c.bold("#" + current.id)}${current.name ? c.dim(` ("${current.name}")`) : ""} ${c.dim("— " + sessionStatus)}`);
   const memCount = getMemoryCount();
   if (memCount > 0) {
@@ -1136,8 +1184,10 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
         const sTurns = sExists ? countSessionTurns(current.sessionPath!) : 0;
         const sSize = sExists ? formatBytes(statSync(current.sessionPath!).size) : "—";
         console.log("");
+        const brandLabel = localBrandLabel(rt.provider);
         console.log("  Status:");
-        console.log(`    Provider:    ${rt.provider}${isLocalProvider(rt.provider) ? " (local server)" : ""}`);
+        console.log(`    Provider:    ${rt.provider}${brandLabel ? ` (${brandLabel}, local server)` : ""}`);
+        console.log(`    Pi --provider: ${resolvePiProvider(rt.provider)}`);
         console.log(`    Model:       ${rt.model}`);
         if (rt.thinking) console.log(`    Thinking:    ${rt.thinking}`);
         console.log(`    Thread:      #${current.id}${current.name ? ` ("${current.name}")` : ""}`);
@@ -1156,16 +1206,64 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
       }
 
       // ─── /model <name> ────────────────────────────────────────────────────
+      // Also accepts `provider:model` (e.g. `/model lmstudio:google/gemma-4-31b`)
+      // to switch both at once. Known local brands: lmstudio, ollama, vllm.
       if (line === "/model" || line.startsWith("/model ")) {
         const newModel = line.slice("/model".length).trim();
         if (!newModel) {
-          console.log(`\n  Current model: ${rt.model}\n  Usage: /model <name>\n`);
+          console.log(`\n  Current provider:model = ${rt.provider}:${rt.model}\n  Usage: /model <id>  or  /model <provider>:<id>\n`);
         } else if (/\s/.test(newModel)) {
           console.log("\n  " + c.yellow("! ") + "Model IDs must not contain whitespace.\n");
+        } else if (newModel.includes(":") && /^[a-z][a-z0-9-]*:/.test(newModel)) {
+          const idx = newModel.indexOf(":");
+          const newProv = newModel.slice(0, idx);
+          const newId   = newModel.slice(idx + 1);
+          const oldProv = rt.provider, oldModel = rt.model;
+          rt.provider = newProv;
+          rt.model = newId;
+          // Re-wire env for newly-selected local brand if needed.
+          if (LOCAL_PROVIDERS.has(newProv)) {
+            const def = LOCAL_BRAND_DEFAULTS[newProv];
+            if (def && !process.env.OPENAI_BASE_URL) {
+              process.env.OPENAI_BASE_URL = def.baseUrl;
+              process.env.LOCAL_LLM_BASE_URL = def.baseUrl;
+            }
+            if (!process.env.OPENAI_API_KEY) process.env.OPENAI_API_KEY = "local";
+            rt.autoRetry = true;
+          }
+          console.log(`\n  Switched: ${oldProv}:${oldModel} → ${rt.provider}:${rt.model}\n`);
         } else {
           const old = rt.model;
           rt.model = newModel;
           console.log(`\n  Model changed: ${old} → ${rt.model}\n`);
+        }
+        continue;
+      }
+
+      // ─── /provider <name> ─────────────────────────────────────────────────
+      // Switch provider (and optionally re-wire local-server env vars).
+      if (line === "/provider" || line.startsWith("/provider ")) {
+        const arg = line.slice("/provider".length).trim();
+        if (!arg) {
+          console.log(`\n  Current provider: ${rt.provider}` +
+            (localBrandLabel(rt.provider) ? c.dim(` (${localBrandLabel(rt.provider)})`) : "") +
+            `\n  Usage: /provider <name>` +
+            `\n  Known local brands: lmstudio, ollama, vllm` +
+            `\n  Cloud examples:    openai, anthropic, google, xai, openrouter\n`);
+        } else {
+          const oldProv = rt.provider;
+          rt.provider = arg;
+          if (LOCAL_PROVIDERS.has(arg)) {
+            const def = LOCAL_BRAND_DEFAULTS[arg];
+            if (def && !process.env.OPENAI_BASE_URL) {
+              process.env.OPENAI_BASE_URL = def.baseUrl;
+              process.env.LOCAL_LLM_BASE_URL = def.baseUrl;
+            }
+            if (!process.env.OPENAI_API_KEY) process.env.OPENAI_API_KEY = "local";
+            rt.autoRetry = true;
+          }
+          console.log(`\n  Provider: ${oldProv} → ${rt.provider}` +
+            (localBrandLabel(rt.provider) ? c.dim(` (${localBrandLabel(rt.provider)} via openai-compatible client)`) : "") + "\n");
         }
         continue;
       }
@@ -1490,23 +1588,36 @@ async function guideMissingApiKey(cfg: RuntimeCfg): Promise<RuntimeCfg | null> {
     if (choice === "2") {
       console.log("");
       console.log("    " + c.bold("Local LLM setup"));
-      console.log("    " + c.dim("Most local servers expose an OpenAI-compatible /v1 endpoint."));
-      console.log("    " + c.dim("Common defaults:"));
-      console.log("      " + c.gray("LM Studio   ") + c.cyan("http://localhost:1234/v1"));
-      console.log("      " + c.gray("Ollama      ") + c.cyan("http://localhost:11434/v1"));
-      console.log("      " + c.gray("vLLM        ") + c.cyan("http://localhost:8000/v1"));
+      console.log("    " + c.dim("Pick the local server you are running. They all speak the"));
+      console.log("    " + c.dim("OpenAI-compatible Chat Completions API, so pi talks to them"));
+      console.log("    " + c.dim("through its 'openai' provider client (you'll see that in"));
+      console.log("    " + c.dim("pi's diagnostics) but the launcher will label things by brand."));
       console.log("");
-      const url = (await promptLine("    Base URL [http://localhost:1234/v1]: ")).trim()
-        || "http://localhost:1234/v1";
+      console.log("      " + c.cyan("[a]") + " LM Studio    " + c.gray("http://localhost:1234/v1"));
+      console.log("      " + c.cyan("[b]") + " Ollama       " + c.gray("http://localhost:11434/v1"));
+      console.log("      " + c.cyan("[c]") + " vLLM         " + c.gray("http://localhost:8000/v1"));
+      console.log("      " + c.cyan("[d]") + " Other openai-compatible endpoint");
+      console.log("");
+      let brand: "lmstudio" | "ollama" | "vllm" | "openai" = "lmstudio";
+      while (true) {
+        const b = (await promptLine("    Server [a/b/c/d]: ")).trim().toLowerCase();
+        if (b === "" || b === "a" || b === "lmstudio" || b === "lm-studio") { brand = "lmstudio"; break; }
+        if (b === "b" || b === "ollama") { brand = "ollama"; break; }
+        if (b === "c" || b === "vllm")   { brand = "vllm"; break; }
+        if (b === "d" || b === "other" || b === "openai") { brand = "openai"; break; }
+        say.warn(`Unrecognised choice: "${b}"`, "Pick a, b, c, or d.");
+      }
+      const defaults = LOCAL_BRAND_DEFAULTS[brand] ?? { label: "openai-compatible", baseUrl: "http://localhost:1234/v1" };
+      const url = (await promptLine(`    Base URL [${defaults.baseUrl}]: `)).trim() || defaults.baseUrl;
       const modelDefault = cfg.model || "local-model";
-      const newModel = (await promptLine(`    Model name [${modelDefault}]: `)).trim() || modelDefault;
+      const newModel = (await promptLine(`    Model id  [${modelDefault}]: `)).trim() || modelDefault;
       process.env.LOCAL_LLM_BASE_URL = url;
       process.env.OPENAI_BASE_URL = url;
       process.env.OPENAI_API_KEY = "local";
-      say.ok(`Local endpoint set: ${url}`);
-      say.hint("Provider remains \"openai\" (uses the OpenAI-compatible client).");
+      say.ok(`${defaults.label} endpoint set: ${url}`);
+      say.hint(`Provider label: ${brand}  (pi sees --provider openai under the hood; --api-key local is sent on every turn so it won't complain about missing keys).`);
       console.log("");
-      return { provider: "openai", model: newModel, thinking: cfg.thinking };
+      return { provider: brand, model: newModel, thinking: cfg.thinking };
     }
 
     if (choice === "3") {
