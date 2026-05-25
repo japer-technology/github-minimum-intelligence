@@ -4,7 +4,7 @@
     "test": "bun test lifecycle/"
   },
   "dependencies": {
-    "@mariozechner/pi-coding-agent": "0.65.1",
+    "@earendil-works/pi-coding-agent": "0.75.5",
     "ansi-regex": "^6.1.0",
     "marked": "^15.0.12",
     "marked-terminal": "^7.3.0"

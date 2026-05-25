@@ -1635,7 +1635,7 @@ async function guideMissingApiKey(cfg: RuntimeCfg): Promise<RuntimeCfg | null> {
 function guidePiNotInstalled(triedPaths: string[]): void {
   say.error(
     "The `pi` binary isn't installed yet.",
-    "This project uses @mariozechner/pi-coding-agent under the hood, " +
+    "This project uses @earendil-works/pi-coding-agent under the hood, " +
     "which is added when you run `bun install` in the .github-minimum-intelligence/ folder."
   );
   console.log("    " + c.bold("To fix:"));

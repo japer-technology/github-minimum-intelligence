@@ -44,7 +44,7 @@ This installs:
 
 | Package | Purpose |
 |---|---|
-| `@mariozechner/pi-coding-agent` | The `pi` binary that drives every turn. |
+| `@earendil-works/pi-coding-agent` | The `pi` binary that drives every turn. |
 | `marked` + `marked-terminal` | Render assistant Markdown replies in the terminal. |
 | `ansi-regex` | Strip stray ANSI escape codes before rendering. |
 | `@types/bun`, `@types/node`, `@types/marked-terminal` (dev) | Type definitions for the editor — runtime not affected. |
@@ -119,7 +119,7 @@ bun run chat --thread 1 "hello"       # one-shot prompt against thread #1
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![AI](https://img.shields.io/badge/Assisted-Development-2b2bff?logo=openai&logoColor=white)
 
-Powered by [pi-mono](https://github.com/badlogic/pi-mono), conversation history is written to your local working tree, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and every transcript is a plain `.jsonl` file you can read, diff, or version yourself.
+Powered by [pi-mono](https://github.com/earendil-works/pi), conversation history is written to your local working tree, giving your agent long-term memory across sessions. It can search prior context, edit or summarize past conversations, and every transcript is a plain `.jsonl` file you can read, diff, or version yourself.
 
 ---
 
@@ -667,7 +667,7 @@ The local edition uses the same provider table as the GitHub edition. Set `defau
 | Groq | `groq` | `deepseek-r1-distill-llama-70b` | `GROQ_API_KEY` |
 | OpenRouter | `openrouter` | any model on [openrouter.ai](https://openrouter.ai/) | `OPENROUTER_API_KEY` |
 
-> **Tip:** The `pi` agent supports many more providers and models. Run `bun run pi --help` from `.github-minimum-intelligence/` or see the [pi-mono docs](https://github.com/badlogic/pi-mono) for the full list.
+> **Tip:** The `pi` agent supports many more providers and models. Run `bun run pi --help` from `.github-minimum-intelligence/` or see the [pi-mono docs](https://github.com/earendil-works/pi) for the full list.
 
 ---
 

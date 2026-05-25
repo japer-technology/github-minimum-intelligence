@@ -1,6 +1,6 @@
 # Analysis: pi-mono Feature Utilization
 
-GitHub Minimum Intelligence depends on a single package from the [pi-mono](https://github.com/badlogic/pi-mono) monorepo — `@mariozechner/pi-coding-agent`. This document audits which pi-mono features GMI currently uses, which remain untapped, and which additions deliver the highest value for a "GitHub as Infrastructure" deployment where the agent runs non-interactively in `--mode json` inside GitHub Actions.
+GitHub Minimum Intelligence depends on a single package from the [pi-mono](https://github.com/earendil-works/pi) monorepo — `@earendil-works/pi-coding-agent`. This document audits which pi-mono features GMI currently uses, which remain untapped, and which additions deliver the highest value for a "GitHub as Infrastructure" deployment where the agent runs non-interactively in `--mode json` inside GitHub Actions.
 
 ---
 
@@ -10,13 +10,13 @@ The monorepo publishes seven packages:
 
 | Package | Description | Used by GMI |
 |---|---|---|
-| `@mariozechner/pi-coding-agent` | Interactive coding agent CLI | **Yes** (v0.65.1) |
-| `@mariozechner/pi-ai` | Unified multi-provider LLM API | No (transitive only) |
-| `@mariozechner/pi-agent-core` | Agent runtime with tool calling and state management | No (transitive only) |
-| `@mariozechner/pi-web-ui` | Web components for AI chat interfaces | No |
-| `@mariozechner/pi-mom` | Slack bot delegating to pi coding agent | No |
-| `@mariozechner/pi-tui` | Terminal UI library with differential rendering | No (transitive only) |
-| `@mariozechner/pi-pods` | CLI for managing vLLM deployments on GPU pods | No |
+| `@earendil-works/pi-coding-agent` | Interactive coding agent CLI | **Yes** (v0.75.5) |
+| `@earendil-works/pi-ai` | Unified multi-provider LLM API | No (transitive only) |
+| `@earendil-works/pi-agent-core` | Agent runtime with tool calling and state management | No (transitive only) |
+| `@earendil-works/pi-web-ui` | Web components for AI chat interfaces | No |
+| `@earendil-works/pi-mom` | Slack bot delegating to pi coding agent | No |
+| `@earendil-works/pi-tui` | Terminal UI library with differential rendering | No (transitive only) |
+| `@earendil-works/pi-pods` | CLI for managing vLLM deployments on GPU pods | No |
 
 GMI installs only `pi-coding-agent` and relies on it both as a CLI binary and as the provider of the `.pi/` configuration contract (settings, skills, extensions, context files).
 
@@ -144,7 +144,7 @@ pi install git:github.com/user/repo
 Pi exports a TypeScript SDK for programmatic usage:
 
 ```typescript
-import { createAgentSession, SessionManager } from "@mariozechner/pi-coding-agent";
+import { createAgentSession, SessionManager } from "@earendil-works/pi-coding-agent";
 const { session } = await createAgentSession({ ... });
 await session.prompt("What files are in the current directory?");
 ```
@@ -165,7 +165,7 @@ pi --mode rpc
 
 ### 3.8 Web UI Package (`pi-web-ui`)
 
-`@mariozechner/pi-web-ui` provides web components for AI chat interfaces with sessions, artifacts, and attachments.
+`@earendil-works/pi-web-ui` provides web components for AI chat interfaces with sessions, artifacts, and attachments.
 
 **Impact of omission:** The public-fabric website uses a custom static page (`index.html` + `status.json`). It does not provide an interactive chat interface.
 
@@ -173,7 +173,7 @@ pi --mode rpc
 
 ### 3.9 Direct LLM API (`pi-ai`)
 
-`@mariozechner/pi-ai` provides a unified streaming LLM API with automatic model discovery and cost tracking.
+`@earendil-works/pi-ai` provides a unified streaming LLM API with automatic model discovery and cost tracking.
 
 **Impact of omission:** All LLM interaction goes through the pi coding agent, which includes tool execution overhead. Lightweight tasks (summarising a comment, classifying an issue) could use the direct API at lower cost.
 
@@ -266,3 +266,20 @@ Three pi-mono packages are not recommended for GMI integration:
 GMI currently uses 7 of pi-mono's feature categories (CLI invocation, session management, settings, system prompt extension, bootstrap protocol, context files, and skills). The highest-impact additions are compaction and retry settings (zero-code, configuration-only), followed by prompt templates and a lightweight GitHub context extension.
 
 The "GitHub as Infrastructure" principle is well served by pi-mono's project-local configuration model: all settings, skills, extensions, and prompt templates live in `.pi/` inside the committed repository. No host-level configuration, external databases, or runtime services are required — the entire agent configuration is versioned alongside the code it operates on.
+
+---
+
+## 10. New Features Available After v0.65.1 → v0.75.5 Upgrade
+
+The upgrade to `@earendil-works/pi-coding-agent` v0.75.5 (see [pi-mono-upgrade-65.1-to-75.5.md](./pi-mono-upgrade-65.1-to-75.5.md)) unlocks several capabilities worth re-auditing for GMI utilization:
+
+- **Incremental bash streaming** (v0.73.0) — long-running commands emit output progressively via `message_update` events; relevant for GMI's JSONL consumers.
+- **`PI_CODING_AGENT_SESSION_DIR`** (v0.71.0) — env-var equivalent of `--session-dir`, enables cleaner config separation in `agent.ts`.
+- **`terminate: true` tool results** — tools can signal early termination from JSON mode.
+- **`ctx.ui.addAutocompleteProvider`** — extension hook for interactive autocomplete (interactive only).
+- **`after_provider_response` hook** (v0.67.4) — inspect provider HTTP status/headers before stream consumption; useful for custom retry policies.
+- **`--no-context-files` / `-nc`** (v0.67.4) — disable automatic `AGENTS.md`/`CLAUDE.md` discovery for clean ad-hoc runs.
+- **`--no-builtin-tools`** — disable built-in tools when running with only extension-provided tools.
+- **`argument-hint` prompt-template frontmatter** (v0.67.6) — autocomplete hints for `/`-style prompts.
+- **XML-tagged context boundaries** (v0.75.0) — cleaner ingestion of `AGENTS.md` and `.pi/APPEND_SYSTEM.md` in the system prompt.
+- **`willRetry` on `agent_end` events** (v0.75.4) — JSONL consumers can discriminate between retry-in-progress and terminal end states.

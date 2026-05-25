@@ -208,7 +208,7 @@ A Docker container action pre-bakes Bun and `node_modules` into an image. With d
 | **Total startup savings** | — | **~5–15s** |
 | Development cost | — | Requires bundling (ncc/esbuild), rewriting Bun-specific APIs |
 
-A JavaScript action runs directly in the Actions runtime without provisioning a separate runtime. However, the core dependency (`@mariozechner/pi-coding-agent`) is a CLI binary that must be invoked as a subprocess — it cannot be bundled into a JavaScript action. The `pi` binary and its SDK dependencies still need to be installed at runtime, which means the expensive dependency installation cannot be eliminated by bundling alone.
+A JavaScript action runs directly in the Actions runtime without provisioning a separate runtime. However, the core dependency (`@earendil-works/pi-coding-agent`) is a CLI binary that must be invoked as a subprocess — it cannot be bundled into a JavaScript action. The `pi` binary and its SDK dependencies still need to be installed at runtime, which means the expensive dependency installation cannot be eliminated by bundling alone.
 
 ---
 

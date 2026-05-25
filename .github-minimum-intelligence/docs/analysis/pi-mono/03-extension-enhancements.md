@@ -47,7 +47,7 @@ In `--mode json` (headless), all tool, command, event, and flag capabilities wor
 **Implementation:**
 
 ```typescript
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 export default function (pi: ExtensionAPI) {
   const BLOCKED_PATTERNS = [
@@ -99,7 +99,7 @@ export default function (pi: ExtensionAPI) {
 **Implementation:**
 
 ```typescript
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 export default function (pi: ExtensionAPI) {
   const PROTECTED_PATHS = [
@@ -146,7 +146,7 @@ export default function (pi: ExtensionAPI) {
 **Implementation outline:**
 
 ```typescript
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { Type } from "@sinclair/typebox";
 
 export default function (pi: ExtensionAPI) {
@@ -256,7 +256,7 @@ export default function (pi: ExtensionAPI) {
 **Implementation:**
 
 ```typescript
-import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 export default function (pi: ExtensionAPI) {
   pi.on("before_agent_start", async (event) => {

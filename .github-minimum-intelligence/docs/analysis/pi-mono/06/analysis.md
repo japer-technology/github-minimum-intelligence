@@ -1,6 +1,6 @@
 # Analysis: Web UI Integration — Arguments For and Against
 
-This document provides a detailed examination of the proposal to integrate `@mariozechner/pi-web-ui` into GMI's public-fabric, as described in [06-web-ui-integration.md](../06-web-ui-integration.md). The analysis evaluates both sides of the decision — why it is a good idea and why it is a bad idea — grounded in GMI's specific deployment context: a headless GitHub Actions agent whose primary interface is GitHub Issues and whose operational philosophy is "GitHub as Infrastructure."
+This document provides a detailed examination of the proposal to integrate `@earendil-works/pi-web-ui` into GMI's public-fabric, as described in [06-web-ui-integration.md](../06-web-ui-integration.md). The analysis evaluates both sides of the decision — why it is a good idea and why it is a bad idea — grounded in GMI's specific deployment context: a headless GitHub Actions agent whose primary interface is GitHub Issues and whose operational philosophy is "GitHub as Infrastructure."
 
 A key principle informs this analysis: **a UX that makes GitHub's developer-centric complexity disappear is a good thing.** GitHub's native interface — Issues, Pull Requests, Actions logs, YAML workflows — is designed for software developers. This works well for the agent's primary audience (repository contributors), but it presents a formidable barrier to everyone else: prospective adopters, technical managers, non-technical stakeholders, and anyone evaluating the project without a GitHub account. Making "programmerville" disappear for these audiences is not a violation of architectural principles — it is an accessibility imperative.
 
@@ -173,7 +173,7 @@ This creates a class of agent interactions that exist outside the repository's m
 
 ### 3.6 New Dependency Maintenance
 
-Adding `@mariozechner/pi-web-ui` introduces a dependency that must be:
+Adding `@earendil-works/pi-web-ui` introduces a dependency that must be:
 
 - Tracked for version updates
 - Tested for compatibility with the session JSONL format

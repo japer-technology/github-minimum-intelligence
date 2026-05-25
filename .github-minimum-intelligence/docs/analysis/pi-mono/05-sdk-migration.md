@@ -60,7 +60,7 @@ import {
   createAgentSession,
   ModelRegistry,
   SessionManager,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 
 const authStorage = AuthStorage.create();
 const modelRegistry = ModelRegistry.create(authStorage);
@@ -108,7 +108,7 @@ import {
   createAgentSession,
   ModelRegistry,
   SessionManager,
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 
 async function runPiSdk(
   prompt: string,
@@ -220,7 +220,7 @@ Once the SDK path is validated, remove:
 ## 6. Prerequisites
 
 1. **Stable SDK API** — The SDK API should be stable (no breaking changes expected in the next 2–3 versions)
-2. **SDK documentation** — Review [docs/sdk.md](https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/docs/sdk.md) for complete API reference
+2. **SDK documentation** — Review [docs/sdk.md](https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/sdk.md) for complete API reference
 3. **Test environment** — Local testing setup to validate SDK behaviour before deploying to GitHub Actions
 
 ---
