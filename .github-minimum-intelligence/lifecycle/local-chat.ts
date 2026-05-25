@@ -453,14 +453,14 @@ function createSpinner(message: string): { stop: (finalMessage?: string) => void
 
 function getGitBranch(): string | null {
   try {
-    return execSync("git rev-parse --abbrev-ref HEAD",
+    return execFileSync("git", ["rev-parse", "--abbrev-ref", "HEAD"],
       { encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] }).trim() || null;
   } catch { return null; }
 }
 
 function getRepoRoot(): string {
   try {
-    return execSync("git rev-parse --show-toplevel",
+    return execFileSync("git", ["rev-parse", "--show-toplevel"],
       { encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] }).trim();
   } catch {
     return resolve(minimumIntelligenceDir, "..");

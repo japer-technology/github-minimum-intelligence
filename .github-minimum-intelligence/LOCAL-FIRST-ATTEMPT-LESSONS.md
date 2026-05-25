@@ -1,5 +1,13 @@
 # LOCAL-FIRST-ATTEMPT-LESSONS
 
+> **Status (2026-05-25): implementation complete.** All §4 ROI items 1–12 are
+> shipped in `lifecycle/local-chat.ts`. §3.4 has a regression test in
+> `lifecycle/local-chat.test.ts` (run with `bun test`). §3.2 is enforced: all
+> non-user shell calls use `execFileSync`; only `/run <command>` uses
+> `execSync` deliberately (it is the user's own command line). §2.4 is
+> documented in [README-VSC.md](README-VSC.md). The sections below are kept
+> as historical record of the decision-making.
+
 A feature inventory and design-decision log from the earlier local-runner
 prototype at `C:\Users\The Federation\Documents\GitHub\gmi-local-2`.
 

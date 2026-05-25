@@ -8,26 +8,107 @@ A repository-local AI framework that plugs into a developer's existing workflow.
 
 ## Installation
 
-1. Clone (or open in VS Code) the repository that already contains the `.github-minimum-intelligence/` folder.
-2. Install **[Bun](https://bun.sh/)** — the runtime that hosts the agent.
-   ```powershell
-   irm bun.sh/install.ps1 | iex
-   ```
-3. Install dependencies inside the agent folder:
-   ```powershell
-   cd .github-minimum-intelligence
-   bun install
-   ```
-4. Set the LLM API key for your configured provider as an **environment variable** in the terminal session VS Code uses. For the default (OpenAI GPT-5.4):
-   ```powershell
-   $env:OPENAI_API_KEY = "sk-..."
-   ```
-   Any [supported LLM provider](#supported-providers) works; the variable name must match the provider configured in `.pi/settings.json`.
-5. Open VS Code's integrated terminal and start your first thread:
-   ```powershell
-   bun run chat --new
-   bun run chat --thread 1
-   ```
+> A complete one-time setup takes ~3 minutes. Steps 1–4 are required; step 5 (editor / TypeScript) is optional but recommended for a clean VS Code experience.
+
+### 1. Clone or open the repository
+
+Open in VS Code any repository that already contains the `.github-minimum-intelligence/` folder.
+
+### 2. Install Bun (the runtime)
+
+Bun is the only compute layer the agent needs — no Node.js, no Docker, no server.
+
+**Windows (PowerShell)**
+```powershell
+irm bun.sh/install.ps1 | iex
+```
+Then **close and reopen your terminal** so the new `PATH` entry takes effect. Verify:
+```powershell
+bun --version
+```
+
+**macOS / Linux**
+```bash
+curl -fsSL https://bun.sh/install | bash
+exec $SHELL -l
+bun --version
+```
+
+### 3. Install dependencies
+
+```powershell
+cd .github-minimum-intelligence
+bun install
+```
+This installs:
+
+| Package | Purpose |
+|---|---|
+| `@mariozechner/pi-coding-agent` | The `pi` binary that drives every turn. |
+| `marked` + `marked-terminal` | Render assistant Markdown replies in the terminal. |
+| `ansi-regex` | Strip stray ANSI escape codes before rendering. |
+| `@types/bun`, `@types/node`, `@types/marked-terminal` (dev) | Type definitions for the editor — runtime not affected. |
+
+### 4. Set an LLM API key
+
+Set it as an environment variable in the terminal session that will launch the agent.
+
+**One-off (PowerShell)**
+```powershell
+$env:OPENAI_API_KEY = "sk-..."
+```
+
+**Persistent (PowerShell user profile)**
+```powershell
+notepad $PROFILE
+# Add: $env:OPENAI_API_KEY = "sk-..."
+```
+
+**Persistent (macOS / Linux)**
+```bash
+echo 'export OPENAI_API_KEY="sk-..."' >> ~/.zshrc   # or ~/.bashrc
+```
+
+> Don't have a cloud key? Skip ahead to [Local LLMs (LM Studio / Ollama / vLLM)](#local-llms-lm-studio--ollama--vllm) — the runner has first-class support for OpenAI-compatible local servers.
+
+> If you just run `bun run chat` without setting a key, the runner now drops you into a **guided recovery menu** that lets you paste a key for the session, switch to a local LLM, or print persistence instructions. Nothing crashes.
+
+### 5. Editor & TypeScript setup (optional, recommended)
+
+`local-chat.ts` runs under Bun, which **does not require a TypeScript compile step** — `bun run chat` executes the file directly. However, VS Code's bundled TypeScript checker will show squiggles for `process`, `fs`, `Bun`, etc. unless type definitions are visible to it.
+
+Step 3 already installs the dev `@types/*` packages. To make VS Code pick them up, add a `tsconfig.json` next to `package.json`:
+
+```jsonc
+// .github-minimum-intelligence/tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["bun", "node"],
+    "lib": ["ES2022"],
+    "strict": false,
+    "noEmit": true,
+    "allowJs": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["lifecycle/**/*.ts"]
+}
+```
+
+Reload the editor (`Ctrl+Shift+P` → "Developer: Reload Window"). All editor errors in `local-chat.ts` and `agent.ts` will clear. Nothing about the runtime changes — this is purely for the IDE.
+
+### 6. Start your first thread
+
+```powershell
+bun run chat                          # interactive launcher (pick or create)
+bun run chat --new                    # explicitly create a new thread
+bun run chat --thread 1               # resume thread #1 (REPL)
+bun run chat --thread 1 "hello"       # one-shot prompt against thread #1
+```
 <p align="center">
   <picture>
     <img src="https://raw.githubusercontent.com/japer-technology/github-minimum-intelligence/main/.github-minimum-intelligence/logo.png" alt="Minimum Intelligence" width="500">
@@ -486,6 +567,89 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 **Share threads with a teammate** — commit `state/sessions/*.jsonl` (it's git-tracked); they pull, run `bun run chat --new`, then manually edit `state/threads/<their-new-id>.json` to point `sessionPath` at the shared transcript. The local edition deliberately doesn't auto-share thread *mappings* (those are personal scratch state).
 
+### Environment variable overrides
+
+These take precedence over `.pi/settings.json` on a per-session basis — useful for trying a different model without editing the settings file.
+
+| Variable | Effect |
+|---|---|
+| `LOCAL_PROVIDER` | Override `defaultProvider` for this session. |
+| `LOCAL_MODEL` | Override `defaultModel`. |
+| `LOCAL_THINKING` | Override `defaultThinkingLevel` (`low` / `medium` / `high`). |
+| `LOCAL_LLM_BASE_URL` | Point an OpenAI-compatible client at a local server (see next section). Forwarded into `OPENAI_BASE_URL`; a placeholder `OPENAI_API_KEY=local` is injected so the SDK won't reject the request. |
+| `NO_COLOR` / `FORCE_COLOR` | Disable / force ANSI colour in the launcher and REPL banners. |
+
+Example:
+```powershell
+$env:LOCAL_MODEL = "gpt-5.3-codex-spark"
+bun run chat
+```
+
+### Local LLMs (LM Studio / Ollama / vLLM)
+
+The runner natively supports any OpenAI-compatible local server. Two ways to enable it:
+
+**(a) Interactive** — just run `bun run chat` with no cloud key set. The guided menu offers "Use a local LLM instead" and walks through the setup.
+
+**(b) Manual env vars** — for repeatable / scripted use:
+
+```powershell
+# LM Studio (default port 1234)
+$env:LOCAL_LLM_BASE_URL = "http://localhost:1234/v1"
+$env:LOCAL_MODEL        = "qwen2.5-coder-32b-instruct"
+bun run chat
+
+# Ollama (default port 11434)
+$env:LOCAL_LLM_BASE_URL = "http://localhost:11434/v1"
+$env:LOCAL_MODEL        = "deepseek-r1:32b"
+bun run chat
+
+# vLLM (default port 8000)
+$env:LOCAL_LLM_BASE_URL = "http://localhost:8000/v1"
+$env:LOCAL_MODEL        = "your-served-model"
+bun run chat
+```
+
+Auto-retry is enabled by default for local providers (they're often slow/flaky on first call); you can change it with `/auto-retry off` in the REPL.
+
+You can also write a permanent local setup into `.pi/settings.json`:
+```json
+{
+  "defaultProvider": "lmstudio",
+  "defaultModel": "qwen2.5-coder-32b-instruct"
+}
+```
+`lmstudio` is a first-class provider value (treated as local; no API key required).
+
+> **`defaultThinkingLevel` and local models.** Many local models (especially smaller quantised ones) reject the `--thinking` flag with an `unknown_field` error. If yours does, **delete the `defaultThinkingLevel` line from `.pi/settings.json`** (or unset `LOCAL_THINKING`) — the runner only passes `--thinking` when the field is present.
+
+### REPL slash-commands quick reference
+
+When you enter a thread without a one-shot prompt (e.g. `bun run chat --thread 1` or any interactive launch), you're dropped into a REPL. Type `/help` inside it for the full grouped listing; the common ones:
+
+| Command | Effect |
+|---|---|
+| `/help` | Show full command list. |
+| `/status` | Provider, model, thread, git branch, memory count, toggles. |
+| `/list` / `/new [name]` / `/switch <ref>` / `/rename <name>` | Thread management. |
+| `/history` / `/export md` | Inspect or export this thread's conversation. |
+| `/model <name>` | Switch model for subsequent turns. |
+| `/time` / `/verbose` | Toggle elapsed-time / JSONL event-count display. |
+| `/auto-retry [on\|off\|N]` | Toggle or set max retry attempts. |
+| `/remember <text>` / `/memories [term]` | Append/search the local `memory.log`. |
+| `/cat <path>` / `/md <path>` | View a file (numbered) or render its Markdown. |
+| `/git` / `/diff [path]` | Git status / diff stat / scoped diff. |
+| `/run <cmd>` | Run a shell command (30 s timeout). |
+| `/retry` / `/again` / `/best-of <n>` | Re-send last prompt (same thread / new thread / N parallel attempts). |
+| `/multiline` | Compose multi-line input (blank line submits). |
+| `/clear` | Clear the screen. |
+| `/exit` / `/quit` | End the session. |
+
+The REPL prompt shows your repo name, current branch, thread ID, and alias:
+```
+github-minimum-intelligence (main) #1 [hatch] >
+```
+
 ---
 
 ## Supported Providers
@@ -539,13 +703,19 @@ The two entry points are deliberately compatible: a session transcript written b
 
 ## Troubleshooting
 
-**`pi binary not found at …\node_modules\.bin\pi.cmd`** — you skipped step 3 of Installation. Run `bun install` inside `.github-minimum-intelligence/`.
+**`bun: The term 'bun' is not recognized…`** — Bun isn't on `PATH`. Close and reopen the terminal after installing Bun so the new `PATH` entry takes effect. On Windows the installer drops `bun.exe` at `%USERPROFILE%\.bun\bin\bun.exe`.
 
-**`Missing env var OPENAI_API_KEY for provider "openai".`** — export the variable in *the same terminal session* you're running `bun run chat` from. PowerShell tabs do not share environment with other tabs.
+**`pi binary not found at …\node_modules\.bin\pi.cmd`** — you skipped step 3 of Installation. Run `bun install` inside `.github-minimum-intelligence/`. The runner now also prints a friendly box with the fix commands instead of throwing.
 
-**`Unknown thread "scratch". Use --list to see threads, or --new to create one.`** — the closed-world identity model rejecting an unknown reference. Either you typed an ID/alias that doesn't exist, or the mapping file was deleted. Use `--list` to see what's available.
+**`Missing env var OPENAI_API_KEY for provider "openai".`** — *no longer crashes.* The runner shows a guided menu offering to (1) paste a key for this session, (2) switch to a local LLM, (3) print persistence instructions, or (q) quit. To set the key permanently see [Add Your API Key](#add-your-api-key). PowerShell tabs do not share environment with other tabs.
 
-**`pi did not create a session file for this turn — refusing to guess …`** — `pi` exited before producing a transcript (often a transient provider error printed to stderr just above the message). Inspect the stderr output, fix the underlying issue, and re-run; the thread mapping is untouched so you can retry safely.
+**VS Code shows red squiggles on `process`, `fs`, `Bun`, `import.meta.dir` etc.** — purely cosmetic; the script runs fine under `bun run`. Add the `tsconfig.json` from [step 5 of Installation](#5-editor--typescript-setup-optional-recommended) and reload the window to clear them.
+
+**`Unknown thread "scratch". Use --list to see threads, or --new to create one.`** — the closed-world identity model rejecting an unknown reference. Either you typed an ID/alias that doesn't exist, or the mapping file was deleted. Use `--list` to see what's available, or run `bun run chat` with no args for the interactive picker.
+
+**`pi did not create a session file for this turn — refusing to guess …`** — `pi` exited before producing a transcript (often a transient provider error printed to stderr just above the message). Inspect the stderr output, fix the underlying issue, and re-run; the thread mapping is untouched so you can retry safely. With auto-retry enabled (default for local providers) you'll see `⟳ Retry N/M` messages before the final failure.
+
+**Local LLM connections refused / hanging.** — Confirm the server is actually listening: `curl http://localhost:1234/v1/models` (LM Studio) or the equivalent for your runner. The runner forwards `LOCAL_LLM_BASE_URL` into `OPENAI_BASE_URL` and injects a placeholder key automatically — you don't need to set those yourself.
 
 **The agent edited files I didn't expect.** — review them in the Source Control panel and discard. Consider switching to the read-only tool list (see [Configuration](#configuration)) for sensitive workspaces.
 

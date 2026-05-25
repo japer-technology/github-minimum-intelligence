@@ -1,11 +1,17 @@
 {
   "scripts": {
-    "chat": "bun run lifecycle/local-chat.ts"
+    "chat": "bun run lifecycle/local-chat.ts",
+    "test": "bun test lifecycle/"
   },
   "dependencies": {
     "@mariozechner/pi-coding-agent": "0.65.1",
     "ansi-regex": "^6.1.0",
     "marked": "^15.0.12",
     "marked-terminal": "^7.3.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "@types/marked-terminal": "^6.1.1",
+    "@types/node": "^25.9.1"
   }
 }
