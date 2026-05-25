@@ -5,3 +5,12 @@ node_modules/
 
 # Local-only chat threads created by lifecycle/local-chat.ts
 .github-minimum-intelligence/state/threads/
+
+# Per-thread scratch / debug artefacts written by local-chat.ts
+.github-minimum-intelligence/state/local-last-run.jsonl
+.github-minimum-intelligence/memory.log
+
+# Leaked tool scratch files that pi-mono / some local tool implementations
+# occasionally drop into the repo root. They are never intentional commits.
+tmpclaude-*
+tmp-pi-*
