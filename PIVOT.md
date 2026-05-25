@@ -142,7 +142,7 @@ spine *is*, primitive by primitive, against the gh-aw reference
 | **Markdown + YAML frontmatter** as the unit of authoring | A workflow is one human-readable file with `on:`, `permissions:`, `tools:`, `safe-outputs:`, `engine:`, `network:`, `strict:`, `timeout-minutes:` in frontmatter and a natural-language body. | A 450-line hand-authored YAML + a 467-line TS orchestrator. | Low *intellectually*, large *physically*. Most of the value is realised once the first workflow compiles. |
 | **`engine: copilot \| claude \| codex \| gemini \| opencode`** | Pluggable model with credentials wired in by gh-aw. **Five** engines, not four. | Eight providers via `pi-mono` selected from `settings.json`. | **High.** GMI loses its 8-provider matrix down to gh-aw's 5 (and loses `pi` itself). This is the single biggest *capability* loss. Mitigation: keep `pi`-mode available behind a `engine: pi` opt-out that *doesn't* compile with `gh aw compile` (degrades to today's workflow). |
 | **`safe-outputs:`** | Schema-validated structured output consumed by a separate write-only job. Built-ins: `add-comment`, `add-labels`, `add-pr-comment`, `create-issue`, `create-pull-request`, `create-discussion` (with `close-older-discussions:` and `close-older-issues:`), `push-to-pull-request-branch`, `upload-artifact` (incl. `skip-archive: true`), `assign-to-agent`, `create-pull-request-review-comment`, and `noop` for "produced nothing". | None. The agent posts comments by calling `gh api` itself. | Medium. The mapping for the issue-bot is `safe-outputs: { add-comment: {} }`. The harder case is *memory*; see §3.2 for the four-way decision. |
-| **Built-in memory primitives** (`cache-memory`, `repo-memory`, `repo-memory` with `wiki: true`, `comment-memory`) | gh-aw ships three persistence backends: Actions-cache-backed ephemeral state, a dedicated `memory/agent-notes` git branch, and inline issue/PR comment state. | `state/sessions/*.jsonl` + `memory.log` committed to `main`. | **Strategic decision, not a free upgrade.** `repo-memory` overlaps with GMI's value proposition; adopting it forfeits "memory on `main`, diffable in PRs". See §3.2. |
+| **Built-in memory primitives** (`cache-memory`, `repo-memory`, `comment-memory`; `repo-memory` optionally surfaced as a GitHub Wiki via `wiki: true`) | gh-aw ships three persistence backends: Actions-cache-backed ephemeral state (`cache-memory`), a dedicated `memory/agent-notes` git branch (`repo-memory`, optionally projected to the repo's Wiki), and inline state pinned to the triggering issue/PR (`comment-memory`). | `state/sessions/*.jsonl` + `memory.log` committed to `main`. | **Strategic decision, not a free upgrade.** `repo-memory` overlaps with GMI's value proposition; adopting it forfeits "memory on `main`, diffable in PRs". See §3.2. |
 | **`network:` allowlist** + **Agent Workflow Firewall (AWF)** | Egress firewall via `gh-aw-firewall`. Domain-based allow-listing, activity logging. | None — runner has full egress. | Low; just opt in. |
 | **`tools.bash: [cat, grep, jq, …]`** | Explicit allowlist of shell commands the agent may invoke. | None — the `pi` agent has whatever `pi-mono` gives it. | Medium. Today's skills assume free-form shell. Each skill needs an audit pass to declare its minimum allowlist. |
 | **`tools.github.mode: gh-proxy`** | Pre-authenticated `gh` CLI through a proxy; faster than a local MCP server. | The agent uses `gh` directly with `GITHUB_TOKEN`. | Low. |
@@ -417,7 +417,9 @@ Two things FUTURE.md misses about this:
   all.** gh-aw is the compiler; GitHub Actions runs the lockfile. So
   every PR a contributor makes to a `.md` workflow ships with a recompile,
   and reviewers diff the lockfile. This needs CI enforcement
-  (`gh aw compile --validate` in PR CI) or the lockfile will silently
+  (`gh aw compile --validate` in PR CI — the `--validate` flag validates
+  without emitting lock files, replacing the older `--check` naming the
+  earlier draft of this document used) or the lockfile will silently
   drift. The same `setup-cli` action makes the CI step a one-liner.
 - **The `GH_AW_VERSION` pin is mandatory.** The gh-aw release notes
   (per the upstream README) warn about a billing-impact bug in
@@ -540,7 +542,7 @@ do I upgrade GMI?", "how do I trigger the issue-bot off-cycle?", and
 | **`github/gh-aw/actions/setup-cli`** | Inside any GitHub Actions runner | Installs the pinned `gh aw` CLI so workflow steps can run `compile`, `fix`, `audit`, `update`, `deploy` from CI | **Adopt** in `run-install`, in PR-CI for lockfile drift checks (`gh aw compile --validate`), and in the daily `gmi-self-check.md` drift sentry (FUTURE.md §6). |
 | **`agentics-maintenance.yml`** | The repo itself, via `workflow_dispatch` in the GitHub UI | Operator buttons: `upgrade`, `disable` / `enable`, `safe_outputs` replay, `create_labels` | **Adopt verbatim.** Replaces most of today's bespoke `run-install` UI. Importantly: this is the *only* surface a non-technical end user ever needs. |
 | **GitHub MCP `create_workflow_dispatch`** | Any MCP-capable client, including Copilot | The MCP-equivalent of `gh aw run` for environments where the gh-aw CLI is unavailable but the GitHub MCP server is | **Document but don't depend on.** Use it as the documented fallback for "trigger a GMI agent from Copilot Chat without leaving the chat". |
-| **`gh aw add <url>` (shared workflow imports)** | Local CLI *or* the `agentic-workflows` MCP tool's `add` | Pulls a workflow from another repo (e.g. `githubnext/agentics`) as a managed import, with version pinning and `gh aw update` for upgrades | **Adopt in two directions.** Inbound: GMI consumes upstream `githubnext/agentics` workflows as starting points instead of re-authoring (e.g. `ci-doctor`). Outbound: GMI *publishes* its triage/PR-review/standup workflows as importables so other repos can `gh aw add github://japer-technology/github-minimum-intelligence/<workflow>`. This is GMI's most plausible distribution channel post-pivot. |
+| **`gh aw add <url>` (shared workflow imports)** | Local CLI *or* the `agentic-workflows` MCP tool's `add` | Pulls a workflow from another repo (e.g. `githubnext/agentics`) as a managed import, with version pinning and `gh aw update` for upgrades | **Adopt in two directions.** Inbound: GMI consumes upstream `githubnext/agentics` workflows as starting points instead of re-authoring (e.g. `ci-doctor`). Outbound: GMI *publishes* its triage/PR-review/standup workflows as importables so other repos can `gh aw add japer-technology/github-minimum-intelligence/<workflow>`. This is GMI's most plausible distribution channel post-pivot. |
 
 Two cross-cutting observations.
 
@@ -555,7 +557,9 @@ without going through gh-aw's vocabulary. Make that visible in the
 security writeup.
 
 **The interaction surface is part of the brand.** If the canonical way
-to install GMI becomes `gh aw add github://japer-technology/github-minimum-intelligence/issue-agent`,
+to install GMI becomes `gh aw add japer-technology/github-minimum-intelligence/issue-agent`
+(the same `<owner>/<repo>/<workflow>` shorthand `gh aw add` accepts for
+`githubnext/agentics/ci-doctor`),
 then GMI's identity shifts from "the bot whose four-click install you
 copy-paste" to "the agent library you pull from a catalogue". That is a
 different product. The Phase-1 install should keep the original
