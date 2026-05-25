@@ -1,0 +1,170 @@
+# COMPLY.md
+
+> How **github-minimum-intelligence** (GMI) assures compliance with the
+> [GitHub Agentic Workflows specification (`gh-aw`)](https://github.github.com/gh-aw)
+> and the [GitHub Site Policies](https://docs.github.com/en/site-policy).
+
+This document is a self-audit. It states what each external policy requires,
+what GMI does today, and the concrete artefact (file, workflow step, doc) that
+provides the evidence. It is intended to be re-reviewed on every release and
+whenever either external policy is updated.
+
+---
+
+## 1. Scope
+
+GMI is an AI agent that lives in a GitHub repository. It uses:
+
+- **GitHub Issues** as the conversational UI.
+- **Git** as persistent, versioned memory.
+- **GitHub Actions** as its only compute layer.
+
+The compliance surface therefore covers three things:
+
+1. The workflow file shipped to user repositories
+   (`.github/workflows/github-minimum-intelligence-agent.yml`).
+2. The agent framework folder installed into user repositories
+   (`.github-minimum-intelligence/`).
+3. The template repository itself (this repo), which distributes the above.
+
+---
+
+## 2. Compliance with the GitHub Agentic Workflows spec (`gh-aw`)
+
+`gh-aw` is GitHub's specification for agentic workflows. Its guardrails are
+the de-facto standard for "an AI agent running inside GitHub Actions". GMI is
+**not** authored as a `.md` workflow compiled by `gh aw compile`; it is a
+hand-written `.yml` workflow. We therefore commit to honouring the same
+guardrails the spec enforces by construction.
+
+| gh-aw guardrail | What it requires | How GMI complies | Evidence |
+|---|---|---|---|
+| **Least-privilege permissions** | Workflows declare the minimum `permissions:` block needed; read-only by default. | The workflow declares only `contents: write`, `issues: write`, `actions: write`, each with an inline justification. No `id-token`, no `packages`, no `security-events`, no `pull-requests: write`. | `.github/workflows/github-minimum-intelligence-agent.yml` — `permissions:` block and surrounding comments. |
+| **Explicit event triggers** | Triggers are enumerated; no broad `on: *`. | Triggers are limited to `issues: [opened]`, `issue_comment: [created]`, and `workflow_dispatch`. | Same file, `on:` block. |
+| **Authorised actors only** | The agent must refuse to act for unauthorised users. | Every job verifies the triggering actor has write/maintain/admin via `gh api .../collaborators/<actor>/permission`. Unauthorised actors get a 👎 reaction and the job exits. | `run-agent` job, "Check authorisation" step; documented in `AGENTS.md` and `docs/security-assessment.md`. |
+| **Safe outputs** | Agent output must pass through a constrained, declared channel (e.g. `add-comment`, `create-pull-request`). | The agent's only output channels are (a) an issue comment posted via `gh issue comment` and (b) a commit to the default branch via a checked-out workspace. No arbitrary network sinks, no third-party webhooks. | `run-agent` job — final "post reply" and "commit state" steps. |
+| **Sandboxed execution** | Agent code runs in an isolated, ephemeral container. | Each invocation runs on a fresh GitHub-hosted `ubuntu-latest` runner; no self-hosted runners, no persistent state outside git. | `runs-on: ubuntu-latest` in every job. |
+| **Secrets isolation** | Secrets are not exposed to model prompts or to untrusted code paths. | LLM API keys are read from `secrets.*` only inside the `env:` of the model invocation step, never echoed, never written to disk, never sent to a comment. The agent prompt is constructed from the issue body + git-tracked context only. | `run-agent` job env block; `docs/security-assessment.md` §"Secrets handling". |
+| **Deterministic, reviewable change set** | Every change the agent makes must be auditable in git history. | Every prompt, every response, every state mutation is committed (see `state/` and session files under `.github-minimum-intelligence/`). Reviewers can `git log` any decision. | README §"Your Data, Your Environment"; `state/` directory layout. |
+| **Versioned, reproducible install** | The workflow ships a pinned, semver-tagged framework. | `.github-minimum-intelligence/VERSION` is semver; the installer refuses to upgrade unless both local and remote versions parse as semver and remote > local. | `run-install` job, "Check for .github-minimum-intelligence" step. |
+| **No surprise upgrades** | Upgrades are explicit. | Install/upgrade only runs on `workflow_dispatch`, never on issue events. | `run-install` job `if:` guard. |
+| **Pinned actions** | Third-party actions are pinned. | Only first-party `actions/checkout@v6` is used; no third-party actions. | Workflow file action references. |
+| **Network egress minimisation** | Agents should not call arbitrary endpoints. | Outbound calls are limited to (a) the configured LLM provider endpoint and (b) `raw.githubusercontent.com` / `github.com/<this-repo>/archive` for self-upgrade. Both are documented. | `docs/warning-blast-radius.md`. |
+| **Documented blast radius** | Users must know what the agent can touch. | `docs/warning-blast-radius.md` enumerates every capability, every permission, every reachable endpoint. | That file. |
+
+### 2.1 Gaps and mitigations
+
+- GMI does not currently produce a `.lock.yml` from a `.md` source — the
+  workflow is hand-authored. **Mitigation:** the workflow is short, heavily
+  commented, and every permission is justified inline so it can be reviewed as
+  if it were compiled output.
+- GMI does not use the `gh-aw` `safe-outputs:` block. **Mitigation:** the
+  equivalent restriction is enforced procedurally — the only side-effects
+  performed by the agent step are `gh issue comment` and `git commit/push` on
+  the default branch.
+
+---
+
+## 3. Compliance with GitHub Site Policy
+
+The applicable policies live under
+<https://docs.github.com/en/site-policy/>. The sub-policies most relevant to
+an AI agent that posts comments, opens commits, and consumes API quota are:
+
+### 3.1 [Acceptable Use Policies](https://docs.github.com/en/site-policy/acceptable-use-policies/github-acceptable-use-policies)
+
+| AUP clause | Requirement | GMI control |
+|---|---|---|
+| §1 Compliance with laws | User is responsible for lawful use. | `LICENSE.md` (MIT) and `docs/final-warning.md` tell installers they own the deployment and its consequences. |
+| §2 User safety | No unlawful, obscene, harassing, threatening, or discriminatory content. | The agent's system prompt (`AGENTS.md`) defines a disciplined, analytical persona ("Spock") and never instructs the model to produce such content. The user retains full git-level review of every output before merging or replying. |
+| §3 IP, authenticity, privacy | No infringement, no impersonation, no doxxing. | The agent never represents itself as a GitHub employee. Repo collaborators are the only authorised actors (see §2 above), so the agent cannot be commandeered by anonymous third parties to dox or impersonate. |
+| §4 Spam & inauthentic activity | No automated bulk activity, no rank abuse, no excessive automation. | (a) Triggered only by genuine issue/comment events from authorised collaborators — not on schedules, not on stars, not on follows. (b) One agent run = one human interaction; no fan-out. (c) No automated starring, following, or cross-repo posting. |
+| §5 Excessive server load | No undue burden on GitHub's servers. | Agent runs are single-shot, short-lived, and bounded by GitHub Actions' own job timeouts. No polling loops, no background daemons. |
+
+### 3.2 [GitHub Terms of Service](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service) — API & Automation
+
+| ToS clause | Requirement | GMI control |
+|---|---|---|
+| API rate limits | Respect documented limits. | All GitHub API access goes through `gh` / `GITHUB_TOKEN`, which is rate-limited per-repository by GitHub itself. No unauthenticated calls. |
+| Automated account creation | Prohibited. | GMI never creates accounts. |
+| Scraping | Prohibited beyond what the API permits. | The agent only fetches: this repo's own template archive (during upgrade) and the configured LLM provider. No scraping of github.com pages. |
+
+### 3.3 [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
+
+| Privacy concern | Requirement | GMI control |
+|---|---|---|
+| Personal data minimisation | Only collect what is needed. | GMI persists exactly the issue/comment content the user voluntarily posts. No telemetry, no analytics, no out-of-band transmission. All persisted data sits in the user's own repository. |
+| Third-party data sharing | Must be disclosed. | The only third party is the LLM provider the user selects by adding an API key; the README, `AGENTS.md`, and `docs/final-warning.md` make this explicit. |
+| Data subject control | Users can delete their data. | All conversation state is plain files in git; `git rm` and `git filter-repo` give the user full control. |
+
+### 3.4 [GitHub Acceptable Use — Information Usage Restrictions](https://docs.github.com/en/site-policy/acceptable-use-policies/github-information-usage-restrictions)
+
+| Clause | Requirement | GMI control |
+|---|---|---|
+| User information not for unsolicited contact | No spamming users via emails harvested from GitHub. | The agent only replies *within the originating issue thread*. It never opens new issues against other users, never @-mentions users who did not opt in, and never sends email. |
+
+### 3.5 [GitHub Logo & Trademark Policy](https://docs.github.com/en/site-policy/content-removal-policies/github-trademark-policy)
+
+- GMI's name ("GitHub Minimum Intelligence") uses "GitHub" descriptively to
+  identify the platform it runs on, consistent with nominative fair use.
+- GMI ships its own logo (`.github-minimum-intelligence/logo.png`) and does
+  **not** use the GitHub Invertocat mark, the GitHub wordmark in a way that
+  implies endorsement, or any Microsoft trademark.
+- If GitHub Legal asks for a name change, the project will comply; this is
+  recorded as an explicit obligation here.
+
+### 3.6 [Responsible AI / Generative AI policies](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features)
+
+| Requirement | GMI control |
+|---|---|
+| Disclose AI involvement in outputs | Every agent comment is posted by the workflow's bot identity, and the README / SECURITY / AGENTS docs make clear that responses are LLM-generated. |
+| Human review before merge | The agent commits to the default branch by design (the install pattern), but every commit is attributable, reversible, and visible in `git log`; users can configure branch protection to require PR review for agent commits. This is recommended in `docs/final-warning.md`. |
+| Provider terms flow-through | Users must comply with their chosen LLM provider's terms. | `README.md` §"Supported providers" and `docs/final-warning.md` flag this. |
+
+---
+
+## 4. Repository-level hygiene
+
+These controls are not mandated by either policy directly, but they materially
+strengthen compliance:
+
+- **`SECURITY.md`** — private disclosure path and pointer to the incident
+  response plan.
+- **`CODE_OF_CONDUCT.md`** — supports AUP §2 (user safety).
+- **`CONTRIBUTING.md`** — defines the review process for changes to the
+  workflow itself.
+- **`LICENSE.md`** — MIT, compatible with redistribution clauses of the ToS.
+- **`docs/security-assessment.md`** — threat model and access control review.
+- **`docs/incident-response.md`** — containment / eradication / recovery
+  procedure if the agent is abused.
+- **`docs/warning-blast-radius.md`** — exact capability inventory.
+- **`docs/final-warning.md`** — informed-consent notice shown to operators
+  before they install.
+
+---
+
+## 5. How to re-verify this document
+
+On every release, or whenever `gh-aw` or GitHub Site Policy changes:
+
+1. Re-read the linked external docs.
+2. Walk every row in §2 and §3; confirm the cited file/step still exists and
+   still implements the claimed control.
+3. Run the workflow once in a sandbox repository and confirm:
+   - Unauthorised actors are rejected.
+   - Permissions in the resulting job log match the declared `permissions:`.
+   - The only outbound network calls are to GitHub and the configured LLM
+     provider.
+4. Update this file and bump `.github-minimum-intelligence/VERSION`.
+
+---
+
+## 6. Statement of compliance
+
+Based on the mapping above, the maintainers assert that, as of the version
+recorded in `.github-minimum-intelligence/VERSION`, this repository is
+designed and operated in a manner consistent with the `gh-aw` guardrails and
+the GitHub Site Policy. Any gaps are explicitly identified in §2.1 above and
+are tracked for remediation.
+
+*Compliance is a process, not a state. This document is the process artefact.*
