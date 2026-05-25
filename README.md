@@ -1,6 +1,6 @@
 # GitHub Minimum Intelligence
 
-#### Please read [more](README.md) before you install this AI Agent.
+#### Please read [more](.github-minimum-intelligence/README.md) before you install this AI Agent.
 
 <p align="center">
   <picture>
