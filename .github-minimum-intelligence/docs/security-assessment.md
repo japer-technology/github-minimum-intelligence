@@ -109,7 +109,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 | Component | Version | Role |
 |-----------|---------|------|
-| `@mariozechner/pi-coding-agent` | 0.65.1 | Core AI agent: prompt processing, LLM interaction, tool execution |
+| `@earendil-works/pi-coding-agent` | 0.75.5 | Core AI agent: prompt processing, LLM interaction, tool execution |
 | GitHub Actions Workflow | N/A | Orchestration: triggers, authorization, environment setup |
 | Lifecycle Scripts (TypeScript) | N/A | Agent initialization and indicator management |
 | Anthropic Claude | N/A | LLM backend for reasoning and code generation |
@@ -276,15 +276,17 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 ### SEC-009: Single Dependency on Third-Party Package 🟡 MEDIUM
 
-**Description:** The entire system depends on `@mariozechner/pi-coding-agent` (^0.52.5), a third-party npm package. This package has transitive dependencies on multiple AI provider SDKs.
+**Description:** The entire system depends on `@earendil-works/pi-coding-agent` (pinned at `0.75.5`), a third-party npm package. This package has transitive dependencies on multiple AI provider SDKs.
 
 **Impact:** A supply chain compromise of this package (or any transitive dependency) would give an attacker arbitrary code execution in the agent's context - with all the privileges documented above.
 
 **Remediation:**
-- Pin the exact version in `package.json` (remove the `^` caret).
+- Pin the exact version in `package.json` (no `^` caret — already done ✅).
 - Use `bun install --frozen-lockfile` (already done ✅).
-- Periodically audit the dependency tree with `npm audit` or `snyk`.
+- Periodically audit the dependency tree with `bun pm audit` or `npm audit`.
 - Consider vendoring critical dependencies.
+- Benefits from upstream v0.75.4 supply-chain hardening: `npm-shrinkwrap.json` ships in the package, lifecycle-script allowlist is enforced, lifecycle scripts are disabled for self-update and local release installs, and dependency pinning is verified at release time.
+- The v0.71.0 release cleared the GHSA-p7fg-763f-g4gf audit finding by updating `@anthropic-ai/sdk`.
 
 ---
 
@@ -365,7 +367,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 ### Dependency Tree
 
 ```
-@mariozechner/pi-coding-agent@0.65.1
+@earendil-works/pi-coding-agent@0.75.5
 ├── @anthropic-ai/sdk          (Anthropic API client)
 ├── @aws-sdk/client-bedrock-runtime  (AWS Bedrock)
 ├── openai                     (OpenAI API client)
@@ -386,7 +388,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 ### Immediate Actions
 
-1. **Pin `@mariozechner/pi-coding-agent`** to exact version (already pinned at `0.65.1`).
+1. **Pin `@earendil-works/pi-coding-agent`** to exact version (already pinned at `0.75.5`).
 2. **Pin GitHub Actions** to commit SHAs:
    ```yaml
    - uses: actions/checkout@<sha>  # v6

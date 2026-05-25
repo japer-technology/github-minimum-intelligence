@@ -110,7 +110,7 @@ The `pi` binary is resolved as a path within the project's own `node_modules`:
 const piBin = resolve(minimumIntelligenceDir, "node_modules", ".bin", "pi");
 ```
 
-This resolves to `.github-minimum-intelligence/node_modules/.bin/pi`. The binary is installed by `bun install` from the `@mariozechner/pi-coding-agent` package declared in `.github-minimum-intelligence/package.json`.
+This resolves to `.github-minimum-intelligence/node_modules/.bin/pi`. The binary is installed by `bun install` from the `@earendil-works/pi-coding-agent` package declared in `.github-minimum-intelligence/package.json`.
 
 ### 5.2 Argument Assembly
 
@@ -286,4 +286,4 @@ The key design decisions are:
 - **Session continuity.** Per-issue session files enable multi-turn conversations across separate workflow runs without external state stores.
 - **JSON mode with post-processing.** Pi runs in `--mode json`, and the agent extracts the final reply using `tac` + `jq` rather than parsing the stream in TypeScript, keeping the orchestration layer minimal.
 - **Piped output via tee.** The `pi` → `tee` pipeline provides simultaneous real-time logging (visible in the Actions run) and a persisted copy for extraction.
-- **Self-contained dependency.** The pi binary is installed from `@mariozechner/pi-coding-agent` via `bun install` and resolved from the project's own `node_modules`, requiring no global tooling on the runner beyond Bun itself.
+- **Self-contained dependency.** The pi binary is installed from `@earendil-works/pi-coding-agent` via `bun install` and resolved from the project's own `node_modules`, requiring no global tooling on the runner beyond Bun itself.

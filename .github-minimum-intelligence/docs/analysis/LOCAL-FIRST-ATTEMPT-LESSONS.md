@@ -238,7 +238,7 @@ behaviour matches `agent.ts` exactly. **Keep ours.**
 
 ### 3.7 Old pi-mono version pin
 Their `package.json` pins `@mariozechner/pi-coding-agent ^0.52.5`; we
-pin `0.65.1`. Do not downgrade.
+pin `0.75.5` (`@earendil-works/pi-coding-agent`). Do not downgrade.
 
 ---
 

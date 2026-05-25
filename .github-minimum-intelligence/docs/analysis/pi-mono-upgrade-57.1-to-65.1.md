@@ -554,3 +554,7 @@ The update from v0.57.1 to v0.65.1 brings **17 releases** of improvements. The m
 The only **mandatory code change** beyond the version bump is adding `promptSnippet` to the `github-context.ts` extension (v0.59.0 breaking change). All other breaking changes either don't affect GMI's CLI-based usage or have been verified as non-impacting.
 
 The update is low-risk with high reward — it addresses several known reliability issues in the non-interactive JSON-mode pipeline that GMI depends on.
+
+---
+
+**See also:** The follow-up upgrade analysis [`pi-mono-upgrade-65.1-to-75.5.md`](./pi-mono-upgrade-65.1-to-75.5.md) covers the move from `0.65.1` to `0.75.5` and the project's migration from `badlogic/pi-mono` (`@mariozechner/*`) to `earendil-works/pi` (`@earendil-works/*`).

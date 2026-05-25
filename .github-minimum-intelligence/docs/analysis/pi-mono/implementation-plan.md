@@ -1,6 +1,6 @@
 # Implementation Plan: pi-mono Feature Completion
 
-This document outlines the implementation plan for features identified in [pi-mono-feature-utilization.md](../pi-mono-feature-utilization.md) that remain unimplemented, plus additional pi-mono capabilities discovered during a comprehensive audit of the [pi-mono repository](https://github.com/badlogic/pi-mono) (packages/coding-agent v0.65.1+).
+This document outlines the implementation plan for features identified in [pi-mono-feature-utilization.md](../pi-mono-feature-utilization.md) that remain unimplemented, plus additional pi-mono capabilities discovered during a comprehensive audit of the [pi-mono repository](https://github.com/earendil-works/pi) (packages/coding-agent v0.75.5+).
 
 ---
 
@@ -96,7 +96,7 @@ Incorporating both the original audit items and newly discovered features, prior
 
 ### Phase 4 — Future enhancements
 
-6. **Web UI integration** — Evaluate `@mariozechner/pi-web-ui` for an interactive chat page on public-fabric.
+6. **Web UI integration** — Evaluate `@earendil-works/pi-web-ui` for an interactive chat page on public-fabric.
 
 ---
 
@@ -119,7 +119,7 @@ Each feature has a dedicated implementation plan document in this directory:
 
 ### 5.1 Direct LLM API (`pi-ai`)
 
-`@mariozechner/pi-ai` provides a unified streaming LLM API with automatic model discovery and cost tracking. It could be used for lightweight tasks (summarising a comment, classifying an issue) at lower cost than the full coding agent.
+`@earendil-works/pi-ai` provides a unified streaming LLM API with automatic model discovery and cost tracking. It could be used for lightweight tasks (summarising a comment, classifying an issue) at lower cost than the full coding agent.
 
 **Why deferred:** The coding agent's tool-calling capability is central to GMI's value proposition. Direct API usage would add a second dependency and a second code path for marginal efficiency gains. The cost difference is minimal when the agent already handles tool execution overhead as part of its core loop.
 
@@ -142,7 +142,7 @@ Pi supports JSON-RPC mode over stdin/stdout for non-Node.js integrations. Since 
 | Extension enhancements | None (uses existing extension infrastructure) |
 | Settings optimisation | None (configuration-only) |
 | SDK migration | Understanding of pi-coding-agent SDK API, significant agent.ts refactor |
-| Web UI integration | `@mariozechner/pi-web-ui` package evaluation, public-fabric architecture decision |
+| Web UI integration | `@earendil-works/pi-web-ui` package evaluation, public-fabric architecture decision |
 
 ---
 
@@ -179,4 +179,4 @@ The revised priority matrix promotes **additional built-in tools** and **pi-skil
 
 The highest-effort item remains the **SDK migration** (P3), which would replace the subprocess + shell pipeline with native TypeScript integration. This is deferred until the current subprocess approach shows concrete limitations.
 
-*Analysis based on pi-mono repository (github.com/badlogic/pi-mono), pi-coding-agent v0.65.1, and GMI codebase as of 2026-04-07.*
+*Analysis based on pi-mono repository (github.com/earendil-works/pi), pi-coding-agent v0.75.5, and GMI codebase as of 2026-04-07.*

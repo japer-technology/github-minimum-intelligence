@@ -1,6 +1,6 @@
 # Implementation: Web UI Integration
 
-This document details the implementation plan for evaluating and potentially integrating `@mariozechner/pi-web-ui` into the GMI public-fabric, as identified in the [implementation plan](implementation-plan.md).
+This document details the implementation plan for evaluating and potentially integrating `@earendil-works/pi-web-ui` into the GMI public-fabric, as identified in the [implementation plan](implementation-plan.md).
 
 A guiding principle: **a UX that makes GitHub's developer-centric complexity disappear is a good thing.** GitHub Issues are the right interface for developers interacting with the agent. But for everyone else — evaluators, stakeholders, managers, prospective adopters — a web surface that presents the agent's work without requiring GitHub literacy is an accessibility imperative, not an architectural concession.
 
@@ -22,7 +22,7 @@ The page displays project status, feature descriptions, and documentation links.
 
 ### 1.2 pi-web-ui Package
 
-`@mariozechner/pi-web-ui` provides web components for AI chat interfaces:
+`@earendil-works/pi-web-ui` provides web components for AI chat interfaces:
 
 - Pre-built chat UI with session management
 - Support for sessions, artifacts, and attachments
@@ -98,7 +98,7 @@ If the session viewer use case is pursued:
 ### Step 1: Evaluate pi-web-ui Components
 
 ```bash
-npm install @mariozechner/pi-web-ui
+npm install @earendil-works/pi-web-ui
 ```
 
 Review the package's exported components:

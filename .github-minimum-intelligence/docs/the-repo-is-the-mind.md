@@ -12,7 +12,7 @@ The `pi` coding agent and the Minimum Intelligence framework eliminate that cont
 
 > An npm package you install in your tree - no hosted backend, no OAuth handshake, no new trust boundary beyond what you configure in Actions YAML.
 
-`@mariozechner/pi-coding-agent` is an npm package. Minimum Intelligence is a repo-local configuration layer. You install it, it runs in your tree, and that's the entire vendor relationship.
+`@earendil-works/pi-coding-agent` is an npm package. Minimum Intelligence is a repo-local configuration layer. You install it, it runs in your tree, and that's the entire vendor relationship.
 
 This means standard supply-chain practices apply directly: version pinning, lockfile auditing, vendoring, forking. The agent's capabilities are scoped to what your workflow file grants it - the same GITHUB_TOKEN permissions model you already manage. No new trust boundary is introduced beyond what you explicitly configure in your Actions YAML.
 
