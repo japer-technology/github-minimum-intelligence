@@ -112,6 +112,12 @@ const piSettingsPath = resolve(minimumIntelligenceDir, ".pi", "settings.json");
 const memoryLogPath = resolve(minimumIntelligenceDir, "memory.log");
 const lastRunRawPath = resolve(stateDir, "local-last-run.jsonl");
 
+// Dedicated pi agent dir used only in local mode. Pointing PI_CODING_AGENT_DIR
+// here makes pi read our generated models.json (a custom OpenAI-compatible
+// provider) without disturbing the user's global ~/.pi/agent config.
+const localAgentDir = resolve(stateDir, "pi-agent");
+const localModelsPath = resolve(localAgentDir, "models.json");
+
 // Repo-root-relative session dir, matching agent.ts.
 const sessionsDirRelative = ".github-minimum-intelligence/state/sessions";
 
@@ -146,12 +152,11 @@ const LOCAL_BRAND_DEFAULTS: Record<string, { label: string; baseUrl: string }> =
   vllm:     { label: "vLLM",      baseUrl: "http://localhost:8000/v1"  },
 };
 
-// Brand labels that map to a "openai-compatible" pi invocation. The key is
-// what the user types or configures; the value is what pi actually receives
-// (always "openai" today because pi has no first-class lmstudio/ollama/vllm
-// provider — they all speak OpenAI Chat Completions).
+// Local brands (lmstudio/ollama/vllm) are registered as first-class custom
+// providers in a generated models.json (see ensureLocalProviderConfig), so pi
+// receives the brand name verbatim and reaches the local server over the
+// OpenAI Chat Completions API. The brand IS the pi provider name now.
 function resolvePiProvider(userProvider: string): string {
-  if (LOCAL_PROVIDERS.has(userProvider)) return "openai";
   return userProvider;
 }
 
@@ -740,6 +745,59 @@ function isLocalProvider(provider: string): boolean {
   return false;
 }
 
+/**
+ * Resolve the effective OpenAI-compatible base URL for a local provider,
+ * honouring explicit env vars first, then well-known brand defaults.
+ */
+function resolveLocalBaseUrl(provider: string): string {
+  return (
+    process.env.LOCAL_LLM_BASE_URL ||
+    process.env.OPENAI_BASE_URL ||
+    LOCAL_BRAND_DEFAULTS[provider]?.baseUrl ||
+    "http://localhost:1234/v1"
+  );
+}
+
+/**
+ * Configure pi to talk to a local OpenAI-compatible server (LM Studio, Ollama,
+ * vLLM, or an `openai` provider pointed at LOCAL_LLM_BASE_URL).
+ *
+ * Why this exists: pi's built-in `openai` provider ignores OPENAI_BASE_URL and
+ * defaults to the Responses API, so it would contact the real api.openai.com
+ * and fail with a 401.  The supported mechanism for a local server is a
+ * `models.json` describing a custom provider with an explicit `baseUrl` and the
+ * `openai-completions` API.  pi only reads `models.json` from its agent dir, so
+ * we point PI_CODING_AGENT_DIR at a repo-local directory and write the file
+ * there.  This leaves the user's global ~/.pi/agent untouched and is applied
+ * only for local providers.
+ *
+ * `compat.supportsDeveloperRole` / `supportsReasoningEffort` are disabled
+ * because many local servers reject the `developer` role and the
+ * `reasoning_effort` parameter used by reasoning-capable cloud models.
+ */
+function ensureLocalProviderConfig(provider: string, model: string): void {
+  const baseUrl = resolveLocalBaseUrl(provider);
+  mkdirSync(localAgentDir, { recursive: true });
+  const modelsConfig = {
+    providers: {
+      [provider]: {
+        baseUrl,
+        api: "openai-completions",
+        apiKey: "local",
+        compat: {
+          supportsDeveloperRole: false,
+          supportsReasoningEffort: false,
+        },
+        models: [{ id: model }],
+      },
+    },
+  };
+  writeFileSync(localModelsPath, JSON.stringify(modelsConfig, null, 2) + "\n");
+  process.env.PI_CODING_AGENT_DIR = localAgentDir;
+  process.env.OPENAI_BASE_URL = baseUrl;
+  if (!process.env.OPENAI_API_KEY) process.env.OPENAI_API_KEY = "local";
+}
+
 // ─── pi binary location ───────────────────────────────────────────────────────
 
 function locatePiBin(): string {
@@ -831,11 +889,12 @@ async function runTurn(
       : null;
 
     // Map brand providers (lmstudio/ollama/vllm) to what pi actually
-    // understands today (openai-compatible Chat Completions). pi has no
-    // first-class lmstudio provider, so the brand is purely a label for
-    // the user; the wire-format is always openai-compatible.
+    // understands. For local mode we (re)write models.json so pi reaches the
+    // local OpenAI-compatible server via a custom provider of the same name;
+    // doing it here also picks up runtime /model and /provider switches.
     const piProvider = resolvePiProvider(rt.provider);
     const localMode = isLocalProvider(rt.provider);
+    if (localMode) ensureLocalProviderConfig(rt.provider, rt.model);
     const args: string[] = [
       "--mode", "json",
       "--tools", "read,bash,edit,write,grep,find,ls",
@@ -856,6 +915,10 @@ async function runTurn(
     try {
       const proc = Bun.spawn([rt.piBin, ...args], {
         cwd: repoRoot,
+        // Pass env explicitly so runtime mutations (e.g. PI_CODING_AGENT_DIR
+        // and OPENAI_BASE_URL set by ensureLocalProviderConfig) reliably reach
+        // the pi child on every platform.
+        env: { ...process.env },
         stdout: "pipe",
         stderr: "inherit",
       });
@@ -1810,6 +1873,11 @@ async function main(): Promise<void> {
     autoRetryMax: 3,
     piBin,
   };
+
+  // For local providers, generate models.json and point PI_CODING_AGENT_DIR at
+  // it up front so the REPL banner shows the right endpoint and the first turn
+  // is correctly wired.
+  if (isLocalProvider(rt.provider)) ensureLocalProviderConfig(rt.provider, rt.model);
 
   // One-shot mode.
   if (args.prompt) {
