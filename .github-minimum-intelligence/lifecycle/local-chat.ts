@@ -91,6 +91,7 @@ import {
   openSync, closeSync,
 } from "fs";
 import { resolve, join, basename } from "path";
+import { networkInterfaces } from "os";
 import { createInterface } from "readline";
 import { execFileSync, execSync } from "child_process";
 import { marked } from "marked";
@@ -1543,10 +1544,95 @@ function printPersistHints(keyName: string, valueHint = "your-key-here"): void {
   console.log("");
 }
 
+// ─── Local LLM network discovery ──────────────────────────────────────────────
+
+// Default port LM Studio exposes its OpenAI-compatible server on.
+const LMSTUDIO_SCAN_PORT = 1234;
+
+// A discovered OpenAI-compatible local LLM server.
+type LocalLLMHit = { baseUrl: string; host: string; models: string[] };
+
+/**
+ * Collect the distinct IPv4 /24 prefixes (e.g. "192.168.1.") for every
+ * non-internal IPv4 address bound to this host. Used to enumerate the LAN.
+ */
+function hostIPv4Prefixes(): string[] {
+  const prefixes: string[] = [];
+  const nets = networkInterfaces();
+  for (const name of Object.keys(nets)) {
+    for (const ni of nets[name] ?? []) {
+      // Node typings declare `family` as a string ("IPv4"); some runtimes
+      // report the number 4. Accept both, and skip loopback/internal NICs.
+      const fam = ni.family as unknown;
+      const isV4 = fam === "IPv4" || fam === 4;
+      if (!isV4 || ni.internal) continue;
+      const parts = ni.address.split(".");
+      if (parts.length !== 4) continue;
+      const prefix = `${parts[0]}.${parts[1]}.${parts[2]}.`;
+      if (!prefixes.includes(prefix)) prefixes.push(prefix);
+    }
+  }
+  return prefixes;
+}
+
+/**
+ * Probe a single host:port for an OpenAI-compatible server by requesting
+ * `/v1/models`. Returns a hit (with any advertised model ids) or null on
+ * timeout / connection-refused / non-OK response.
+ */
+async function probeOpenAIServer(
+  host: string,
+  port: number,
+  timeoutMs: number,
+): Promise<LocalLLMHit | null> {
+  const baseUrl = `http://${host}:${port}/v1`;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${baseUrl}/models`, {
+      signal: ctrl.signal,
+      // Some servers reject unauthenticated /models; send a benign dummy key.
+      headers: { authorization: "Bearer local" },
+    });
+    if (!res.ok) return null;
+    const body = (await res.json()) as any;
+    const models = Array.isArray(body?.data)
+      ? body.data.map((m: any) => String(m?.id ?? "")).filter(Boolean)
+      : [];
+    return { baseUrl, host, models };
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/**
+ * Scan the host's IPv4 /24 networks — all 256 addresses each, plus localhost —
+ * for an OpenAI-compatible LLM server answering over http:// on `port`.
+ * Probes are issued concurrently; returns every server that responded.
+ */
+async function scanForLocalLLM(
+  port = LMSTUDIO_SCAN_PORT,
+  timeoutMs = 600,
+): Promise<LocalLLMHit[]> {
+  const targets: string[] = ["127.0.0.1"];
+  for (const prefix of hostIPv4Prefixes()) {
+    for (let host = 0; host < 256; host++) {
+      const addr = `${prefix}${host}`;
+      if (!targets.includes(addr)) targets.push(addr);
+    }
+  }
+  const results = await Promise.all(
+    targets.map((host) => probeOpenAIServer(host, port, timeoutMs)),
+  );
+  return results.filter((r): r is LocalLLMHit => r !== null);
+}
+
 /**
  * Recover from a missing cloud API key without crashing.  Offers four paths:
  *   1. Paste the key now (session-scoped).
- *   2. Switch to a local LLM (OpenAI-compatible endpoint).
+ *   2. Scan the LAN for a local LM Studio server (OpenAI-compatible endpoint).
  *   3. Show persistence instructions and quit.
  *   4. Quit.
  * Returns the (possibly updated) runtime config to use, or null to quit.
@@ -1562,7 +1648,7 @@ async function guideMissingApiKey(cfg: RuntimeCfg): Promise<RuntimeCfg | null> {
   console.log("");
   console.log("    " + c.bold("How would you like to continue?"));
   console.log("      " + c.cyan("[1]") + "  Paste your API key now " + c.dim("(used for this session only)"));
-  console.log("      " + c.cyan("[2]") + "  Use a local LLM instead " + c.dim("(LM Studio, Ollama, vLLM…)"));
+  console.log("      " + c.cyan("[2]") + "  Scan for local LM Studio " + c.dim("(auto-detected on your LAN)"));
   console.log("      " + c.cyan("[3]") + "  Show how to set the env var permanently, then quit");
   console.log("      " + c.cyan("[q]") + "  Quit");
   console.log("");
@@ -1587,37 +1673,40 @@ async function guideMissingApiKey(cfg: RuntimeCfg): Promise<RuntimeCfg | null> {
 
     if (choice === "2") {
       console.log("");
-      console.log("    " + c.bold("Local LLM setup"));
-      console.log("    " + c.dim("Pick the local server you are running. They all speak the"));
-      console.log("    " + c.dim("OpenAI-compatible Chat Completions API, so pi talks to them"));
-      console.log("    " + c.dim("through its 'openai' provider client (you'll see that in"));
-      console.log("    " + c.dim("pi's diagnostics) but the launcher will label things by brand."));
+      console.log("    " + c.bold("Scanning your LAN for a local LM Studio server…"));
+      console.log("    " + c.dim("Probing this host's IPv4 /24 (all 256 addresses) plus"));
+      console.log("    " + c.dim(`localhost for an OpenAI-compatible server on port ${LMSTUDIO_SCAN_PORT}.`));
+      console.log("    " + c.dim("LM Studio speaks the OpenAI-compatible Chat Completions API,"));
+      console.log("    " + c.dim("so pi talks to it through its 'openai' provider client (you'll"));
+      console.log("    " + c.dim("see that in pi's diagnostics) labelled here as 'lmstudio'."));
       console.log("");
-      console.log("      " + c.cyan("[a]") + " LM Studio    " + c.gray("http://localhost:1234/v1"));
-      console.log("      " + c.cyan("[b]") + " Ollama       " + c.gray("http://localhost:11434/v1"));
-      console.log("      " + c.cyan("[c]") + " vLLM         " + c.gray("http://localhost:8000/v1"));
-      console.log("      " + c.cyan("[d]") + " Other openai-compatible endpoint");
-      console.log("");
-      let brand: "lmstudio" | "ollama" | "vllm" | "openai" = "lmstudio";
-      while (true) {
-        const b = (await promptLine("    Server [a/b/c/d]: ")).trim().toLowerCase();
-        if (b === "" || b === "a" || b === "lmstudio" || b === "lm-studio") { brand = "lmstudio"; break; }
-        if (b === "b" || b === "ollama") { brand = "ollama"; break; }
-        if (b === "c" || b === "vllm")   { brand = "vllm"; break; }
-        if (b === "d" || b === "other" || b === "openai") { brand = "openai"; break; }
-        say.warn(`Unrecognised choice: "${b}"`, "Pick a, b, c, or d.");
+
+      const hits = await scanForLocalLLM(LMSTUDIO_SCAN_PORT);
+      if (hits.length === 0) {
+        say.warn(
+          "No local LM Studio server found on your network.",
+          `Make sure LM Studio is running with its local server enabled on ` +
+          `port ${LMSTUDIO_SCAN_PORT}, then pick this option again or choose another.`,
+        );
+        continue;
       }
-      const defaults = LOCAL_BRAND_DEFAULTS[brand] ?? { label: "openai-compatible", baseUrl: "http://localhost:1234/v1" };
-      const url = (await promptLine(`    Base URL [${defaults.baseUrl}]: `)).trim() || defaults.baseUrl;
-      const modelDefault = cfg.model || "local-model";
-      const newModel = (await promptLine(`    Model id  [${modelDefault}]: `)).trim() || modelDefault;
+
+      const hit = hits[0];
+      const url = hit.baseUrl;
+      const modelDefault = hit.models[0] || cfg.model || "local-model";
       process.env.LOCAL_LLM_BASE_URL = url;
       process.env.OPENAI_BASE_URL = url;
       process.env.OPENAI_API_KEY = "local";
-      say.ok(`${defaults.label} endpoint set: ${url}`);
-      say.hint(`Provider label: ${brand}  (pi sees --provider openai under the hood; --api-key local is sent on every turn so it won't complain about missing keys).`);
+      say.ok(
+        `Found LM Studio at ${url}` +
+        (hits.length > 1 ? ` ${c.dim(`(+${hits.length - 1} more on the LAN)`)}` : ""),
+      );
+      say.hint(
+        `Provider label: lmstudio  (pi sees --provider openai under the hood; ` +
+        `--api-key local is sent on every turn so it won't complain about missing keys).`,
+      );
       console.log("");
-      return { provider: brand, model: newModel, thinking: cfg.thinking };
+      return { provider: "lmstudio", model: modelDefault, thinking: cfg.thinking };
     }
 
     if (choice === "3") {
