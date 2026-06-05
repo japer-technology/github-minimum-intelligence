@@ -1561,9 +1561,10 @@ function hostIPv4Prefixes(): string[] {
   const nets = networkInterfaces();
   for (const name of Object.keys(nets)) {
     for (const ni of nets[name] ?? []) {
-      // Node <18 reports `family` as a string ("IPv4"); newer versions may
+      // Node typings declare `family` as a string ("IPv4"); some runtimes
       // report the number 4. Accept both, and skip loopback/internal NICs.
-      const isV4 = ni.family === "IPv4" || (ni.family as unknown) === 4;
+      const fam = ni.family as unknown;
+      const isV4 = fam === "IPv4" || fam === 4;
       if (!isV4 || ni.internal) continue;
       const parts = ni.address.split(".");
       if (parts.length !== 4) continue;
