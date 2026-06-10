@@ -985,7 +985,7 @@ async function runTurn(
       return { thread: updated, reply, rawJsonl };
     } catch (err) {
       spinner?.stop();
-      activePiProcess = null;
+      cleanup();
       lastErr = err as Error;
       if (attempt < maxAttempts) {
         console.log("  " + c.yellow(`⟳ Retry ${attempt + 1}/${maxAttempts} after error: ${(err as Error).message}`));
