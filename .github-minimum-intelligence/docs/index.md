@@ -67,6 +67,7 @@ Six questions define the philosophical and architectural foundation of this proj
 |----------|----------|-------------|
 | [AGENTS.md](../AGENTS.md) | `.github-minimum-intelligence/` | Agent identity — name, personality, and behavioral guidance. |
 | [PACKAGES.md](../PACKAGES.md) | `.github-minimum-intelligence/` | Runtime dependencies and required packages. |
+| [Local Chat](./local-chat.md) | `.github-minimum-intelligence/docs/` | Command reference for the terminal-based `bun run chat` REPL — CLI flags and all slash-commands. |
 
 ---
 
