@@ -601,7 +601,10 @@ rejected (no auto-create on typos). Aliases must start with a letter.`
  * non-TTY stdin) — readline never invokes the question callback in that case,
  * which would otherwise leave the promise (and the process) hanging forever.
  * The `pending` hand-off guarantees each promise settles exactly once even if
- * the close event and the question callback race.
+ * the close event and the question callback race.  Questions must be asked
+ * serially (await each answer before asking the next), which is how every
+ * call site in this file uses it; concurrent questions would overwrite the
+ * single pending resolver.
  */
 function makeAsk(rl: ReturnType<typeof createInterface>): (q: string) => Promise<string | null> {
   let pending: ((v: string | null) => void) | null = null;

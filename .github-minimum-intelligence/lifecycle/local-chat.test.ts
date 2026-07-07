@@ -97,7 +97,7 @@ describe("local-chat regression tests", () => {
     }
   });
 
-  test("missing API key with closed stdin exits gracefully instead of hanging", () => {
+  test("missing API key with closed stdin exits cleanly without hanging", () => {
     // With no key and stdin at EOF, the guided-recovery prompt must resolve
     // (treating EOF as "quit") rather than waiting forever on input.
     const result = runChat([], MI_DIR, {
