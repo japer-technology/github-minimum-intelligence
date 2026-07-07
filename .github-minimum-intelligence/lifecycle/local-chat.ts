@@ -90,7 +90,7 @@ import {
   mkdirSync, readdirSync, statSync, unlinkSync, renameSync,
   openSync, closeSync,
 } from "fs";
-import { resolve, join, basename } from "path";
+import { resolve, join, basename, sep } from "path";
 import { networkInterfaces } from "os";
 import { createInterface } from "readline";
 import { execFileSync, execSync } from "child_process";
@@ -246,6 +246,13 @@ const say = {
   },
 };
 
+// ─── Error taxonomy ───────────────────────────────────────────────────────────
+// UserError marks problems caused by user input (unknown thread, taken alias,
+// malformed args).  The top-level handler maps it to exit code 2, keeping the
+// documented contract: 0 success, 1 environment problem, 2 user error.
+
+class UserError extends Error {}
+
 // ─── Thread record schema ─────────────────────────────────────────────────────
 
 type Thread = {
@@ -273,7 +280,12 @@ function readThread(id: number): Thread | null {
 }
 
 function writeThread(t: Thread): void {
-  writeFileSync(threadPath(t.id), JSON.stringify(t, null, 2) + "\n");
+  // Atomic write: write to a temp file then rename over the target so a crash
+  // mid-write can never leave a truncated/corrupt thread record behind.
+  const target = threadPath(t.id);
+  const tmp = `${target}.tmp-${process.pid}`;
+  writeFileSync(tmp, JSON.stringify(t, null, 2) + "\n");
+  renameSync(tmp, target);
 }
 
 function listThreads(): Thread[] {
@@ -297,7 +309,7 @@ function listThreads(): Thread[] {
 function allocateThread(name: string | null): Thread {
   if (name !== null) {
     if (!ALIAS_PATTERN.test(name)) {
-      throw new Error(
+      throw new UserError(
         `Invalid name "${name}". Must start with a letter and contain only ` +
         `letters, digits, "_" or "-" (max 64 chars). Pure-digit names are ` +
         `reserved for IDs.`
@@ -305,7 +317,7 @@ function allocateThread(name: string | null): Thread {
     }
     for (const existing of listThreads()) {
       if (existing.name === name) {
-        throw new Error(
+        throw new UserError(
           `Thread name "${name}" already taken by thread #${existing.id}.`
         );
       }
@@ -507,7 +519,10 @@ function getRepoName(): string {
 function safePath(userPath: string): string | null {
   const root = getRepoRoot();
   const resolved = resolve(root, userPath);
-  if (!resolved.startsWith(root)) return null;
+  // Require the repo root itself or a path under `root + sep`; a bare
+  // startsWith(root) check would wrongly accept sibling dirs like
+  // "/repo-evil" when root is "/repo".
+  if (resolved !== root && !resolved.startsWith(root + sep)) return null;
   return resolved;
 }
 
@@ -644,10 +659,20 @@ async function interactiveStart(provider: string, model: string, thinking: strin
   console.log("");
 
   const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-  const ask = (q: string): Promise<string> => new Promise((res) => rl.question(q, res));
+  // Resolve the pending question with null on EOF (Ctrl-D / closed stdin);
+  // readline never invokes the question callback in that case, which would
+  // otherwise hang the launcher forever.
+  let pendingAsk: ((v: string | null) => void) | null = null;
+  rl.on("close", () => { if (pendingAsk) { pendingAsk(null); pendingAsk = null; } });
+  const ask = (q: string): Promise<string | null> => new Promise((res) => {
+    pendingAsk = res;
+    rl.question(q, (a: string) => { pendingAsk = null; res(a); });
+  });
   try {
     while (true) {
-      const raw = (await ask("    Select> ")).trim();
+      const answer = await ask("    Select> ");
+      if (answer === null) return null; // EOF — treat as quit.
+      const raw = answer.trim();
       if (raw === "q" || raw === "Q" || raw === "/exit" || raw === "/quit") {
         return null;
       }
@@ -974,9 +999,14 @@ async function runTurn(
             "and risk binding the wrong session to this thread."
           );
         }
-        created.sort((a, b) =>
-          statSync(join(sessionsDir, b)).mtimeMs - statSync(join(sessionsDir, a)).mtimeMs
-        );
+        created.sort((a, b) => {
+          // A concurrent runner may delete/rotate a session file between the
+          // snapshot diff and this sort; treat vanished files as oldest.
+          const mtime = (f: string): number => {
+            try { return statSync(join(sessionsDir, f)).mtimeMs; } catch { return 0; }
+          };
+          return mtime(b) - mtime(a);
+        });
         sessionPath = join(sessionsDir, created[0]);
       }
 
@@ -1019,6 +1049,7 @@ function cmdRemove(ref: string): void {
   const t = resolveThreadRef(ref);
   if (!t) {
     say.warn(`No thread matching "${ref}".`, "Use `--list` to see existing threads.");
+    process.exitCode = 2; // user error per the documented exit-code contract
     return;
   }
   unlinkSync(threadPath(t.id));
@@ -1116,7 +1147,15 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
   console.log("");
 
   const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-  const ask = (q: string): Promise<string> => new Promise((res) => rl.question(q, res));
+  // Resolve the pending question with null on EOF (Ctrl-D / closed stdin) so
+  // the REPL exits cleanly instead of hanging on a question that will never
+  // be answered.
+  let pendingAsk: ((v: string | null) => void) | null = null;
+  rl.on("close", () => { if (pendingAsk) { pendingAsk(null); pendingAsk = null; } });
+  const ask = (q: string): Promise<string | null> => new Promise((res) => {
+    pendingAsk = res;
+    rl.question(q, (a: string) => { pendingAsk = null; res(a); });
+  });
 
   function prompt(): string {
     const branch = getGitBranch();
@@ -1147,7 +1186,9 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
   try {
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const line = (await ask(prompt())).trim();
+      const answer = await ask(prompt());
+      if (answer === null) break; // EOF — end the session cleanly.
+      const line = answer.trim();
       if (!line) continue;
 
       // ─── Exit ─────────────────────────────────────────────────────────────
@@ -1549,7 +1590,7 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
         // eslint-disable-next-line no-constant-condition
         while (true) {
           const more = await ask("  ... ");
-          if (more.trim() === "") break;
+          if (more === null || more.trim() === "") break;
           lines.push(more);
         }
         const full = lines.join("\n").trim();
@@ -1589,6 +1630,10 @@ async function promptLine(question: string): Promise<string> {
   const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
   try {
     return await new Promise<string>((res) => {
+      // Resolve on EOF (Ctrl-D / closed non-TTY stdin) as well: readline never
+      // invokes the question callback when input ends, which would otherwise
+      // leave this promise — and the whole process — hanging forever.
+      rl.on("close", () => res(""));
       rl.question(question, (a: string) => res(a ?? ""));
     });
   } catch {
@@ -1813,9 +1858,13 @@ async function main(): Promise<void> {
 
   let cfg: RuntimeCfg = resolveRuntimeConfig();
 
+  // Pure allocation (`--new` without a prompt or thread ref) never contacts a
+  // model, so it must work without an API key.
+  const allocationOnly = args.newThread && !args.prompt && !args.threadRef;
+
   // ── Validate config BEFORE creating threads ─────────────────────────────
   // (so quitting from the guide doesn't leave orphan thread #1 behind.)
-  if (!isLocalProvider(cfg.provider)) {
+  if (!allocationOnly && !isLocalProvider(cfg.provider)) {
     const keyName = PROVIDER_KEY_MAP[cfg.provider];
     if (keyName && !process.env[keyName]) {
       const updated = await guideMissingApiKey(cfg);
@@ -1859,6 +1908,7 @@ async function main(): Promise<void> {
           "Use `--list` to see existing threads, or `--new` to create one. " +
           "Closed-world: unknown refs are never auto-created."
         );
+        process.exitCode = 2; // user error per the documented exit-code contract
         return;
       }
     }
@@ -1894,5 +1944,14 @@ async function main(): Promise<void> {
   await repl(activeThread, rt);
 }
 
-main();
-
+main().catch((err: unknown) => {
+  // Top-level error handler: honour the documented exit-code contract
+  // (1 = environment problem, 2 = user error) and print a readable message
+  // instead of an unhandled-rejection stack trace.
+  say.error(
+    err instanceof UserError ? "Invalid request" : "Startup failed",
+    err instanceof Error ? err.message : String(err),
+  );
+  cleanup();
+  process.exit(err instanceof UserError ? 2 : 1);
+});

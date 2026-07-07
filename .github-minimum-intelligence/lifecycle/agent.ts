@@ -113,6 +113,14 @@ const repo = process.env.GITHUB_REPOSITORY!;
 const defaultBranch = event.repository?.default_branch ?? "main";
 
 // The issue number is present on both the `issues` and `issue_comment` payloads.
+// Guard explicitly so a misconfigured workflow trigger (e.g. a non-issue event)
+// fails with a clear message instead of an opaque TypeError.
+if (!event.issue || typeof event.issue.number !== "number") {
+  throw new Error(
+    `Event payload for "${eventName}" has no issue number. ` +
+    `agent.ts only supports "issues" and "issue_comment" events.`
+  );
+}
 const issueNumber: number = event.issue.number;
 
 // Read the committed `.pi` defaults and pass them explicitly to the runtime.
@@ -464,4 +472,9 @@ async function main() {
   }
 }
 
-main();
+main().catch((err: unknown) => {
+  // Fail the workflow step with a readable error instead of relying on the
+  // runtime's unhandled-rejection behaviour (which varies between versions).
+  console.error(err instanceof Error ? err.message : String(err));
+  process.exit(1);
+});
