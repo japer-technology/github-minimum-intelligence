@@ -593,6 +593,31 @@ rejected (no auto-create on typos). Aliases must start with a letter.`
   );
 }
 
+// ─── EOF-safe readline questions ──────────────────────────────────────────────
+
+/**
+ * Build an EOF-safe `ask` function for a readline interface.  Resolves with
+ * the user's answer, or `null` when the input reaches EOF (Ctrl-D / closed
+ * non-TTY stdin) — readline never invokes the question callback in that case,
+ * which would otherwise leave the promise (and the process) hanging forever.
+ * The `pending` hand-off guarantees each promise settles exactly once even if
+ * the close event and the question callback race.
+ */
+function makeAsk(rl: ReturnType<typeof createInterface>): (q: string) => Promise<string | null> {
+  let pending: ((v: string | null) => void) | null = null;
+  rl.on("close", () => {
+    const p = pending; pending = null;
+    if (p) p(null);
+  });
+  return (q: string) => new Promise((res) => {
+    pending = res;
+    rl.question(q, (a: string) => {
+      const p = pending; pending = null;
+      if (p) p(a ?? "");
+    });
+  });
+}
+
 /**
  * Interactive launcher shown when `bun run chat` is invoked with no args.
  * Lists existing threads and lets the user pick by row number, press Enter
@@ -659,15 +684,7 @@ async function interactiveStart(provider: string, model: string, thinking: strin
   console.log("");
 
   const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-  // Resolve the pending question with null on EOF (Ctrl-D / closed stdin);
-  // readline never invokes the question callback in that case, which would
-  // otherwise hang the launcher forever.
-  let pendingAsk: ((v: string | null) => void) | null = null;
-  rl.on("close", () => { if (pendingAsk) { pendingAsk(null); pendingAsk = null; } });
-  const ask = (q: string): Promise<string | null> => new Promise((res) => {
-    pendingAsk = res;
-    rl.question(q, (a: string) => { pendingAsk = null; res(a); });
-  });
+  const ask = makeAsk(rl);
   try {
     while (true) {
       const answer = await ask("    Select> ");
@@ -1147,15 +1164,9 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
   console.log("");
 
   const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
-  // Resolve the pending question with null on EOF (Ctrl-D / closed stdin) so
-  // the REPL exits cleanly instead of hanging on a question that will never
-  // be answered.
-  let pendingAsk: ((v: string | null) => void) | null = null;
-  rl.on("close", () => { if (pendingAsk) { pendingAsk(null); pendingAsk = null; } });
-  const ask = (q: string): Promise<string | null> => new Promise((res) => {
-    pendingAsk = res;
-    rl.question(q, (a: string) => { pendingAsk = null; res(a); });
-  });
+  // EOF-safe question wrapper: resolves null on Ctrl-D / closed stdin so the
+  // REPL exits cleanly instead of hanging on an unanswerable question.
+  const ask = makeAsk(rl);
 
   function prompt(): string {
     const branch = getGitBranch();
@@ -1629,13 +1640,9 @@ type RuntimeCfg = { provider: string; model: string; thinking: string | undefine
 async function promptLine(question: string): Promise<string> {
   const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
   try {
-    return await new Promise<string>((res) => {
-      // Resolve on EOF (Ctrl-D / closed non-TTY stdin) as well: readline never
-      // invokes the question callback when input ends, which would otherwise
-      // leave this promise — and the whole process — hanging forever.
-      rl.on("close", () => res(""));
-      rl.question(question, (a: string) => res(a ?? ""));
-    });
+    // makeAsk resolves null on EOF (Ctrl-D / closed stdin); map that to ""
+    // so callers can treat it as "user backed out".
+    return (await makeAsk(rl)(question)) ?? "";
   } catch {
     return "";
   } finally {

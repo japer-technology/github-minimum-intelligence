@@ -24,12 +24,16 @@ import { join, resolve } from "path";
 const MI_DIR = resolve(import.meta.dir, "..");
 const CHAT_SCRIPT = join(MI_DIR, "lifecycle", "local-chat.ts");
 
+// Hard ceiling for each spawned runner: an EOF-handling regression would
+// otherwise hang the suite forever.
+const SPAWN_TIMEOUT_MS = 30_000;
+
 function runChat(args: string[], cwd: string, extraEnv: Record<string, string | undefined> = {}) {
   // process.execPath points at the currently running Bun, regardless of PATH.
   return spawnSync(process.execPath, ["run", CHAT_SCRIPT, ...args], {
     cwd,
     encoding: "utf-8",
-    timeout: 30_000,
+    timeout: SPAWN_TIMEOUT_MS,
     env: { ...process.env, NO_COLOR: "1", ...extraEnv },
   });
 }
