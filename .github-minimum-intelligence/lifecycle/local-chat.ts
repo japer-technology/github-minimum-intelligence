@@ -575,7 +575,7 @@ function printCliHelp(): void {
 
 Usage:
   bun run chat                                   Interactive launcher (pick or create).
-  bun run chat --new [--name <alias>]            Create a new thread and enter REPL.
+  bun run chat --new [--name <alias>]            Create a new thread; prints its ID.
   bun run chat --thread <id|alias> [prompt...]   Continue a thread; REPL if no prompt.
   bun run chat --list                            List all threads.
   bun run chat --rm <id|alias>                   Delete a thread mapping.
@@ -686,7 +686,11 @@ async function interactiveStart(provider: string, model: string, thinking: strin
   console.log("      • Type  q  (or Ctrl-C) to quit.");
   console.log("");
 
-  const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: Boolean(process.stdin.isTTY && process.stdout.isTTY),
+  });
   const ask = makeAsk(rl);
   try {
     while (true) {
@@ -1166,7 +1170,11 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
   console.log("  " + c.dim("─────────────────────────────────────────────────────────────────────"));
   console.log("");
 
-  const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: Boolean(process.stdin.isTTY && process.stdout.isTTY),
+  });
   // EOF-safe question wrapper: resolves null on Ctrl-D / closed stdin so the
   // REPL exits cleanly instead of hanging on an unanswerable question.
   const ask = makeAsk(rl);
@@ -1641,7 +1649,11 @@ type RuntimeCfg = { provider: string; model: string; thinking: string | undefine
  * throwing, so callers can treat it as "user backed out".
  */
 async function promptLine(question: string): Promise<string> {
-  const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: Boolean(process.stdin.isTTY && process.stdout.isTTY),
+  });
   try {
     // makeAsk resolves null on EOF (Ctrl-D / closed stdin); map that to ""
     // so callers can treat it as "user backed out".
@@ -1883,19 +1895,6 @@ async function main(): Promise<void> {
     }
   }
 
-  // ── Locate pi binary; guide the user if it's missing ────────────────────
-  let piBin: string;
-  try {
-    piBin = locatePiBin();
-  } catch (err) {
-    // Extract the candidate list out of the throw message for the guide.
-    const msg = (err as Error).message;
-    const m = msg.match(/not found in any of: ([^\n]+)/);
-    const candidates = m ? m[1].split(", ") : [];
-    guidePiNotInstalled(candidates);
-    return;
-  }
-
   // ── Resolve / create the active thread ──────────────────────────────────
   let activeThread: Thread | null = null;
   if (args.newThread) {
@@ -1924,6 +1923,20 @@ async function main(): Promise<void> {
     }
   }
 
+  // ── Locate pi binary; guide the user if it's missing ────────────────────
+  // Allocation-only --new returns above and does not need runtime dependencies.
+  let piBin: string;
+  try {
+    piBin = locatePiBin();
+  } catch (err) {
+    // Extract the candidate list out of the throw message for the guide.
+    const msg = (err as Error).message;
+    const m = msg.match(/not found in any of: ([^\n]+)/);
+    const candidates = m ? m[1].split(", ") : [];
+    guidePiNotInstalled(candidates);
+    return;
+  }
+
   // Auto-retry default: on for local providers (flaky/slow), off for cloud
   // (failures are usually configuration errors, not transient).
   const rt: RuntimeState = {
@@ -1947,6 +1960,7 @@ async function main(): Promise<void> {
       console.log(renderMarkdown(reply || "(no text reply produced)"));
     } catch (err) {
       say.error("Turn failed", (err as Error).message);
+      process.exitCode = 1;
     }
     return;
   }

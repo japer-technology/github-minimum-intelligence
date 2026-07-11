@@ -13,6 +13,7 @@
  *      exit 2; environment problems exit 1.
  *   5. EOF safety: closed stdin (non-TTY / Ctrl-D) must never hang an
  *      interactive prompt.
+ *   6. A failed one-shot model turn must exit 1 rather than reporting success.
  */
 
 import { describe, expect, test } from "bun:test";
@@ -111,5 +112,26 @@ describe("local-chat regression tests", () => {
     // Must terminate (no timeout) and quit cleanly from the recovery guide.
     expect(result.signal).toBeNull();
     expect(result.status).toBe(0);
+  });
+
+  test("failed one-shot model turn exits 1", () => {
+    const alias = `gmi-failed-turn-${Date.now()}-${process.pid}`;
+    try {
+      const created = runChat(["--new", "--name", alias], MI_DIR);
+      expect(created.status).toBe(0);
+
+      const result = runChat(["--thread", alias, "hello"], MI_DIR, {
+        LOCAL_PROVIDER: "not-a-real-provider",
+        LOCAL_MODEL: "not-a-real-model",
+        OPENAI_API_KEY: undefined,
+        OPENAI_BASE_URL: undefined,
+        LOCAL_LLM_BASE_URL: undefined,
+      });
+      expect(result.status).toBe(1);
+      expect(result.stdout).toContain("Turn failed");
+    } finally {
+      const rm = runChat(["--rm", alias], MI_DIR);
+      expect(rm.status).toBe(0);
+    }
   });
 });

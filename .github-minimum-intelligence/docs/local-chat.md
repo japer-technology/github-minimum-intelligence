@@ -22,7 +22,7 @@ Invoke with `bun run chat` from the `.github-minimum-intelligence` directory.
 | Invocation | Description |
 |------------|-------------|
 | `bun run chat` | Interactive launcher (pick an existing thread or create one). |
-| `bun run chat --new [--name <alias>]` | Create a new thread and enter the REPL. |
+| `bun run chat --new [--name <alias>]` | Create a new thread and print its ID. |
 | `bun run chat --thread <id\|alias> [prompt...]` | Continue a thread; enter the REPL if no prompt is given, otherwise send the prompt one-shot. |
 | `bun run chat --list` | List all threads. |
 | `bun run chat --rm <id\|alias>` | Delete a thread mapping. |
