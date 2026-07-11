@@ -14,11 +14,12 @@
  *   5. EOF safety: closed stdin (non-TTY / Ctrl-D) must never hang an
  *      interactive prompt.
  *   6. A failed one-shot model turn must exit 1 rather than reporting success.
+ *   7. A missing `pi` binary must exit 1 as an environment problem.
  */
 
 import { describe, expect, test } from "bun:test";
 import { spawnSync } from "child_process";
-import { existsSync, mkdtempSync } from "fs";
+import { existsSync, mkdtempSync, renameSync } from "fs";
 import { tmpdir } from "os";
 import { join, resolve } from "path";
 
@@ -130,6 +131,34 @@ describe("local-chat regression tests", () => {
       expect(result.status).toBe(1);
       expect(result.stdout).toContain("Turn failed");
     } finally {
+      const rm = runChat(["--rm", alias], MI_DIR);
+      expect(rm.status).toBe(0);
+    }
+  });
+
+  test("missing pi binary exits 1", () => {
+    const alias = `gmi-missing-pi-${Date.now()}-${process.pid}`;
+    const piBin = join(MI_DIR, "node_modules", ".bin", "pi");
+    const piBins = (process.platform === "win32"
+      ? [`${piBin}.exe`, `${piBin}.cmd`, piBin]
+      : [piBin]
+    ).filter(existsSync);
+    const hiddenPiBins = piBins.map((path) => `${path}.gmi-test-hidden`);
+
+    try {
+      const created = runChat(["--new", "--name", alias], MI_DIR);
+      expect(created.status).toBe(0);
+
+      piBins.forEach((path, index) => renameSync(path, hiddenPiBins[index]));
+      const result = runChat(["--thread", alias], MI_DIR, {
+        LOCAL_PROVIDER: "lmstudio",
+      });
+      expect(result.status).toBe(1);
+      expect(result.stdout).toContain("isn't installed yet");
+    } finally {
+      hiddenPiBins.forEach((path, index) => {
+        if (existsSync(path)) renameSync(path, piBins[index]);
+      });
       const rm = runChat(["--rm", alias], MI_DIR);
       expect(rm.status).toBe(0);
     }
