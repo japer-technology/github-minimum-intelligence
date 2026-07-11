@@ -1934,6 +1934,7 @@ async function main(): Promise<void> {
     const m = msg.match(/not found in any of: ([^\n]+)/);
     const candidates = m ? m[1].split(", ") : [];
     guidePiNotInstalled(candidates);
+    process.exitCode = 1;
     return;
   }
 
