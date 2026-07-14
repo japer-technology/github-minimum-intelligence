@@ -238,7 +238,7 @@ jobs:
             "$TARGET/docs/local-chat.md" \
             "$TARGET/README-VSC.md"; do
             if [ ! -f "$required" ]; then
-              echo "::error::Required local chat file is missing after $ACTION: $required"
+              echo "::error::Required local chat file is missing after install/upgrade: $required"
               exit 1
             fi
           done
