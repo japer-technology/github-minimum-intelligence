@@ -229,6 +229,20 @@ jobs:
             cp "$TARGET/install/settings.json" "$TARGET/.pi/settings.json"
           fi
 
+          # The installed framework must include the local terminal chat
+          # runner and its user-facing docs/tests, not just the GitHub Actions
+          # agent. Fail fast if a future template cleanup omits them.
+          for required in \
+            "$TARGET/lifecycle/local-chat.ts" \
+            "$TARGET/lifecycle/local-chat.test.ts" \
+            "$TARGET/docs/local-chat.md" \
+            "$TARGET/README-VSC.md"; do
+            if [ ! -f "$required" ]; then
+              echo "::error::Required local chat file is missing after install/upgrade: $required"
+              exit 1
+            fi
+          done
+
       # 4. Ensure common ignore patterns are present in .gitignore so that
       #    node_modules, OS junk files, the pi agent's auto-created .pi/
       #    directory at the repo root, and the scratch artefacts produced by
