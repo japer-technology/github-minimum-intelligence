@@ -97,6 +97,7 @@ import { execFileSync, execSync } from "child_process";
 import { marked } from "marked";
 import { markedTerminal } from "marked-terminal";
 import ansiRegex from "ansi-regex";
+import { cleanupPiAgentDir, preparePiAgentDir } from "./pi-runtime.ts";
 
 // marked-terminal's return type does not perfectly align with marked's
 // MarkedExtension interface; the cast is the standard workaround.
@@ -111,12 +112,6 @@ const sessionsDir = resolve(stateDir, "sessions");
 const piSettingsPath = resolve(minimumIntelligenceDir, ".pi", "settings.json");
 const memoryLogPath = resolve(minimumIntelligenceDir, "memory.log");
 const lastRunRawPath = resolve(stateDir, "local-last-run.jsonl");
-
-// Dedicated pi agent dir used only in local mode. Pointing PI_CODING_AGENT_DIR
-// here makes pi read our generated models.json (a custom OpenAI-compatible
-// provider) without disturbing the user's global ~/.pi/agent config.
-const localAgentDir = resolve(stateDir, "pi-agent");
-const localModelsPath = resolve(localAgentDir, "models.json");
 
 // Repo-root-relative session dir, matching agent.ts.
 const sessionsDirRelative = ".github-minimum-intelligence/state/sessions";
@@ -815,18 +810,18 @@ function resolveLocalBaseUrl(provider: string): string {
  * defaults to the Responses API, so it would contact the real api.openai.com
  * and fail with a 401.  The supported mechanism for a local server is a
  * `models.json` describing a custom provider with an explicit `baseUrl` and the
- * `openai-completions` API.  pi only reads `models.json` from its agent dir, so
- * we point PI_CODING_AGENT_DIR at a repo-local directory and write the file
- * there.  This leaves the user's global ~/.pi/agent untouched and is applied
- * only for local providers.
+ * `openai-completions` API. Pi only reads `models.json` from its agent dir, so
+ * we write the file into the process-local runtime copy prepared at startup.
+ * This leaves the user's global ~/.pi/agent untouched.
  *
  * `compat.supportsDeveloperRole` / `supportsReasoningEffort` are disabled
  * because many local servers reject the `developer` role and the
  * `reasoning_effort` parameter used by reasoning-capable cloud models.
  */
-function ensureLocalProviderConfig(provider: string, model: string): void {
+function ensureLocalProviderConfig(provider: string, model: string, piAgentDir: string): void {
   const baseUrl = resolveLocalBaseUrl(provider);
-  mkdirSync(localAgentDir, { recursive: true });
+  const localModelsPath = resolve(piAgentDir, "models.json");
+  mkdirSync(piAgentDir, { recursive: true });
   const modelsConfig = {
     providers: {
       [provider]: {
@@ -842,7 +837,6 @@ function ensureLocalProviderConfig(provider: string, model: string): void {
     },
   };
   writeFileSync(localModelsPath, JSON.stringify(modelsConfig, null, 2) + "\n");
-  process.env.PI_CODING_AGENT_DIR = localAgentDir;
   process.env.OPENAI_BASE_URL = baseUrl;
   if (!process.env.OPENAI_API_KEY) process.env.OPENAI_API_KEY = "local";
 }
@@ -898,6 +892,7 @@ type RuntimeState = {
   autoRetry: boolean;
   autoRetryMax: number;
   piBin: string;
+  piAgentDir: string;
 };
 
 // ─── One agent turn ───────────────────────────────────────────────────────────
@@ -943,8 +938,9 @@ async function runTurn(
     // doing it here also picks up runtime /model and /provider switches.
     const piProvider = resolvePiProvider(rt.provider);
     const localMode = isLocalProvider(rt.provider);
-    if (localMode) ensureLocalProviderConfig(rt.provider, rt.model);
+    if (localMode) ensureLocalProviderConfig(rt.provider, rt.model, rt.piAgentDir);
     const args: string[] = [
+      "--approve",
       "--mode", "json",
       "--tools", "read,bash,edit,write,grep,find,ls",
       "--provider", piProvider,
@@ -1938,6 +1934,10 @@ async function main(): Promise<void> {
     return;
   }
 
+  const piAgentDir = preparePiAgentDir(minimumIntelligenceDir);
+  process.env.PI_CODING_AGENT_DIR = piAgentDir;
+  process.on("exit", () => cleanupPiAgentDir(piAgentDir));
+
   // Auto-retry default: on for local providers (flaky/slow), off for cloud
   // (failures are usually configuration errors, not transient).
   const rt: RuntimeState = {
@@ -1945,13 +1945,14 @@ async function main(): Promise<void> {
     showTiming: false, verbose: false,
     autoRetry: isLocalProvider(cfg.provider),
     autoRetryMax: 3,
-    piBin,
+    piBin, piAgentDir,
   };
 
-  // For local providers, generate models.json and point PI_CODING_AGENT_DIR at
-  // it up front so the REPL banner shows the right endpoint and the first turn
-  // is correctly wired.
-  if (isLocalProvider(rt.provider)) ensureLocalProviderConfig(rt.provider, rt.model);
+  // For local providers, generate models.json up front so the REPL banner
+  // shows the right endpoint and the first turn is correctly wired.
+  if (isLocalProvider(rt.provider)) {
+    ensureLocalProviderConfig(rt.provider, rt.model, rt.piAgentDir);
+  }
 
   // One-shot mode.
   if (args.prompt) {

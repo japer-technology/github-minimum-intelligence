@@ -109,7 +109,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 | Component | Version | Role |
 |-----------|---------|------|
-| `@earendil-works/pi-coding-agent` | 0.75.5 | Core AI agent: prompt processing, LLM interaction, tool execution |
+| `@earendil-works/pi-coding-agent` | 0.84.1 | Core AI agent: prompt processing, LLM interaction, tool execution |
 | GitHub Actions Workflow | N/A | Orchestration: triggers, authorization, environment setup |
 | Lifecycle Scripts (TypeScript) | N/A | Agent initialization and indicator management |
 | Anthropic Claude | N/A | LLM backend for reasoning and code generation |
@@ -276,7 +276,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 ### SEC-009: Single Dependency on Third-Party Package 🟡 MEDIUM
 
-**Description:** The entire system depends on `@earendil-works/pi-coding-agent` (pinned at `0.75.5`), a third-party npm package. This package has transitive dependencies on multiple AI provider SDKs.
+**Description:** The core agent runtime depends on `@earendil-works/pi-coding-agent` (pinned at `0.84.1`), a third-party npm package. This package has transitive dependencies on multiple AI provider SDKs.
 
 **Impact:** A supply chain compromise of this package (or any transitive dependency) would give an attacker arbitrary code execution in the agent's context - with all the privileges documented above.
 
@@ -367,11 +367,11 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 ### Dependency Tree
 
 ```
-@earendil-works/pi-coding-agent@0.75.5
+@earendil-works/pi-coding-agent@0.84.1
 ├── @anthropic-ai/sdk          (Anthropic API client)
 ├── @aws-sdk/client-bedrock-runtime  (AWS Bedrock)
 ├── openai                     (OpenAI API client)
-├── @google/generative-ai      (Google Gemini)
+├── @google/genai              (Google Gemini)
 ├── fast-xml-parser            (XML parsing)
 └── tslib                      (TypeScript helpers)
 ```
@@ -388,7 +388,7 @@ The `github-minimum-intelligence` system is an AI coding agent that runs autonom
 
 ### Immediate Actions
 
-1. **Pin `@earendil-works/pi-coding-agent`** to exact version (already pinned at `0.75.5`).
+1. **Pin `@earendil-works/pi-coding-agent`** to exact version (already pinned at `0.84.1`).
 2. **Pin GitHub Actions** to commit SHAs:
    ```yaml
    - uses: actions/checkout@<sha>  # v6
@@ -647,6 +647,7 @@ This project follows a coordinated disclosure model:
 
 | Date | Version | Author | Changes |
 |------|---------|--------|---------|
+| 2026-08-11 | 1.1 | AI Agent (GMI) | Refreshed the dependency inventory for pi 0.84.1 |
 | 2026-02-24 | 1.0 | AI Agent (GMI) | Initial security report |
 
 ---
