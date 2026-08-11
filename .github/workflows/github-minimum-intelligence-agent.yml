@@ -261,6 +261,7 @@ jobs:
             ".DS_Store" \
             "/.pi/" \
             ".github-minimum-intelligence/state/threads/" \
+            ".github-minimum-intelligence/state/pi-agent/" \
             ".github-minimum-intelligence/state/local-last-run.jsonl" \
             "tmpclaude-*" \
             "tmp-pi-*"; do

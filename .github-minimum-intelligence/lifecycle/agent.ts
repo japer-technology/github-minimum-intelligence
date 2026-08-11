@@ -77,6 +77,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { resolve } from "path";
+import { cleanupPiAgentDir, preparePiAgentDir } from "./pi-runtime.ts";
 
 // ─── Paths and event context ───────────────────────────────────────────────────
 // `import.meta.dir` resolves to `.github-minimum-intelligence/lifecycle/`; stepping up one level
@@ -202,6 +203,7 @@ async function main() {
   // Track whether the agent completed successfully so the `finally` block can
   // add the correct outcome reaction (👍 on success, 👎 on error).
   let succeeded = false;
+  let piAgentDir: string | null = null;
 
   try {
     // ── Read issue title and body from the event payload ──────────────────────────
@@ -311,12 +313,16 @@ async function main() {
     }
 
     // ── Run the pi agent ─────────────────────────────────────────────────────────
+    piAgentDir = preparePiAgentDir(minimumIntelligenceDir);
+    process.env.PI_CODING_AGENT_DIR = piAgentDir;
+
     // Pipe agent output through `tee` so we get:
     //   • a live stream to stdout (visible in the Actions log in real time), and
     //   • a persisted copy at `/tmp/agent-raw.jsonl` for post-processing below.
     const piBin = resolve(minimumIntelligenceDir, "node_modules", ".bin", "pi");
     const piArgs = [
       piBin,
+      "--approve",
       "--mode",
       "json",
       "--tools",
@@ -469,6 +475,7 @@ async function main() {
         console.error("Failed to add outcome reaction:", e);
       }
     }
+    if (piAgentDir) cleanupPiAgentDir(piAgentDir);
   }
 }
 
