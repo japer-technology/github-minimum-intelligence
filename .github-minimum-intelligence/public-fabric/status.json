@@ -22,7 +22,7 @@
     "tagline": "A repository-local AI framework that uses GitHub\u00a0Issues for conversation, Git for persistent versioned memory, and GitHub\u00a0Actions for execution \u2014 delivering low-infrastructure, auditable, user-owned automation by committing every prompt and response to the codebase.",
     "badges": [
       {
-        "label": "v1.0.7",
+        "label": "v2.0.2",
         "color": "blue"
       },
       {
@@ -333,7 +333,7 @@
               "rows": [
                 [
                   "<a href=\"https://github.com/earendil-works/pi\" target=\"_blank\" rel=\"noopener\">@earendil-works/pi-coding-agent</a>",
-                  "0.75.5",
+                  "0.84.1",
                   "Core AI agent \u2014 processes prompts, manages sessions"
                 ]
               ]
@@ -445,7 +445,7 @@
                 [
                   "<a href=\"https://platform.openai.com/\" target=\"_blank\" rel=\"noopener\">OpenAI</a>",
                   "<code>openai</code>",
-                  "<code>gpt-5.4</code> (default), <code>gpt-5.3-codex</code>, <code>gpt-5.3-codex-spark</code>",
+                  "<code>gpt-5.5</code> (default), <code>gpt-5.3-codex</code>, <code>gpt-5.3-codex-spark</code>",
                   "<code>OPENAI_API_KEY</code>"
                 ],
                 [
@@ -570,7 +570,7 @@
                   "comment": "\u2190 provider id"
                 },
                 {
-                  "path": "  \"defaultModel\": \"gpt-5.4\",",
+                  "path": "  \"defaultModel\": \"gpt-5.5\",",
                   "comment": "\u2190 model name"
                 },
                 {

@@ -9,7 +9,10 @@
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [@earendil-works/pi-coding-agent](https://github.com/earendil-works/pi) | 0.75.5 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
+| [@earendil-works/pi-coding-agent](https://github.com/earendil-works/pi) | 0.84.1 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
+| [ansi-regex](https://www.npmjs.com/package/ansi-regex) | ^6.2.2 | Removes terminal control sequences before rendering local chat responses. |
+| [marked](https://www.npmjs.com/package/marked) | ^15.0.12 | Parses Markdown responses for local terminal display. This is the latest major supported by `marked-terminal` 7.x. |
+| [marked-terminal](https://www.npmjs.com/package/marked-terminal) | ^7.3.0 | Renders parsed Markdown for the local terminal chat interface. |
 
 ### pi-mono Feature Surface
 
@@ -57,7 +60,7 @@ An API key from at least one supported LLM provider is needed:
 
 | Provider | API Key Secret | Description |
 |----------|---------------|-------------|
-| [OpenAI](https://platform.openai.com/) | `OPENAI_API_KEY` | GPT models including GPT-5.4 (default provider). |
+| [OpenAI](https://platform.openai.com/) | `OPENAI_API_KEY` | GPT models including GPT-5.5 (default provider). |
 | [Anthropic](https://console.anthropic.com/) | `ANTHROPIC_API_KEY` | Claude models. |
 | [Google Gemini](https://aistudio.google.com/) | `GEMINI_API_KEY` | Gemini 2.5 Pro and Flash models. |
 | [xAI](https://console.x.ai/) | `XAI_API_KEY` | Grok 3 and Grok 3 Mini models. |
