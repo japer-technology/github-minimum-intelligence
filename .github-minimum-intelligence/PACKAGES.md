@@ -9,7 +9,7 @@
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [@earendil-works/pi-coding-agent](https://github.com/earendil-works/pi) | 0.85.1 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
+| [@earendil-works/pi-coding-agent](https://github.com/earendil-works/pi) | 0.87.1 | Coding agent CLI with read, bash, edit, and write tools and session management. This is the core AI agent that powers the entire Minimum Intelligence system - it processes prompts, interacts with LLM providers, and manages conversation sessions. |
 | [ansi-regex](https://www.npmjs.com/package/ansi-regex) | ^6.2.2 | Removes terminal control sequences before rendering local chat responses. |
 | [marked](https://www.npmjs.com/package/marked) | ^15.0.12 | Parses Markdown responses for local terminal display. This is the latest major supported by `marked-terminal` 7.x. |
 | [marked-terminal](https://www.npmjs.com/package/marked-terminal) | ^7.3.0 | Renders parsed Markdown for the local terminal chat interface. |
