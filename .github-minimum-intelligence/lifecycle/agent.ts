@@ -342,7 +342,7 @@ async function main() {
       piArgs.push("--session", sessionPath);
     }
 
-    const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "inherit" });
+    const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "inherit", env: process.env });
     const tee = Bun.spawn(["tee", "/tmp/agent-raw.jsonl"], { stdin: pi.stdout, stdout: "inherit" });
     await tee.exited;
 
