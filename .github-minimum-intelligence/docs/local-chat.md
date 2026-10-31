@@ -121,7 +121,9 @@ Closed-world identity — IDs are allocated by the tool.
   (`http://localhost:1234/v1`, `http://localhost:11434/v1`, `http://localhost:8000/v1`
   respectively) and enables auto-retry.
 - Session transcripts are written by `pi` into `state/sessions/` and preserved
-  per thread; `/history` and `/export md` read from them.
+  per thread; `/history` shows condensed previews and `/export md` preserves
+  the full message text. Local transcripts are git-ignored; hosted runs
+  explicitly stage their own transcript. Already tracked files remain tracked.
 - Unknown slash-commands print `Unknown command: <cmd>  (type /help)` rather than
   being sent to the model.
 

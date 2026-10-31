@@ -6,7 +6,7 @@ node_modules/
 # Local-only chat threads created by lifecycle/local-chat.ts
 .github-minimum-intelligence/state/threads/
 
-# Per-session transcripts written to state/sessions
+# Local transcripts; hosted runs explicitly stage their own session file
 .github-minimum-intelligence/state/sessions/
 
 # Generated pi agent dir for local mode (models.json, etc.)

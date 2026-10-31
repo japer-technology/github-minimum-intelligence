@@ -29,7 +29,7 @@ Open a [GitHub Issue](../../issues) describing:
 
 1. Fork the repository and create a branch from `main`.
 2. Make your changes in small, reviewable increments.
-3. Test locally with `cd .github-minimum-intelligence && bun install` and verify dependencies install cleanly.
+3. Install locked dependencies with `cd .github-minimum-intelligence && bun install --frozen-lockfile`, then run `bun test lifecycle/`.
 4. Open a pull request with a clear description of what changed and why.
 
 ---
