@@ -90,6 +90,7 @@ Step 3 already installs the dev `@types/*` packages. To make VS Code pick them u
     "lib": ["ES2022"],
     "strict": false,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "allowJs": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -222,7 +223,7 @@ All state lives in your working tree:
 
 Each thread is identified by an integer **owned by the runner**, mirroring the way GitHub owns issue numbers in the production edition: `thread #N` → `state/threads/N.json` → `state/sessions/<session>.jsonl`. When you resume the thread weeks later, the runner loads that linked session and passes it to `pi` via `--session`. No database, no session cookies, no remote service — just files.
 
-The `state/sessions/` directory is git-tracked by default (same as the GitHub edition); the local-only `state/threads/` directory is git-ignored so your scratch conversations never accidentally land in a commit.
+The `state/sessions/` and `state/threads/` directories are git-ignored so local scratch conversations are not automatically committed. The GitHub edition explicitly stages only its own session transcript to preserve hosted conversation history. Previously tracked transcripts remain tracked; ignore rules do not untrack existing files.
 
 ---
 
@@ -380,7 +381,7 @@ This is optional. The agent works without hatching, but it's more fun with a per
   public-fabric/                    # GitHub Pages static site (not used locally)
   state/
     threads/                        # Local thread mappings (git-ignored)
-    sessions/                       # Session transcripts (git-tracked)
+    sessions/                       # Local transcripts ignored; hosted sessions explicitly tracked
   logo.png                          # Agent logo
   AGENTS.md                         # Agent identity file
   VERSION                           # Installed version
@@ -565,7 +566,7 @@ Requires `OPENROUTER_API_KEY`. Browse available models at [openrouter.ai](https:
 
 **Adjust thinking level** — set `defaultThinkingLevel` to `"low"`, `"medium"`, or `"high"` in `settings.json` for different task complexities.
 
-**Share threads with a teammate** — commit `state/sessions/*.jsonl` (it's git-tracked); they pull, run `bun run chat --new`, then manually edit `state/threads/<their-new-id>.json` to point `sessionPath` at the shared transcript. The local edition deliberately doesn't auto-share thread *mappings* (those are personal scratch state).
+**Share threads with a teammate** — review a transcript for private information, then explicitly stage that single file with `git add -f -- .github-minimum-intelligence/state/sessions/<session>.jsonl` and commit it. They pull, run `bun run chat --new`, then manually edit `state/threads/<their-new-id>.json` to point `sessionPath` at the shared transcript. The local edition deliberately doesn't auto-share thread *mappings* (those are personal scratch state).
 
 ### Environment variable overrides
 

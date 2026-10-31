@@ -7,6 +7,7 @@
     "lib": ["ES2022"],
     "strict": false,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "allowJs": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

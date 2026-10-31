@@ -387,8 +387,8 @@ function extractFinalAssistantText(jsonl: string): string {
   return "";
 }
 
-/** Count `message_end` events with role=user — i.e. user turns in a session. */
-function countSessionTurns(filePath: string): number {
+/** Session files contain `message` entries, not the CLI's `message_end` events. */
+export function countSessionTurns(filePath: string): number {
   if (!existsSync(filePath)) return 0;
   try {
     const lines = readFileSync(filePath, "utf-8")
@@ -397,33 +397,34 @@ function countSessionTurns(filePath: string): number {
     for (const line of lines) {
       try {
         const evt = JSON.parse(line) as PiEvent;
-        if (evt.type === "message_end" && evt.message?.role === "user") turns++;
+        if (evt.type === "message" && evt.message?.role === "user") turns++;
       } catch {}
     }
     return turns;
   } catch { return 0; }
 }
 
-/** Condensed per-turn preview list for /history and /export. */
-function getSessionHistory(filePath: string): Array<{ role: string; preview: string }> {
+/** Full text for exports, with condensed previews for /history. */
+export function getSessionHistory(filePath: string): Array<{ role: string; text: string; preview: string }> {
   if (!existsSync(filePath)) return [];
   try {
     const lines = readFileSync(filePath, "utf-8")
       .split(/\r?\n/).filter((l) => l.trim().length > 0);
-    const out: Array<{ role: string; preview: string }> = [];
+    const out: Array<{ role: string; text: string; preview: string }> = [];
     for (const line of lines) {
       try {
         const evt = JSON.parse(line) as PiEvent;
-        if (evt.type !== "message_end") continue;
+        if (evt.type !== "message") continue;
         const role = evt.message?.role;
         if (role !== "user" && role !== "assistant") continue;
         const text = (evt.message?.content ?? [])
           .filter((b) => b.type === "text" && typeof b.text === "string")
-          .map((b) => (b.text ?? "").trim())
+          .map((b) => b.text ?? "")
           .filter((t) => t.length > 0)
-          .join(" ").replace(/\s+/g, " ");
+          .join("\n\n");
         if (!text) continue;
-        out.push({ role, preview: text.length > 80 ? text.slice(0, 77) + "..." : text });
+        const preview = text.replace(/\s+/g, " ").trim();
+        out.push({ role, text, preview: preview.length > 80 ? preview.slice(0, 77) + "..." : preview });
       } catch {}
     }
     return out;
@@ -603,11 +604,14 @@ rejected (no auto-create on typos). Aliases must start with a letter.`
  */
 function makeAsk(rl: ReturnType<typeof createInterface>): (q: string) => Promise<string | null> {
   let pending: ((v: string | null) => void) | null = null;
+  let closed = false;
   rl.on("close", () => {
+    closed = true;
     const p = pending; pending = null;
     if (p) p(null);
   });
   return (q: string) => new Promise((res) => {
+    if (closed) { res(null); return; }
     pending = res;
     rl.question(q, (a: string) => {
       const p = pending; pending = null;
@@ -1291,8 +1295,8 @@ async function repl(initial: Thread, rt: RuntimeState): Promise<void> {
         ];
         let n = 0;
         for (const e of h) {
-          if (e.role === "user") { n++; md.push(`## Turn ${n}`, ``, `**You:** ${e.preview}`, ``); }
-          else { md.push(`**AI:** ${e.preview}`, ``); }
+          if (e.role === "user") { n++; md.push(`## Turn ${n}`, ``, `**You:** ${e.text}`, ``); }
+          else { md.push(`**AI:** ${e.text}`, ``); }
         }
         try { writeFileSync(outPath, md.join("\n")); console.log(`\n  Exported to: ${outPath}\n`); }
         catch (err) { console.log("\n  " + c.red("× ") + (err as Error).message + "\n"); }
@@ -1970,7 +1974,7 @@ async function main(): Promise<void> {
   await repl(activeThread, rt);
 }
 
-main().catch((err: unknown) => {
+if (import.meta.main) main().catch((err: unknown) => {
   // Top-level error handler: honour the documented exit-code contract
   // (1 = environment problem, 2 = user error) and print a readable message
   // instead of an unhandled-rejection stack trace.

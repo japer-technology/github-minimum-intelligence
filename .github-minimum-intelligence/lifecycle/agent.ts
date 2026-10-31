@@ -28,7 +28,7 @@
  *   3. Build a prompt string from the event payload.
  *   4. Run the `pi` coding agent binary with the prompt (+ prior session if resuming).
  *      Agent output is streamed through `tee` to provide a live Actions log AND
- *      persist the raw JSONL to `/tmp/agent-raw.jsonl` for post-processing.
+ *      persist raw JSONL in the ignored runtime directory for post-processing.
  *   5. Extract the assistant's final text reply from the JSONL output using
  *      `tac` (reverse) + `jq` (parse the last `message_end` event).
  *   6. Persist the issue → session mapping so the next run can resume the conversation.
@@ -77,6 +77,7 @@
 
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { resolve } from "path";
+import { randomUUID } from "crypto";
 import { cleanupPiAgentDir, preparePiAgentDir } from "./pi-runtime.ts";
 
 // ─── Paths and event context ───────────────────────────────────────────────────
@@ -223,8 +224,7 @@ async function main() {
     mkdirSync(issuesDir, { recursive: true });
     mkdirSync(sessionsDir, { recursive: true });
 
-    let mode = "new";
-    let sessionPath = "";
+    let sessionPath = `${sessionsDirRelative}/issue-${issueNumber}-${randomUUID()}.jsonl`;
     const mappingFile = resolve(issuesDir, `${issueNumber}.json`);
 
     if (existsSync(mappingFile)) {
@@ -232,7 +232,6 @@ async function main() {
         const mapping = JSON.parse(readFileSync(mappingFile, "utf-8"));
         if (existsSync(mapping.sessionPath)) {
           // A prior session exists — resume it to preserve conversation context.
-          mode = "resume";
           sessionPath = mapping.sessionPath;
           console.log(`Found existing session: ${sessionPath}`);
         } else {
@@ -315,10 +314,11 @@ async function main() {
     // ── Run the pi agent ─────────────────────────────────────────────────────────
     piAgentDir = preparePiAgentDir(minimumIntelligenceDir);
     process.env.PI_CODING_AGENT_DIR = piAgentDir;
+    const rawOutputPath = resolve(piAgentDir, "agent-raw.jsonl");
 
     // Pipe agent output through `tee` so we get:
     //   • a live stream to stdout (visible in the Actions log in real time), and
-    //   • a persisted copy at `/tmp/agent-raw.jsonl` for post-processing below.
+    //   • a process-local copy for post-processing below.
     const piBin = resolve(minimumIntelligenceDir, "node_modules", ".bin", "pi");
     const piArgs = [
       piBin,
@@ -334,20 +334,18 @@ async function main() {
       ...(configuredThinking ? ["--thinking", configuredThinking] : []),
       "--session-dir",
       sessionsDirRelative,
+      "--session",
+      sessionPath,
       "-p",
       prompt,
     ];
-    if (mode === "resume" && sessionPath) {
-      // Pass the prior session transcript so the agent can recall earlier context.
-      piArgs.push("--session", sessionPath);
-    }
-
     const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "inherit", env: process.env });
-    const tee = Bun.spawn(["tee", "/tmp/agent-raw.jsonl"], { stdin: pi.stdout, stdout: "inherit" });
-    await tee.exited;
+    const tee = Bun.spawn(["tee", rawOutputPath], { stdin: pi.stdout, stdout: "inherit" });
+    const teeExitCode = await tee.exited;
 
     // Check if the pi agent exited successfully.
     const piExitCode = await pi.exited;
+    if (teeExitCode !== 0) throw new Error(`Could not save pi output (tee exited with code ${teeExitCode})`);
     if (piExitCode !== 0) {
       // Surface the provider/model in the error so that an invalid or
       // misspelled model ID doesn't fail silently — the most common cause of
@@ -366,51 +364,54 @@ async function main() {
     // AND the content contains at least one `text` block.  This correctly handles
     // cases where the final event has empty content (e.g., a 400 API error after
     // a successful tool call) by falling back to an earlier assistant message.
-    const tac = Bun.spawn(["tac", "/tmp/agent-raw.jsonl"], { stdout: "pipe" });
+    const tac = Bun.spawn(["tac", rawOutputPath], { stdout: "pipe" });
     const jq = Bun.spawn(
-      ["jq", "-r", "-s", '[ .[] | select(.type == "message_end" and .message.role == "assistant") | select((.message.content // []) | map(select(.type == "text")) | length > 0) ] | .[0].message.content[] | select(.type == "text") | .text'],
+      ["jq", "-r", "-s", '[ .[] | select(.type == "message_end" and .message.role == "assistant") | select((.message.content // []) | map(select(.type == "text")) | length > 0) ] | (.[0].message.content // [])[] | select(.type == "text") | .text'],
       { stdin: tac.stdout, stdout: "pipe" }
     );
     const agentText = await new Response(jq.stdout).text();
-    await jq.exited;
+    const [jqExitCode, tacExitCode] = await Promise.all([jq.exited, tac.exited]);
+    if (jqExitCode !== 0 || tacExitCode !== 0) {
+      throw new Error("Could not extract the assistant response from pi output");
+    }
 
-    // ── Determine latest session file ────────────────────────────────────────────
-    // After the agent run, the newest `.jsonl` file in the sessions directory is
-    // the session transcript that was just written (or extended).
-    const { stdout: latestSession } = await run([
-      "bash", "-c", `ls -t ${sessionsDirRelative}/*.jsonl 2>/dev/null | head -1`,
-    ]);
+    // Never infer ownership from modification time: a newer transcript may
+    // belong to a local chat rather than this hosted run.
+    if (!existsSync(sessionPath)) {
+      throw new Error(`pi did not write the expected session file: ${sessionPath}`);
+    }
 
     // ── Persist issue → session mapping ─────────────────────────────────────────
     // Write (or overwrite) the mapping file so that the next run for this issue
     // can locate the correct session transcript and resume the conversation.
-    if (latestSession) {
-      writeFileSync(
-        mappingFile,
-        JSON.stringify({
-          issueNumber,
-          sessionPath: latestSession,
-          updatedAt: new Date().toISOString(),
-        }, null, 2) + "\n"
-      );
-      console.log(`Saved mapping: issue #${issueNumber} -> ${latestSession}`);
-    } else {
-      console.log("Warning: no session file found to map");
-    }
+    writeFileSync(
+      mappingFile,
+      JSON.stringify({
+        issueNumber,
+        sessionPath,
+        updatedAt: new Date().toISOString(),
+      }, null, 2) + "\n"
+    );
+    console.log(`Saved mapping: issue #${issueNumber} -> ${sessionPath}`);
 
     // ── Commit and push state changes ───────────────────────────────────────────
     // Stage all changes (session log, mapping JSON, any files the agent edited),
     // commit only if the index is dirty, then push with a retry-on-conflict loop.
     const addResult = await run(["git", "add", "-A"]);
     if (addResult.exitCode !== 0) {
-      console.error("git add failed with exit code", addResult.exitCode);
+      throw new Error(`git add failed with exit code ${addResult.exitCode}`);
+    }
+    // Local transcripts stay ignored; only this hosted session is opted in.
+    const sessionAdd = await run(["git", "add", "-f", "--", sessionPath]);
+    if (sessionAdd.exitCode !== 0) {
+      throw new Error(`Could not stage session state (git add exited with code ${sessionAdd.exitCode})`);
     }
     const { exitCode } = await run(["git", "diff", "--cached", "--quiet"]);
-    if (exitCode !== 0) {
-      // exitCode !== 0 means there are staged changes to commit.
+    if (exitCode > 1) throw new Error(`git diff failed with exit code ${exitCode}`);
+    if (exitCode === 1) {
       const commitResult = await run(["git", "commit", "-m", `minimum-intelligence: work on issue #${issueNumber}`]);
       if (commitResult.exitCode !== 0) {
-        console.error("git commit failed with exit code", commitResult.exitCode);
+        throw new Error(`git commit failed with exit code ${commitResult.exitCode}`);
       }
     }
 
